@@ -1,0 +1,145 @@
+/** Example rules used by the template application (remove for your app) */
+html{
+        height: 94%;
+}
+body{
+        height: 94%;
+}
+h1 {
+  font-size: 2em;
+  font-weight: bold;
+  color: #777777;
+  margin: 40px 0px 70px;
+  text-align: center;
+}
+
+
+#mainDiv
+{
+    width: 100%;
+    height:100%%;
+        background-color: #456789;      
+}
+#topDiv
+{
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+    min-width:1300px;
+    width: 100%;
+    height:9%;
+        background-color: #666666;
+       
+   
+}
+#wrapper{
+
+
+width: 100%;
+overflow: hidden;
+height: 100%;
+
+}
+#rightDiv
+{
+    min-width:3000;
+    width: 20%;
+    height:50px;
+        background-color: #999999;
+        overflow: hidden;
+        height: 100%;
+}
+
+#oryxDiv
+{
+        float: left;
+    min-width:1000px;
+    width: 80%;
+    height:100%;
+        background-color: #FF4500;
+   
+}
+
+#rightDivTop
+{
+    min-width:3000;
+    width: 100%;
+    height:50px;
+        background-color: #378945;
+        overflow: hidden;
+        height: 35%;
+   
+}
+#rightDivBot
+{
+    min-width:3000;
+    width: 100%;
+    height:50px;
+        background-color: #354365;
+        overflow: hidden;
+        height: 65%;
+   
+}
+
+
+.sendButton {
+  display: block;
+  font-size: 16pt;
+}
+
+/** Most GWT widgets already have a style name defined */
+.gwt-DialogBox {
+  width: 400px;
+}
+
+.dialogVPanel {
+  margin: 5px;
+}
+
+.serverResponseLabelError {
+  color: red;
+}
+
+/** Set ids using widget.getElement().setId("idOfElement") */
+#closeButton {
+  margin: 15px 6px 6px;
+}
+
+.utilityButton {
+border:1px solid #a8c1d5; -webkit-border-radius: 3px; -moz-border-radius: 3px;border-radius: 3px;font-size:12px;font-family:arial, helvetica, sans-serif; padding: 10px 10px 10px 10px; text-decoration:none; display:inline-block;text-shadow: -1px -1px 0 rgba(0,0,0,0.3);font-weight:bold; color: #FFFFFF;
+ background-color: #CEDCE7; background-image: -webkit-gradient(linear, left top, left bottom, from(#CEDCE7), to(#596a72));
+ background-image: -webkit-linear-gradient(top, #CEDCE7, #596a72);
+ background-image: -moz-linear-gradient(top, #CEDCE7, #596a72);
+ background-image: -ms-linear-gradient(top, #CEDCE7, #596a72);
+ background-image: -o-linear-gradient(top, #CEDCE7, #596a72);
+ background-image: linear-gradient(to bottom, #CEDCE7, #596a72);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#CEDCE7, endColorstr=#596a72);
+}
+
+.utilityButton:hover{
+ border:1px solid #8aabc5;
+ background-color: #acc4d6; background-image: -webkit-gradient(linear, left top, left bottom, from(#acc4d6), to(#434f55));
+ background-image: -webkit-linear-gradient(top, #acc4d6, #434f55);
+ background-image: -moz-linear-gradient(top, #acc4d6, #434f55);
+ background-image: -ms-linear-gradient(top, #acc4d6, #434f55);
+ background-image: -o-linear-gradient(top, #acc4d6, #434f55);
+ background-image: linear-gradient(to bottom, #acc4d6, #434f55);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#acc4d6, endColorstr=#434f55);
+}
+
+.diagramButton {
+border:1px solid #a8c1d5; -webkit-border-radius: 3px; -moz-border-radius: 3px;border-radius: 3px;font-size:12px;font-family:arial, helvetica, sans-serif; padding: 10px 10px 10px 10px; text-decoration:none; display:inline-block;text-shadow: -1px -1px 0 rgba(0,0,0,0.3);font-weight:bold; color: #FFFFFF;
+ background-color: #CEDCE7; background-image: -webkit-gradient(linear, left top, left bottom, from(#CEDCE7), to(#596a72));
+ background-image: -webkit-linear-gradient(top, #CEDCE7, #596a72);
+ background-image: -moz-linear-gradient(top, #CEDCE7, #596a72);
+ background-image: -ms-linear-gradient(top, #CEDCE7, #596a72);
+ background-image: -o-linear-gradient(top, #CEDCE7, #596a72);
+ background-image: linear-gradient(to bottom, #CEDCE7, #596a72);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#CEDCE7, endColorstr=#596a72);
+}
+
+.diagramButton:hover{
+ border:1px solid #8aabc5;
+ background-color: #acc4d6; background-image: -webkit-gradient(linear, left top, left bottom, from(#acc4d6), to(#434f55));
+ background-image: -webkit-linear-gradient(top, #acc4d6, #434f55);
+ background-image: -moz-linear-gradient(top, #acc4d6, #434f55);
+ background-image: -ms-linear-gradient(top, #acc4d6, #434f55);
+ background-image: -o-linear-gradient(top, #acc4d6, #434f55);
+ background-image: linear-gradient(to bottom, #acc4d6, #434f55);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#acc4d6, endColorstr=#434f55);
+}

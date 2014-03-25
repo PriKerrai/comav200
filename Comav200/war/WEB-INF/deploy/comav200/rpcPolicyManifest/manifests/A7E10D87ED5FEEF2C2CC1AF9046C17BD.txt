@@ -1,0 +1,2 @@
+serviceClass: com.coma.client.GreetingService
+path: 9CA7ADD91B7FC753D46BA401BE35AA10.gwt.rpc
