@@ -30,8 +30,8 @@ public class Comav200 implements EntryPoint {
 	/**
 	 * Create a remote service proxy to talk to the server-side Greeting service.
 	 */
-	private final GreetingServiceAsync greetingService = GWT
-			.create(GreetingService.class);
+	private final DatabaseConnectionAsync databaseConnection = GWT
+			.create(DatabaseConnection.class);
 
 	/**
 	 * This is the entry point method.
@@ -124,7 +124,7 @@ public class Comav200 implements EntryPoint {
 				sendButton.setEnabled(false);
 				textToServerLabel.setText(textToServer);
 				serverResponseLabel.setText("");
-				greetingService.greetServer(textToServer,
+				databaseConnection.databaseServer(textToServer,
 						new AsyncCallback<String>() {
 							public void onFailure(Throwable caught) {
 								// Show the RPC error message to the user

@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.coma.client.GreetingService;
+import com.coma.client.DatabaseConnection;
 import com.coma.shared.FieldVerifier;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -18,10 +18,10 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
  * The server-side implementation of the RPC service.
  */
 @SuppressWarnings("serial")
-public class GreetingServiceImpl extends RemoteServiceServlet implements
-		GreetingService {
+public class DatabaseConnectionImpl extends RemoteServiceServlet implements
+		DatabaseConnection {
 
-	public String greetServer(String input) throws IllegalArgumentException {
+	public String databaseServer(String input) throws IllegalArgumentException {
 		
 		String dbURL = "jdbc:mysql://localhost:3306/comadatabase";
         String username ="root";
