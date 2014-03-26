@@ -21,26 +21,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class DatabaseConnectionImpl extends RemoteServiceServlet implements
 		DatabaseConnection {
 
-	public String databaseServer(String input) throws IllegalArgumentException {
-		
-		// Verify that the input is valid. 
-		if (!FieldVerifier.isValidName(input)) {
-			// If the input is not valid, throw an IllegalArgumentException back to
-			// the client.
-			throw new IllegalArgumentException(
-					"Name must be at least 4 characters long");
-		}
 
-		String serverInfo = getServletContext().getServerInfo();
-		String userAgent = getThreadLocalRequest().getHeader("User-Agent");
-
-		// Escape data from the client to avoid cross-site script vulnerabilities.
-		input = escapeHtml(input);
-		userAgent = escapeHtml(userAgent);
-
-		return "Hello, " + input + "!<br><br>I am running " + serverInfo
-				+ ".<br><br>It looks like you are using:<br>" + userAgent;
-	}
 
 	/**
 	 * Escape an html string. Escaping data received from the client helps to
@@ -92,5 +73,31 @@ public class DatabaseConnectionImpl extends RemoteServiceServlet implements
         	   
            
 		return null;
+	}
+	
+	@Override
+	public String databaseServer(String email)throws IllegalArgumentException {
+		Connection dbCon = null;
+		Statement stmt = null;
+		String password = null;
+		
+		System.out.print(email);
+        String query = "SELECT password FROM user WHERE email = ?";
+        
+           try{
+        	      dbCon = initializeDBConnection(); 
+        	      PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+        	      preparedStatement.setString(1, email);
+        	      ResultSet rs = preparedStatement.executeQuery(query);
+        	      while (rs.next()) {
+        	      	password = rs.getString("password");	
+        	      }
+        	      
+           
+           } catch (SQLException ex) {
+               Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+           } 
+              //close connection ,stmt and resultset here       
+		return password;
 	}
 }

@@ -30,6 +30,10 @@ public class Comav200 implements EntryPoint {
      public Button diagramButton3 = new Button("diagramButton3");
      public Button diagramButton4 = new Button("diagramButton4");
      public Button diagramButton5 = new Button("diagramButton5");
+     String res = null;
+     
+     
+     
      LogIn logIn = new LogIn();
 
 	/**
@@ -285,6 +289,24 @@ public void initializeSignUp() {
         RootPanel.get("oryxDiv").add(signUp.screen());
     }
 
+public String getPasswordFromDatabase(String email) {
+	
+	
+	
+	databaseConnection.databaseServer(email, new AsyncCallback<String>() {
+				public void onFailure(Throwable caught) {
+					
+				}
+
+				public void onSuccess(String result) {
+					res = result;
+				}
+			});
+	
+		return res;
+
+	}
+
 public void addUserToDatabase(String email, String password) {
 	
 	databaseConnection.databaseServer(email, password,
@@ -298,7 +320,7 @@ public void addUserToDatabase(String email, String password) {
 				}
 			});
 
-}
+	}
 }
 
 
