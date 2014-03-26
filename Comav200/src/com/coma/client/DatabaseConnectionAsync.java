@@ -6,6 +6,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  * The async counterpart of <code>GreetingService</code>.
  */
 public interface DatabaseConnectionAsync {
-	void databaseServer(String input, AsyncCallback<String> callback)
+	void databaseServer(String name, AsyncCallback<String> callback)
+			throws IllegalArgumentException;
+	void databaseServer(String name, String password, AsyncCallback<String> callback)
 			throws IllegalArgumentException;
 }

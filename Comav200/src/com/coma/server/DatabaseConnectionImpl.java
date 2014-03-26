@@ -23,38 +23,6 @@ public class DatabaseConnectionImpl extends RemoteServiceServlet implements
 
 	public String databaseServer(String input) throws IllegalArgumentException {
 		
-		String dbURL = "jdbc:mysql://localhost:3306/comadatabase";
-        String username ="root";
-        String password = "";
-       
-        Connection dbCon = null;
-        Statement stmt = null;
-        ResultSet rs = null;
-       
-        String query ="select count(*) from employee";
-        String query1 = "SELECT first_name from employee WHERE id=1";
-        try {
-            //getting database connection to MySQL server
-            dbCon = DriverManager.getConnection(dbURL, username, password);
-           
-            //getting PreparedStatment to execute query
-            stmt = dbCon.prepareStatement(query1);
-           
-            //Resultset returned by query
-            rs = stmt.executeQuery(query1);
-           
-            while(rs.next()){
-             String count = rs.getString(1);
-             System.out.println("count of stock : " + count);
-            }
-           
-        } catch (SQLException ex) {
-            Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
-        } finally{
-           //close connection ,stmt and resultset here
-        }
-		
-		
 		// Verify that the input is valid. 
 		if (!FieldVerifier.isValidName(input)) {
 			// If the input is not valid, throw an IllegalArgumentException back to
@@ -87,5 +55,42 @@ public class DatabaseConnectionImpl extends RemoteServiceServlet implements
 		}
 		return html.replaceAll("&", "&amp;").replaceAll("<", "&lt;")
 				.replaceAll(">", "&gt;");
+	}
+	
+	private Connection initializeDBConnection() throws SQLException {
+		String dbURL = "jdbc:mysql://localhost:3306/comadatabase";
+        String username ="root";
+        String password = "";
+        
+        Connection dbCon = null;
+        
+        return dbCon = DriverManager.getConnection(dbURL, username, password);
+ 
+	}
+
+	@Override
+	public String databaseServer(String email, String password)
+			throws IllegalArgumentException {
+		Connection dbCon = null;
+		Statement stmt = null;
+
+        String insertUserQuery = "INSERT INTO user (email, password) VALUES (?,?)";
+        
+           try{
+        	      dbCon = initializeDBConnection(); 
+        	      PreparedStatement preparedStmt = dbCon.prepareStatement(insertUserQuery);
+        	   	  preparedStmt.setString(1, email);
+        	      preparedStmt.setString(2, password);
+        	      
+        	      
+        	      preparedStmt.executeUpdate();
+           
+           } catch (SQLException ex) {
+               Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+           } 
+              //close connection ,stmt and resultset here
+        	   
+           
+		return null;
 	}
 }

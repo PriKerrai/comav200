@@ -12,6 +12,19 @@ import com.google.gwt.user.client.ui.*;
  */
 public class Comav200 implements EntryPoint {
 	
+	
+	private static Comav200 instance = null;
+	
+	public static Comav200 GetInstance(){
+		if(instance == null){
+			instance = new Comav200();
+			return instance;
+		}
+		else{
+			return instance;
+		}
+	}
+	
 	 public Button diagramButton1 = new Button("diagramButton1");
      public Button diagramButton2 = new Button("diagramButton2");
      public Button diagramButton3 = new Button("diagramButton3");
@@ -43,20 +56,9 @@ public class Comav200 implements EntryPoint {
         final Label errorLabel = new Label("hjehej");
        
         LogIn login = new LogIn();
+
+        RootPanel.get("oryxDiv").add(login.screen());
         
-        
-        RootPanel.get("topDiv").add(login.screen());
-        
-        
-        //RootPanel.get("centerDiv").add(errorLabel);
-        RootPanel.get("rightDivBot").add(votingPanel("title", "preview", 1));
-        RootPanel.get("topDiv").add(topMenuButtons());
-        RootPanel.get("rightDivTop").add(diagramButtons());
-        Frame testOryxFrame = new Frame("http://localhost/oryx/oryx.xhtml");
-       
-        testOryxFrame.setHeight("100%");
-        testOryxFrame.setWidth("99%");
-        RootPanel.get("oryxDiv").add(testOryxFrame);
         //RootPanel.get("oryxDiv").add(logIn.screen());
         // We can add style names to widgets
         sendButton.addStyleName("sendButton");
@@ -148,6 +150,10 @@ public class Comav200 implements EntryPoint {
 								serverResponseLabel.setHTML(result);
 								dialogBox.center();
 								closeButton.setFocus(true);
+								RootPanel.get("mainDiv").clear();
+								RootPanel.get("topDiv").clear();
+								RootPanel.get("oryxDiv").clear();
+								RootPanel.get("rightDivBot").clear();
 							}
 						});
 			}
@@ -157,6 +163,7 @@ public class Comav200 implements EntryPoint {
 		MyHandler handler = new MyHandler();
 		diagramButton1.addClickHandler(handler);
 		nameField.addKeyUpHandler(handler);
+		
 	}
 	
 
@@ -255,5 +262,44 @@ public class Comav200 implements EntryPoint {
                       
             return cp;
     }
+    
+    public void initializeOryx() {
+    	
+        RootPanel.get("rightDivBot").add(votingPanel("title", "preview", 1));
+        
+        RootPanel.get("topDiv").add(topMenuButtons());
+        RootPanel.get("rightDivTop").add(diagramButtons());
+        Frame testOryxFrame = new Frame("http://localhost/oryx/oryx.xhtml");
+        testOryxFrame.setHeight("100%");
+        testOryxFrame.setWidth("99%");
+        RootPanel.get("oryxDiv").clear();
+        RootPanel.get("oryxDiv").add(testOryxFrame);
+    }
+    
+public void initializeSignUp() {
+    	
+		RootPanel.get("oryxDiv").clear();
+        
+		SignUp signUp = new SignUp();
+
+        RootPanel.get("oryxDiv").add(signUp.screen());
+    }
+
+public void addUserToDatabase(String email, String password) {
+	
+	databaseConnection.databaseServer(email, password,
+			new AsyncCallback<String>() {
+				public void onFailure(Throwable caught) {
+					
+				}
+
+				public void onSuccess(String result) {
+					initializeOryx();
+				}
+			});
 
 }
+}
+
+
+
