@@ -9,6 +9,9 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class LogIn {
 
+	
+	public boolean hello = false;
+	
         public Panel screen(){
                 VerticalPanel vPanel = new VerticalPanel();
                 TextBox emailTextBox = new TextBox();
@@ -23,7 +26,7 @@ public class LogIn {
                 vPanel.add(passwordLabel);
                 vPanel.add(passwordTextBox);
                 vPanel.add(logInButton);
-               
+
                
                 return vPanel;
         }

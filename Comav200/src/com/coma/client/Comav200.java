@@ -42,12 +42,16 @@ public class Comav200 implements EntryPoint {
         nameField.setText("GWT User");
         final Label errorLabel = new Label("hjehej");
        
+        LogIn login = new LogIn();
+        
+        
+        RootPanel.get("topDiv").add(login.screen());
+        
+        
         //RootPanel.get("centerDiv").add(errorLabel);
         RootPanel.get("rightDivBot").add(votingPanel("title", "preview", 1));
-       
         RootPanel.get("topDiv").add(topMenuButtons());
         RootPanel.get("rightDivTop").add(diagramButtons());
-       
         Frame testOryxFrame = new Frame("http://localhost/oryx/oryx.xhtml");
        
         testOryxFrame.setHeight("100%");
@@ -56,7 +60,7 @@ public class Comav200 implements EntryPoint {
         //RootPanel.get("oryxDiv").add(logIn.screen());
         // We can add style names to widgets
         sendButton.addStyleName("sendButton");
-
+        
         // Focus the cursor on the name field when the app loads
         nameField.setFocus(true);
         nameField.selectAll();
@@ -248,8 +252,7 @@ public class Comav200 implements EntryPoint {
             mainPanel.add(panel);
             }
             cp.add(mainPanel);
-           
-           
+                      
             return cp;
     }
 

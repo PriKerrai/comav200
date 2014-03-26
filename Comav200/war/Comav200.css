@@ -13,14 +13,21 @@ h1 {
   text-align: center;
 }
 
+#mainDiv
+{
+	width: 100%;
+	height: 100%;
+	background-color: #345678;
+}
+
 #topDiv
 {
-        border-top: 1px solid black;
-        border-bottom: 1px solid black;
+   border-top: 1px solid black;
+   border-bottom: 1px solid black;
     min-width:1300px;
     width: 100%;
     height:9%;
-        background-color: #666666;
+    background-color: #666666;
        
    
 }
