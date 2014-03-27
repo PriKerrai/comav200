@@ -81,10 +81,9 @@ public class LogIn {
         
         private boolean checkAuthantication(String email, String password){
         	
-        	
         	String encryptedPassword = encryptPassword(password);
         	String dbPassword = Comav200.GetInstance().getPasswordFromDatabase(email);
-        	
+
         	if(encryptedPassword.equals(dbPassword)){        		
         		return true;
         	}
@@ -100,9 +99,10 @@ public class LogIn {
             public void onClick(ClickEvent event) {
 
                     if(event.getSource().equals(logInButton)){
-                    	
+                    	System.out.print("loginbutton");
                     	if(checkAuthantication(email.getText(), password.getValue())){
                     		Comav200.GetInstance().initializeOryx();
+                    		
                     	}
                     }
                     if(event.getSource().equals(signUpButton)){

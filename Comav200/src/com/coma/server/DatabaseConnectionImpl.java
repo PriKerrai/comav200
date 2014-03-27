@@ -78,26 +78,24 @@ public class DatabaseConnectionImpl extends RemoteServiceServlet implements
 	@Override
 	public String databaseServer(String email)throws IllegalArgumentException {
 		Connection dbCon = null;
-		Statement stmt = null;
-		String password = null;
-		
-		System.out.print(email);
+		String password = "hej";
+	
         String query = "SELECT password FROM user WHERE email = ?";
-        
+
            try{
+
         	      dbCon = initializeDBConnection(); 
         	      PreparedStatement preparedStatement = dbCon.prepareStatement(query);
         	      preparedStatement.setString(1, email);
-        	      ResultSet rs = preparedStatement.executeQuery(query);
+        	      ResultSet rs = preparedStatement.executeQuery();
         	      while (rs.next()) {
         	      	password = rs.getString("password");	
         	      }
-        	      
+        	      return password;
            
            } catch (SQLException ex) {
                Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
-           } 
-              //close connection ,stmt and resultset here       
-		return password;
+           }      
+		return null;
 	}
 }
