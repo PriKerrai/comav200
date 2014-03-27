@@ -3,10 +3,15 @@ package com.coma.client;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import org.apache.tools.ant.taskdefs.Sleep;
 import org.eclipse.jetty.util.security.Password;
 
 import com.coma.shared.FieldVerifier;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -28,7 +33,7 @@ public class LogIn {
 	Button signUpButton = new Button("Sign Up");
 	TextBox email = new TextBox();
 	PasswordTextBox password = new PasswordTextBox();
-	
+
         public FormPanel screen(){
         	final FormPanel form = new FormPanel();
         	form.setEncoding(FormPanel.ENCODING_MULTIPART);
@@ -78,12 +83,16 @@ public class LogIn {
     		}
     		return hashtext;
     	}
-        
-        private boolean checkAuthantication(String email, String password){
-        	
-        	String encryptedPassword = encryptPassword(password);
-        	String dbPassword = Comav200.GetInstance().getPasswordFromDatabase(email);
 
+         	
+        private boolean checkAuthantication(String email, String password){
+        	String encryptedPassword = encryptPassword(password);
+        	String dbPassword = null;
+        	
+        	Comav200.GetInstance().getPasswordFromDatabase(email);
+        	dbPassword = Comav200.GetInstance().getResult();
+        	System.out.println("db");
+        	
         	if(encryptedPassword.equals(dbPassword)){        		
         		return true;
         	}
@@ -99,7 +108,6 @@ public class LogIn {
             public void onClick(ClickEvent event) {
 
                     if(event.getSource().equals(logInButton)){
-                    	System.out.print("loginbutton");
                     	if(checkAuthantication(email.getText(), password.getValue())){
                     		Comav200.GetInstance().initializeOryx();
                     		
@@ -109,7 +117,6 @@ public class LogIn {
                     	System.out.print(email.getText());
                     	Comav200.GetInstance().initializeSignUp();
                     }
-
             }
     }
         

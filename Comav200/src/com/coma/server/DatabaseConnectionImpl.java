@@ -81,19 +81,23 @@ public class DatabaseConnectionImpl extends RemoteServiceServlet implements
 		String password = "hej";
 	
         String query = "SELECT password FROM user WHERE email = ?";
-
+        System.out.println("databaseServer");
            try{
-
+        	   System.out.println("before connection");
         	      dbCon = initializeDBConnection(); 
+        	      System.out.println("after connection");
         	      PreparedStatement preparedStatement = dbCon.prepareStatement(query);
         	      preparedStatement.setString(1, email);
         	      ResultSet rs = preparedStatement.executeQuery();
         	      while (rs.next()) {
-        	      	password = rs.getString("password");	
+        	    	  System.out.println("while");
+        	      	password = rs.getString("password");
         	      }
+        	      System.out.println("password = " + password);
         	      return password;
            
            } catch (SQLException ex) {
+        	   System.out.println("CATCH");
                Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
            }      
 		return null;

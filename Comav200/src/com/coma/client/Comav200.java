@@ -12,7 +12,6 @@ import com.google.gwt.user.client.ui.*;
  */
 public class Comav200 implements EntryPoint {
 	
-	
 	private static Comav200 instance = null;
 	
 	public static Comav200 GetInstance(){
@@ -25,16 +24,23 @@ public class Comav200 implements EntryPoint {
 		}
 	}
 	
-	 public Button diagramButton1 = new Button("diagramButton1");
-     public Button diagramButton2 = new Button("diagramButton2");
-     public Button diagramButton3 = new Button("diagramButton3");
-     public Button diagramButton4 = new Button("diagramButton4");
-     public Button diagramButton5 = new Button("diagramButton5");
-     String res = null;
+	private String result;
+	
+	public String getResult() {
+		return result;
+	}
+
+	public void setResult(String value) {
+		result = value;
+	}
+
+	public Button diagramButton1 = new Button("diagramButton1");
+    public Button diagramButton2 = new Button("diagramButton2");
+    public Button diagramButton3 = new Button("diagramButton3");
+    public Button diagramButton4 = new Button("diagramButton4");
+    public Button diagramButton5 = new Button("diagramButton5");
      
-     
-     
-     LogIn logIn = new LogIn();
+    LogIn logIn = new LogIn();
 
 	/**
 	 * The message displayed to the user when the server cannot be reached or
@@ -289,22 +295,20 @@ public void initializeSignUp() {
         RootPanel.get("oryxDiv").add(signUp.screen());
     }
 
-public String getPasswordFromDatabase(String email) {
+public void getPasswordFromDatabase(String email) {
 	
-	
+System.out.println("getPasswordFromDatabase");
 	
 	databaseConnection.databaseServer(email, new AsyncCallback<String>() {
 				public void onFailure(Throwable caught) {
-					
+					System.out.println("onFailure");
 				}
 
 				public void onSuccess(String result) {
-					res = result;
+					setResult(result);	
+					System.out.println("success");
 				}
 			});
-	
-		return res;
-
 	}
 
 public void addUserToDatabase(String email, String password) {
