@@ -1,5 +1,7 @@
 package com.coma.client;
 
+import java.sql.SQLException;
+
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
