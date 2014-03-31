@@ -91,6 +91,7 @@ public class Comav200 implements EntryPoint {
                     		DialogBox b = gdb.createDialogBox();
                     		b.center();
                     		b.show();
+
                     		
                     }
                     else if(event.getSource().equals(diagramButton2)){
@@ -244,7 +245,7 @@ public void initializeSignUp() {
 
 public void getPasswordFromDatabase(String email) {
 		
-	databaseConnection.databaseServer(email, new AsyncCallback<String>() {
+	databaseConnection.getPasswordForAuthorization(email, new AsyncCallback<String>() {
 				public void onFailure(Throwable caught) {
 				}
 
@@ -256,13 +257,13 @@ public void getPasswordFromDatabase(String email) {
 
 public void addUserToDatabase(String email, String password) {
 	
-	databaseConnection.databaseServer(email, password,
-			new AsyncCallback<String>() {
+	databaseConnection.createNewUser(email, password,
+			new AsyncCallback<Void>() {
 				public void onFailure(Throwable caught) {
 					
 				}
 
-				public void onSuccess(String result) {
+				public void onSuccess(Void result) {
 					initializeOryx();
 				}
 			});

@@ -50,7 +50,7 @@ public class DatabaseConnectionImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public String databaseServer(String email, String password)
+	public void createNewUser(String email, String password)
 			throws IllegalArgumentException {
 		Connection dbCon = null;
 		Statement stmt = null;
@@ -69,14 +69,10 @@ public class DatabaseConnectionImpl extends RemoteServiceServlet implements
            } catch (SQLException ex) {
                Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
            } 
-              //close connection ,stmt and resultset here
-        	   
-           
-		return null;
 	}
 	
 	@Override
-	public String databaseServer(String email)throws IllegalArgumentException {
+	public String getPasswordForAuthorization(String email)throws IllegalArgumentException {
 		Connection dbCon = null;
 		String password = null;
 	
@@ -95,5 +91,24 @@ public class DatabaseConnectionImpl extends RemoteServiceServlet implements
                Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
            }      
 		return null;
+	}
+
+	@Override
+	public void createNewGroup(int userID, String groupName, String date) {
+		Connection dbCon = null;
+		String password = null;
+	
+        String query = "INSERT INTO group VALUES(?,?,?)";
+           try{
+        	      dbCon = initializeDBConnection(); 
+        	      PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+        	      preparedStatement.setInt(1, userID);
+        	      preparedStatement.setString(2, groupName);
+        	      preparedStatement.setString(3, date);
+        	      preparedStatement.executeUpdate();
+           
+           } catch (SQLException ex) {
+               Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+           }      
 	}
 }

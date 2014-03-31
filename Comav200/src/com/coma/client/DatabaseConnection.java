@@ -10,6 +10,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
  */
 @RemoteServiceRelativePath("database")
 public interface DatabaseConnection extends RemoteService {
-	String databaseServer(String email) throws IllegalArgumentException;
-	String databaseServer(String name, String password) throws IllegalArgumentException;
+	void createNewUser(String name, String password) throws IllegalArgumentException;
+	void createNewGroup(int userID, String groupName, String date);
+	String getPasswordForAuthorization(String email);
 }

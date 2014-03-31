@@ -1,92 +1,79 @@
 package com.coma.client.widgets;
 
+import java.awt.TextField;
+import java.util.Date;
+
+import com.coma.client.DatabaseConnection;
+import com.coma.client.DatabaseConnectionAsync;
+import com.coma.client.User;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.i18n.client.Constants;
-import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
+
 
 public class GroupDialogBox{
-
-	 public static interface CwConstants extends Constants {
-		    String cwDialogBoxCaption();
-
-		    String cwDialogBoxClose();
-
-		    String cwDialogBoxDescription();
-
-		    String cwDialogBoxDetails();
-
-		    String cwDialogBoxItem();
-
-		    String cwDialogBoxListBoxInfo();
-
-		    String cwDialogBoxMakeTransparent();
-
-		    String cwDialogBoxName();
-
-		    String cwDialogBoxShowButton();
-		  }
+	private TextBox nameBox;
 	
-	  private CwConstants constants;
+	private final DatabaseConnectionAsync databaseConnection = GWT
+			.create(DatabaseConnection.class);
+	
+	public DialogBox createDialogBox(){
+// Create the popup dialog box
+		final DialogBox dialogBox = new DialogBox();
+		dialogBox.setAnimationEnabled(true);
+		dialogBox.setText("Create group");
+		
+		final Button sendButton = new Button("Send");
+		sendButton.getElement().setId("sendButton");
+		VerticalPanel dialogVPanel = new VerticalPanel();
+		dialogVPanel.addStyleName("dialogVPanel");
+		dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
+		
+		dialogVPanel.add(new Label("Group name:"));
+		
+		nameBox = new TextBox();
+		
+		dialogVPanel.add(nameBox);
+		
+		dialogVPanel.add(sendButton);
+		dialogBox.setWidget(dialogVPanel);
 
-	  public Widget onInitialize() {
-	    // Create the dialog box
-	    final DialogBox dialogBox = createDialogBox();
-	    dialogBox.setGlassEnabled(true);
-	    dialogBox.setAnimationEnabled(true);
-	    return dialogBox;
-	  }
+		// Add a handler to close the DialogBox
+		sendButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				String groupName = nameBox.getText();
+				int userID = User.getInstance().getUserId();
+				Date date = new Date();
+				createNewGroup(userID, groupName, date.toString());
 
-	  /**
-	   * Create the dialog box for this example.
-	   *
-	   * @return the new dialog box
-	   */
-	  public DialogBox createDialogBox() {
-	    // Create a dialog box and set the caption text
-	    final DialogBox dialogBox = new DialogBox();
-	    dialogBox.ensureDebugId("cwDialogBox");
-	    dialogBox.setText(constants.cwDialogBoxCaption());
+				dialogBox.hide();
 
-	    // Create a table to layout the content
-	    VerticalPanel dialogContents = new VerticalPanel();
-	    dialogContents.setSpacing(4);
-	    dialogBox.setWidget(dialogContents);
+			}
+		});
+		
+		return dialogBox;
+	}
 
-	    // Add some text to the top of the dialog
-	    HTML details = new HTML(constants.cwDialogBoxDetails());
-	    dialogContents.add(details);
-	    dialogContents.setCellHorizontalAlignment(
-	        details, HasHorizontalAlignment.ALIGN_CENTER);
+	public void createNewGroup(int userID, String groupName, String date) {
+		
+		databaseConnection.createNewGroup(userID, groupName, date, new AsyncCallback<Void>() {
+					public void onFailure(Throwable caught) {
+					}
 
-	    
-	    // Add a close button at the bottom of the dialog
-	    Button closeButton = new Button(
-	        constants.cwDialogBoxClose(), new ClickHandler() {
-	          @Override
-	        	public void onClick(ClickEvent event) {
-	            dialogBox.hide();
-	          }
-	        });
-	    dialogContents.add(closeButton);
-	    if (LocaleInfo.getCurrentLocale().isRTL()) {
-	      dialogContents.setCellHorizontalAlignment(
-	          closeButton, HasHorizontalAlignment.ALIGN_LEFT);
-
-	    } else {
-	      dialogContents.setCellHorizontalAlignment(
-	          closeButton, HasHorizontalAlignment.ALIGN_RIGHT);
-	    }
-
-	    // Return the dialog box
-	    return dialogBox;
-	  }
+					@Override
+					public void onSuccess(Void result) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
+		}
 }
-
