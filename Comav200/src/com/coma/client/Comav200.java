@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.*;
 import com.coma.client.oryxhandlers.LoadingCompleteEventListener;
 import com.coma.client.oryxhandlers.LoadingCompletehandler;
 import com.coma.client.widgets.CallbackHandler;
+import com.coma.client.widgets.GroupDialogBox;
 
 
 /**
@@ -67,9 +68,10 @@ public class Comav200 implements EntryPoint {
 	 */
 	public void onModuleLoad() {
      
-        LogIn login = new LogIn();
+        //LogIn login = new LogIn();
+		
 
-        RootPanel.get("oryxDiv").add(login.screen());
+        RootPanel.get("mainDiv").add(initTabPanel());
 
 
 		// Add a handler to send the name to the server
@@ -85,7 +87,11 @@ public class Comav200 implements EntryPoint {
             public void onClick(ClickEvent event) {
 
                     if(event.getSource().equals(diagramButton1)){
-
+                    		GroupDialogBox gdb = new GroupDialogBox();
+                    		DialogBox b = gdb.createDialogBox();
+                    		b.center();
+                    		b.show();
+                    		
                     }
                     else if(event.getSource().equals(diagramButton2)){
 
@@ -102,18 +108,45 @@ public class Comav200 implements EntryPoint {
             }
     }
    
+    private TabPanel initTabPanel(){
+    	
+    	TabPanel panel = new TabPanel();
+		panel.add(initMain(), "Main");
+		panel.add(initializeOryx(), "Group Model");
+		panel.add(diagramButtons(), "Proposals");		
+		
+		panel.setSize("100%", "100%");
+		
+		panel.selectTab(0);
+		
+		return panel;
+		
+	
+    }
+    
     private Panel topMenuButtons()
-    {
+    { 	
             HorizontalPanel panel = new HorizontalPanel();
    
             final Button importButton = new Button("Import");
             final Button exportButton = new Button("Export");
+            final Button createGroup = new Button("Create group");
+            final Button inviteGroup = new Button("Invite to group");
+            final Button switchGroup = new Button("Switch group");
+
 
             importButton.getElement().setClassName("utilityButton");
             exportButton.getElement().setClassName("utilityButton");
-           
+            createGroup.getElement().setClassName("utilityButton");
+            inviteGroup.getElement().setClassName("utilityButton");
+            switchGroup.getElement().setClassName("utilityButton");
+            
             panel.add(importButton);
             panel.add(exportButton);
+            panel.add(createGroup);
+            panel.add(inviteGroup);
+            panel.add(switchGroup);
+    	
             return panel;  
     }
    
@@ -154,38 +187,50 @@ public class Comav200 implements EntryPoint {
            
             VerticalPanel mainPanel = new VerticalPanel();
             for(int i = 0; i<10; i++){
-            HorizontalPanel panel = new HorizontalPanel();
-            VerticalPanel vPanel = new VerticalPanel();
-            HorizontalPanel hPanel = new HorizontalPanel();
-            panel.add(new Label(preview));
-            panel.add(vPanel);
-            vPanel.add(new Label(title));
-            vPanel.add(hPanel);
-
-            hPanel.add(new Button("1"));
-            hPanel.add(new Button("2"));
-            hPanel.add(new Button("3"));
-            hPanel.add(new Button("4"));
-            hPanel.add(new Button("5"));
-           
-            mainPanel.add(panel);
+	            HorizontalPanel panel = new HorizontalPanel();
+	            VerticalPanel vPanel = new VerticalPanel();
+	            HorizontalPanel hPanel = new HorizontalPanel();
+	            
+	            panel.add(new Label(preview));
+	            panel.add(vPanel);
+	            vPanel.add(new Label(title));
+	            vPanel.add(hPanel);
+	
+	            hPanel.add(new Button("1"));
+	            hPanel.add(new Button("2"));
+	            hPanel.add(new Button("3"));
+	            hPanel.add(new Button("4"));
+	            hPanel.add(new Button("5"));
+	           
+	            mainPanel.add(panel);
             }
             cp.add(mainPanel);
                       
             return cp;
     }
     
-    public void initializeOryx() {
-    	
+    
+    private Panel initMain(){
+    	VerticalPanel panel = new VerticalPanel();
+    	panel.add(topMenuButtons());
+    	panel.add(initializeOryx());
+    	return panel;
+    }
+    
+    public Frame initializeOryx() {
+    	/*
         RootPanel.get("rightDivBot").add(votingPanel("title", "preview", 1));
-        
         RootPanel.get("topDiv").add(topMenuButtons());
         RootPanel.get("rightDivTop").add(diagramButtons());
-        Frame testOryxFrame = new Frame("http://localhost/oryx/oryx.xhtml");
-        testOryxFrame.setHeight("100%");
-        testOryxFrame.setWidth("99%");
         RootPanel.get("oryxDiv").clear();
         RootPanel.get("oryxDiv").add(testOryxFrame);
+        */
+        
+        Frame oryxFrame = new Frame("http://localhost/oryx/oryx.xhtml");
+        oryxFrame.setHeight("600px");
+        oryxFrame.setWidth("100%");
+        return oryxFrame;
+
     }
     
 public void initializeSignUp() {
@@ -198,17 +243,13 @@ public void initializeSignUp() {
     }
 
 public void getPasswordFromDatabase(String email) {
-	
-System.out.println("getPasswordFromDatabase");
-	
+		
 	databaseConnection.databaseServer(email, new AsyncCallback<String>() {
 				public void onFailure(Throwable caught) {
-					System.out.println("onFailure");
 				}
 
 				public void onSuccess(String result) {
 					setResult(result);	
-					System.out.println("success");
 				}
 			});
 	}

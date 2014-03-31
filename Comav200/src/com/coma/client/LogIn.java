@@ -91,7 +91,6 @@ public class LogIn {
         	
         	Comav200.GetInstance().getPasswordFromDatabase(email);
         	dbPassword = Comav200.GetInstance().getResult();
-        	System.out.println("db");
         	
         	if(encryptedPassword.equals(dbPassword)){        		
         		return true;
