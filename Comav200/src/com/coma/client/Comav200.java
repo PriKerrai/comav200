@@ -9,8 +9,7 @@ import com.google.gwt.user.client.ui.*;
 import com.coma.client.oryxhandlers.LoadingCompleteEventListener;
 import com.coma.client.oryxhandlers.LoadingCompletehandler;
 import com.coma.client.widgets.CallbackHandler;
-import com.coma.client.widgets.GroupDialogBox;
-
+import com.coma.client.widgets.*;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -41,13 +40,15 @@ public class Comav200 implements EntryPoint {
 		result = value;
 	}
 
-	public Button diagramButton1 = new Button("diagramButton1");
-    public Button diagramButton2 = new Button("diagramButton2");
-    public Button diagramButton3 = new Button("diagramButton3");
-    public Button diagramButton4 = new Button("diagramButton4");
-    public Button diagramButton5 = new Button("diagramButton5");
+    public Button importButton = new Button("Import");
+    public Button exportButton = new Button("Export");
+    public Button createGroup = new Button("Create group");
+    public Button inviteGroup = new Button("Invite to group");
+    public Button switchGroup = new Button("Switch group");
+
      
     LogIn logIn = new LogIn();
+    SignUp signUp = new SignUp();
 
 	/**
 	 * The message displayed to the user when the server cannot be reached or
@@ -67,17 +68,7 @@ public class Comav200 implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-     
-        //LogIn login = new LogIn();
-		
-
-        RootPanel.get("mainDiv").add(initTabPanel());
-
-
-		// Add a handler to send the name to the server
-		MyHandler handler = new MyHandler();
-		diagramButton1.addClickHandler(handler);
-		
+        RootPanel.get("mainDiv").add(logIn.screen());
 	}
 	
 
@@ -86,31 +77,30 @@ public class Comav200 implements EntryPoint {
             @Override
             public void onClick(ClickEvent event) {
 
-                    if(event.getSource().equals(diagramButton1)){
-                    		GroupDialogBox gdb = new GroupDialogBox();
-                    		DialogBox b = gdb.createDialogBox();
-                    		b.center();
-                    		b.show();
-
-                    		
+            		if(event.getSource().equals(createGroup)){
+                    	GroupDialogBox gdb = new GroupDialogBox();
+                		DialogBox b = gdb.createDialogBox();
+                		b.center();
+                		b.show();
                     }
-                    else if(event.getSource().equals(diagramButton2)){
-
+                    else if(event.getSource().equals(switchGroup)){
+                    	SwitchGroupDialogBox sgdb = new SwitchGroupDialogBox();
+                		DialogBox b = sgdb.createDialogBox();
+                		b.center();
+                		b.show();
                     }
-                    else if(event.getSource().equals(diagramButton3)){
-
+                    else if(event.getSource().equals(inviteGroup)){
+                    	InviteToGroupDialogBox itgdb = new InviteToGroupDialogBox();
+                		DialogBox b = itgdb.createDialogBox();
+                		b.center();
+                		b.show();
                     }
-                    else if(event.getSource().equals(diagramButton4)){
 
-                    }
-                    else if(event.getSource().equals(diagramButton5)){
-
-                    }
             }
     }
    
-    private TabPanel initTabPanel(){
-    	
+    public TabPanel initTabPanel(){
+
     	TabPanel panel = new TabPanel();
 		panel.add(initMain(), "Main");
 		panel.add(initializeOryx(), "Group Model");
@@ -129,11 +119,11 @@ public class Comav200 implements EntryPoint {
     { 	
             HorizontalPanel panel = new HorizontalPanel();
    
-            final Button importButton = new Button("Import");
-            final Button exportButton = new Button("Export");
-            final Button createGroup = new Button("Create group");
-            final Button inviteGroup = new Button("Invite to group");
-            final Button switchGroup = new Button("Switch group");
+            importButton = new Button("Import");
+            exportButton = new Button("Export");
+            createGroup = new Button("Create group");
+            inviteGroup = new Button("Invite to group");
+            switchGroup = new Button("Switch group");
 
 
             importButton.getElement().setClassName("utilityButton");
@@ -141,6 +131,11 @@ public class Comav200 implements EntryPoint {
             createGroup.getElement().setClassName("utilityButton");
             inviteGroup.getElement().setClassName("utilityButton");
             switchGroup.getElement().setClassName("utilityButton");
+            
+            MyHandler handler = new MyHandler();
+            createGroup.addClickHandler(handler);
+            inviteGroup.addClickHandler(handler);
+            switchGroup.addClickHandler(handler);
             
             panel.add(importButton);
             panel.add(exportButton);
@@ -154,28 +149,10 @@ public class Comav200 implements EntryPoint {
     //Buttons for diagrams in rightDiv
     private Panel diagramButtons()
     {
-            diagramButton1 = new Button("diagramButton1");
-            diagramButton2 = new Button("diagramButton2");
-            diagramButton3 = new Button("diagramButton3");
-            diagramButton4 = new Button("diagramButton4");
-            diagramButton5 = new Button("diagramButton5");
-           
-            MyHandler m = new MyHandler();
-            diagramButton1.addClickHandler(m);
-            diagramButton2.addClickHandler(m);
-           
-            diagramButton1.getElement().setClassName("diagramButton");
-            diagramButton2.getElement().setClassName("diagramButton");
-            diagramButton3.getElement().setClassName("diagramButton");
-            diagramButton4.getElement().setClassName("diagramButton");
-            diagramButton5.getElement().setClassName("diagramButton");
-           
+         
             FlowPanel flowPanel = new FlowPanel();
-            flowPanel.add(diagramButton1);
-            flowPanel.add(diagramButton2);
-            flowPanel.add(diagramButton3);
-            flowPanel.add(diagramButton4);
-            flowPanel.add(diagramButton5);
+            flowPanel.add(initializeOryx());
+            flowPanel.add(votingPanel("Baever", "Tex Luthor", 1));
 
             return flowPanel;
     }
@@ -187,7 +164,7 @@ public class Comav200 implements EntryPoint {
             cp.setHeight("100%");
            
             VerticalPanel mainPanel = new VerticalPanel();
-            for(int i = 0; i<10; i++){
+            for(int i = 0; i<5; i++){
 	            HorizontalPanel panel = new HorizontalPanel();
 	            VerticalPanel vPanel = new VerticalPanel();
 	            HorizontalPanel hPanel = new HorizontalPanel();
@@ -236,11 +213,11 @@ public class Comav200 implements EntryPoint {
     
 public void initializeSignUp() {
     	
-		RootPanel.get("oryxDiv").clear();
+		RootPanel.get("mainDiv").clear();
         
 		SignUp signUp = new SignUp();
 
-        RootPanel.get("oryxDiv").add(signUp.screen());
+        RootPanel.get("mainDiv").add(signUp.screen());
     }
 
 public void getPasswordFromDatabase(String email) {
@@ -254,6 +231,20 @@ public void getPasswordFromDatabase(String email) {
 				}
 			});
 	}
+
+public void getAndSetUserIDFromDatabase(String email) {
+	
+	databaseConnection.getUserID(email, new AsyncCallback<Integer>() {
+				public void onFailure(Throwable caught) {
+				}
+				@Override
+				public void onSuccess(Integer result) {
+					User.getInstance().setUserId(result);
+				}
+			});
+	}
+
+
 
 public void addUserToDatabase(String email, String password) {
 	
@@ -269,6 +260,12 @@ public void addUserToDatabase(String email, String password) {
 			});
 
 	}
+
+public void initMainProgram() {
+	RootPanel.get("mainDiv").clear();
+	RootPanel.get("mainDiv").add(initTabPanel());
+	
+}
 }
 
 

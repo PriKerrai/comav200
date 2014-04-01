@@ -6,12 +6,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.coma.client.DatabaseConnection;
-import com.coma.shared.FieldVerifier;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -20,9 +21,6 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 @SuppressWarnings("serial")
 public class DatabaseConnectionImpl extends RemoteServiceServlet implements
 		DatabaseConnection {
-
-
-
 	/**
 	 * Escape an html string. Escaping data received from the client helps to
 	 * prevent cross-site script vulnerabilities.
@@ -92,14 +90,40 @@ public class DatabaseConnectionImpl extends RemoteServiceServlet implements
            }      
 		return null;
 	}
+	
+	@Override
+	public int getUserID(String email) throws IllegalArgumentException {
+		Connection dbCon = null;
+		int userID = 0;
+	
+        String query = "SELECT ID FROM user WHERE email = ?";
+           try{
+        	      dbCon = initializeDBConnection(); 
+        	      PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+        	      preparedStatement.setString(1, email);
+        	      ResultSet rs = preparedStatement.executeQuery();
+        	      while (rs.next()) {
+        	    	  userID = rs.getInt("ID");
+        	      }
+        	      return userID;
+           
+           } catch (SQLException ex) {
+               Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+           }      
+		return 0;
+	}
 
 	@Override
-	public void createNewGroup(int userID, String groupName, String date) {
+	public void createNewGroup(int userID, String groupName) {
 		Connection dbCon = null;
 		String password = null;
-	
-        String query = "INSERT INTO group VALUES(?,?,?)";
+		
+		String date = getDate();
+
+        String query = "INSERT INTO collaborationgroup (groupowner, groupname, creationdate) VALUES (?,?,?)";
            try{
+        	   	  System.out.println(userID + "    " + groupName);
+        	   	  System.out.println("    " + date);
         	      dbCon = initializeDBConnection(); 
         	      PreparedStatement preparedStatement = dbCon.prepareStatement(query);
         	      preparedStatement.setInt(1, userID);
@@ -111,4 +135,12 @@ public class DatabaseConnectionImpl extends RemoteServiceServlet implements
                Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
            }      
 	}
+	
+	public String getDate() {
+		GregorianCalendar calendar = new GregorianCalendar();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return format.format(calendar.getTime());
+	}
 }
+
+

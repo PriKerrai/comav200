@@ -34,6 +34,9 @@ public class LogIn {
 	TextBox email = new TextBox();
 	PasswordTextBox password = new PasswordTextBox();
 
+	private final DatabaseConnectionAsync databaseConnection = GWT
+			.create(DatabaseConnection.class);
+	
         public FormPanel screen(){
         	final FormPanel form = new FormPanel();
         	form.setEncoding(FormPanel.ENCODING_MULTIPART);
@@ -108,13 +111,14 @@ public class LogIn {
 
                     if(event.getSource().equals(logInButton)){
                     	if(checkAuthantication(email.getText(), password.getValue())){
-                    		Comav200.GetInstance().initializeOryx();
-                    		
+                    		Comav200.GetInstance().initMainProgram();
+                    		Comav200.GetInstance().getAndSetUserIDFromDatabase(email.getText());
                     	}
                     }
                     if(event.getSource().equals(signUpButton)){
                     	System.out.print(email.getText());
                     	Comav200.GetInstance().initializeSignUp();
+                    	
                     }
             }
     }

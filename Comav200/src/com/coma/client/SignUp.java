@@ -88,7 +88,7 @@ public class SignUp {
 		@Override
 		public void onClick(ClickEvent event) {
 
-			
+			String email = emailTextBox.getValue();
 			String password = passwordTextbox.getValue();
 			String passwordRepeated = passwordRepeatedTextbox.getValue();
 
@@ -100,6 +100,8 @@ public class SignUp {
 				if (password.equals(passwordRepeated)) {
 					Comav200.GetInstance().addUserToDatabase(
 							emailTextBox.getText(), encryptPassword(passwordTextbox.getValue()));
+					Comav200.GetInstance().initMainProgram();
+					Comav200.GetInstance().getAndSetUserIDFromDatabase(email);
 				} else {
 					return;
 				}

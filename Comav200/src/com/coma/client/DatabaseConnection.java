@@ -1,6 +1,7 @@
 package com.coma.client;
 
 import java.sql.SQLException;
+import java.util.Date;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -11,6 +12,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("database")
 public interface DatabaseConnection extends RemoteService {
 	void createNewUser(String name, String password) throws IllegalArgumentException;
-	void createNewGroup(int userID, String groupName, String date);
+	void createNewGroup(int userID, String groupName);
 	String getPasswordForAuthorization(String email);
+	int getUserID(String email);
 }
