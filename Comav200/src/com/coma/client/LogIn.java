@@ -8,7 +8,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.apache.tools.ant.taskdefs.Sleep;
-import org.eclipse.jetty.util.security.Password;
 
 import com.coma.shared.FieldVerifier;
 import com.google.gwt.core.client.GWT;

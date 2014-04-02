@@ -7,12 +7,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.coma.client.DatabaseConnection;
+import com.coma.client.DiagramInfo;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -95,8 +101,8 @@ public class DatabaseConnectionImpl extends RemoteServiceServlet implements
 	public int getUserID(String email) throws IllegalArgumentException {
 		Connection dbCon = null;
 		int userID = 0;
-	
-        String query = "SELECT ID FROM user WHERE email = ?";
+
+		String query = "SELECT ID FROM user WHERE email = ?";
            try{
         	      dbCon = initializeDBConnection(); 
         	      PreparedStatement preparedStatement = dbCon.prepareStatement(query);
@@ -111,6 +117,36 @@ public class DatabaseConnectionImpl extends RemoteServiceServlet implements
                Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
            }      
 		return 0;
+	}
+	
+	@Override
+	public List<DiagramInfo> getVoteList() throws IllegalArgumentException {
+		Connection dbCon = null;
+
+		List<DiagramInfo> diagramList = new ArrayList<DiagramInfo>();
+
+		String creator, diagramName, date;
+	
+        String query = "SELECT * FROM celllist";
+           try{
+        	      dbCon = initializeDBConnection(); 
+        	      PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+        	      ResultSet rs = preparedStatement.executeQuery();
+        	      while (rs.next()) {
+        	    	  
+        	    	  creator = rs.getString("creator");
+        	    	  diagramName = rs.getString("diagramname");
+        	    	  date = rs.getString("date");
+        	    	  DiagramInfo dI = new DiagramInfo(creator, diagramName, date);
+        	    	  
+        	    	  diagramList.add(dI);
+        	      }
+        	      return  diagramList;
+           } catch (SQLException ex) {
+               Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+           }      
+           return  null;
+		
 	}
 
 	@Override

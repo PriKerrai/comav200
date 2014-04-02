@@ -1,14 +1,22 @@
 package com.coma.client;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
 import com.coma.shared.FieldVerifier;
+import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dev.asm.tree.IntInsnNode;
 import com.google.gwt.event.dom.client.*;
+import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
+import com.google.gwt.user.client.rpc.InvocationException;
 import com.google.gwt.user.client.ui.*;
 import com.coma.client.oryxhandlers.LoadingCompleteEventListener;
 import com.coma.client.oryxhandlers.LoadingCompletehandler;
-import com.coma.client.widgets.CallbackHandler;
 import com.coma.client.widgets.*;
 
 /**
@@ -49,6 +57,7 @@ public class Comav200 implements EntryPoint {
      
     LogIn logIn = new LogIn();
     SignUp signUp = new SignUp();
+    VoteCellList voteCellList = new VoteCellList();
 
 	/**
 	 * The message displayed to the user when the server cannot be reached or
@@ -69,6 +78,7 @@ public class Comav200 implements EntryPoint {
 	 */
 	public void onModuleLoad() {
         RootPanel.get("mainDiv").add(logIn.screen());
+        getVoteMapData();
 	}
 	
 
@@ -147,46 +157,18 @@ public class Comav200 implements EntryPoint {
     }
    
     //Buttons for diagrams in rightDiv
-    private Panel diagramButtons()
+    private DockPanel diagramButtons()
     {
-         
-            FlowPanel flowPanel = new FlowPanel();
-            flowPanel.add(initializeOryx());
-            flowPanel.add(votingPanel("Baever", "Tex Luthor", 1));
+            Frame oryxFrame = initializeOryx();
+            oryxFrame.setWidth("99%");
+            
+            DockPanel dockPanel = new DockPanel();
+            dockPanel.setWidth("100%");
+            dockPanel.add(oryxFrame, DockPanel.WEST);
+            dockPanel.add(voteCellList.votingPanel(), DockPanel.EAST);
 
-            return flowPanel;
+            return dockPanel;
     }
-   
-   
-    private Panel votingPanel(String title, String preview, int id)
-    {
-            ScrollPanel cp = new ScrollPanel();
-            cp.setHeight("100%");
-           
-            VerticalPanel mainPanel = new VerticalPanel();
-            for(int i = 0; i<5; i++){
-	            HorizontalPanel panel = new HorizontalPanel();
-	            VerticalPanel vPanel = new VerticalPanel();
-	            HorizontalPanel hPanel = new HorizontalPanel();
-	            
-	            panel.add(new Label(preview));
-	            panel.add(vPanel);
-	            vPanel.add(new Label(title));
-	            vPanel.add(hPanel);
-	
-	            hPanel.add(new Button("1"));
-	            hPanel.add(new Button("2"));
-	            hPanel.add(new Button("3"));
-	            hPanel.add(new Button("4"));
-	            hPanel.add(new Button("5"));
-	           
-	            mainPanel.add(panel);
-            }
-            cp.add(mainPanel);
-                      
-            return cp;
-    }
-    
     
     private Panel initMain(){
     	VerticalPanel panel = new VerticalPanel();
@@ -196,14 +178,6 @@ public class Comav200 implements EntryPoint {
     }
     
     public Frame initializeOryx() {
-    	/*
-        RootPanel.get("rightDivBot").add(votingPanel("title", "preview", 1));
-        RootPanel.get("topDiv").add(topMenuButtons());
-        RootPanel.get("rightDivTop").add(diagramButtons());
-        RootPanel.get("oryxDiv").clear();
-        RootPanel.get("oryxDiv").add(testOryxFrame);
-        */
-        
         Frame oryxFrame = new Frame("http://localhost/oryx/oryx.xhtml");
         oryxFrame.setHeight("600px");
         oryxFrame.setWidth("100%");
@@ -232,10 +206,41 @@ public void getPasswordFromDatabase(String email) {
 			});
 	}
 
+public void getVoteMapData () {
+	databaseConnection.getVoteList(new AsyncCallback<List<DiagramInfo>>() {
+
+		@Override
+		public void onFailure(Throwable caught) {
+			// TODO Auto-generated method stub
+			try {
+				        throw caught;
+				      } catch (IncompatibleRemoteServiceException e) {
+				        // this client is not compatible with the server; cleanup and refresh the 
+				        // browser
+				    	  System.out.println("IncompatibleRemoteServiceException");
+				      } catch (InvocationException e) {
+				        // the call didn't complete cleanly
+				    	  System.out.println("InvocationException");
+				      } catch (Throwable e) {
+				    	  System.out.println("Throwable");
+				      }
+				    }
+				  
+		
+
+		@Override
+		public void onSuccess(List<DiagramInfo> result) {
+			// TODO Auto-generated method stub
+			voteCellList.setMap(result);
+		}
+	});
+}
+
 public void getAndSetUserIDFromDatabase(String email) {
 	
 	databaseConnection.getUserID(email, new AsyncCallback<Integer>() {
 				public void onFailure(Throwable caught) {
+					
 				}
 				@Override
 				public void onSuccess(Integer result) {
