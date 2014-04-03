@@ -14,10 +14,12 @@ public class LoadingCompletehandler implements CallbackHandler {
     
     public LoadingCompletehandler(LoadingCompleteEventListener loadingCompleteEventListener) {
         this.listener = loadingCompleteEventListener;
+        
     }
 
     @Override
     public void callBack(HashMap<String, String> data) {
+    	System.out.println("callback");
         if (data.get("action").equals("loaded")) {
             listener.loadingComplete();
         }

@@ -18,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.coma.client.DatabaseConnection;
+import com.coma.client.Model;
 import com.coma.client.DiagramInfo;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -152,8 +153,6 @@ public class DatabaseConnectionImpl extends RemoteServiceServlet implements
 	@Override
 	public void createNewGroup(int userID, String groupName) {
 		Connection dbCon = null;
-		String password = null;
-		
 		String date = getDate();
 
         String query = "INSERT INTO collaborationgroup (groupowner, groupname, creationdate) VALUES (?,?,?)";
@@ -166,16 +165,61 @@ public class DatabaseConnectionImpl extends RemoteServiceServlet implements
         	      preparedStatement.setString(2, groupName);
         	      preparedStatement.setString(3, date);
         	      preparedStatement.executeUpdate();
-           
            } catch (SQLException ex) {
                Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
-           }      
+           }  
+
 	}
 	
 	public String getDate() {
 		GregorianCalendar calendar = new GregorianCalendar();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		return format.format(calendar.getTime());
+	}
+
+	@Override
+	public void saveModel(int userID, String type, String model) {
+		
+		Connection dbCon = null;
+
+        String query = "INSERT INTO model (userID, type, model) VALUES (?,?,?)";
+           try{
+        	      dbCon = initializeDBConnection(); 
+        	      PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+        	      preparedStatement.setInt(1, userID);
+        	      preparedStatement.setString(2, type);
+        	      preparedStatement.setString(3, model);
+        	      preparedStatement.executeUpdate();
+           } catch (SQLException ex) {
+               Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+           }  
+		
+	}
+
+	@Override
+	public Model getModel(int modelID) {
+		Connection dbCon = null;
+		int userID = 0;
+		Model model = new Model();
+		
+        String query = "SELECT * FROM model WHERE id = ?";
+           try{
+        	      dbCon = initializeDBConnection(); 
+        	      PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+        	      preparedStatement.setInt(1, modelID);
+        	      ResultSet rs = preparedStatement.executeQuery();
+        	      while (rs.next()) {
+        	    	  model.setId(rs.getInt("id"));
+        	    	  model.setCreatorID(rs.getInt("userid"));
+        	    	  model.setType(rs.getString("type"));
+        	    	  model.setMessage(rs.getString("message"));
+        	      }
+        	      return model;
+           
+           } catch (SQLException ex) {
+               Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+           }      
+		return null;
 	}
 }
 

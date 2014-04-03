@@ -2,7 +2,6 @@ package com.coma.client;
 
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -17,6 +16,8 @@ public interface DatabaseConnection extends RemoteService {
 	void createNewGroup(int userID, String groupName);
 	String getPasswordForAuthorization(String email);
 	int getUserID(String email);
+	void saveModel(int userID, String type, String model);
+	Model getModel(int modelID);
 	List<DiagramInfo> getVoteList();
 	
 }

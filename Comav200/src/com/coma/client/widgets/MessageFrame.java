@@ -72,6 +72,7 @@ public class MessageFrame extends NamedFrame {
     }
 
     private void callBack() {
+
         for (CallbackHandler cbh : callbackHandlers) {
             cbh.callBack(callbackData);
         }
@@ -136,12 +137,14 @@ public class MessageFrame extends NamedFrame {
     }-*/;
 
     private native void sendStringNative(String data) /*-{
+    	alert("sendstringnative");
 		var messageframe = $doc
 				.getElementsByName(this.@com.coma.client.widgets.MessageFrame::name)[0].contentWindow;
 		messageframe.postMessage(data, "*");
     }-*/;
 
     private native void sendJSONNative(HashMap<String, String> data, Object[] keys) /*-{
+    	alert("sendJSONNative()");
 		var javascriptData = new Array();
 
 		for ( var key in keys) {

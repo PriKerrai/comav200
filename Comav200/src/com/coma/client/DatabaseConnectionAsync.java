@@ -1,7 +1,5 @@
 package com.coma.client;
 
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -16,6 +14,9 @@ public interface DatabaseConnectionAsync {
 	void createNewUser(String name, String password,
 			AsyncCallback<Void> callback);
 	void getUserID(String email, AsyncCallback<Integer> callback);
+	void saveModel(int userID, String type, String model,
+			AsyncCallback<Void> asyncCallback);
+	void getModel(int modelID, AsyncCallback<Model> asyncCallback);
 	void getVoteList(AsyncCallback<List<DiagramInfo>> callback);
 
 }
