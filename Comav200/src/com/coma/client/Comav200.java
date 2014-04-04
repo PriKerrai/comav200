@@ -1,12 +1,13 @@
 package com.coma.client;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.*;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
 import com.google.gwt.user.client.rpc.InvocationException;
@@ -77,8 +78,8 @@ public class Comav200 implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-		//RootPanel.get("mainDiv").add(logIn.screen());
-		initMainProgram();
+		RootPanel.get("mainDiv").add(logIn.screen());
+		//initMainProgram();
 	}
 
 	public void saveModel(){
@@ -102,10 +103,8 @@ public class Comav200 implements EntryPoint {
 				}
 				// Save the model that is in variable "message" (very long string/text)
 				String veryLongText = data.get("message");
-				System.out.println(veryLongText);
 				HEJ = veryLongText;
 				//shave to database
-
 			}
 		});
 		oryxFrame.sendJSON(oryxCmd);
@@ -127,7 +126,6 @@ public class Comav200 implements EntryPoint {
 				oryxFrame.addCallbackHandler(new CallbackHandler() {
 					@Override
 					public void callBack(final HashMap<String, String> data) {
-						System.out.println("hjehej");
 						oryxFrame.removeAllCallbackHandlers();
 						if (!data.get("action").equals("shapesloaded")) {
 							// Display error message that model cannot be loaded
@@ -182,14 +180,24 @@ public class Comav200 implements EntryPoint {
 
 	public TabPanel initTabPanel(){
 
-		TabPanel panel = new TabPanel();
+		//SpecialFrame myFrame = new SpecialFrame();
+		
+		final TabPanel panel = new TabPanel();
 		panel.add(initMain(), "Main");
-		//panel.add(initializeOryx(), "Group Model");
+		panel.add(topMenuButtons(), "Group Model");
 		//panel.add(diagramButtons(), "Proposals");		
-
 		panel.setSize("100%", "100%");
-
 		panel.selectTab(0);
+		
+		panel.addSelectionHandler(new SelectionHandler<Integer>(){
+			@Override
+			public void onSelection(SelectionEvent<Integer> event) {
+				int tabId = event.getSelectedItem();
+				
+				
+			}
+			});
+
 
 		return panel;
 	}
@@ -228,6 +236,7 @@ public class Comav200 implements EntryPoint {
 	}
 
 	//Buttons for diagrams in rightDiv
+	/*
 	private DockPanel diagramButtons()
 	{
 		Frame oryxFrame = initializeOryx();
@@ -239,8 +248,7 @@ public class Comav200 implements EntryPoint {
 		dockPanel.add(voteCellList.votingPanel(), DockPanel.EAST);
 
 		return dockPanel;
-	}
-
+	}*/
 
 	public void getVoteMapData () {
 		databaseConnection.getVoteList(new AsyncCallback<List<DiagramInfo>>() {
@@ -299,23 +307,22 @@ public class Comav200 implements EntryPoint {
 		return cp;
 	}
 
-
 	private Panel initMain(){
 		VerticalPanel panel = new VerticalPanel();
+		initializeOryx();
 		panel.add(topMenuButtons());
-		panel.add(initializeOryx());
+		panel.add(oryxFrame);
 		return panel;
 	}
 
-
-	public MessageFrame initializeOryx() {
+	public void initializeOryx() {
 
 		oryxFrame = new MessageFrame("oryxFrame");
 		oryxFrame.init();
 		oryxFrame.setUrl("http://localhost/oryx/oryx.xhtml");
 		oryxFrame.setHeight("600px");
 		oryxFrame.setWidth("100%");
-		return oryxFrame;
+		//return oryxFrame;
 	}
 
 	public void initializeSignUp() {

@@ -20,7 +20,6 @@ public class SaveModel {
 		
 		final MessageFrame oryxFrame = orFrame;
 		 // When saving a model
-		System.out.println("Savemodel2");
        HashMap<String, String> oryxCmd = new HashMap<String, String>();
        oryxCmd.put("target", "oryx");
        oryxCmd.put("action", "sendshapes");
@@ -39,7 +38,7 @@ public class SaveModel {
                	System.out.println("This was a triumph, I'm making a note here: Huge success! " + data.get("message"));
                }
                // Save the model that is in variable "message" (very long string/text)
-              saveModelToDatabase(User.getInstance().getUserId(), "TYPE", data.get("message"));
+              //saveModelToDatabase(User.getInstance().getUserId(), "TYPE", data.get("message"));
                
            }
        });
@@ -47,9 +46,9 @@ public class SaveModel {
 	}
 	
 	
-	 private void saveModelToDatabase(int userID, String type, String model) {
+	 private void saveModelToDatabase(int groupID, int userID, int modelType, String modelString) {
 			
-			databaseConnection.saveModel(userID, type, model,
+			databaseConnection.saveModel(groupID, userID, modelType, modelString,
 					new AsyncCallback<Void>() {
 						public void onFailure(Throwable caught) {
 							

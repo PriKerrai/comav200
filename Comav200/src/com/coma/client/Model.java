@@ -6,7 +6,7 @@ public class Model implements IsSerializable {
 
 	private int id;
 	private int creatorID;
-	private String type;
+	private int type;
 	private String message;
 	
 	public Model(){}
@@ -25,10 +25,10 @@ public class Model implements IsSerializable {
 	public void setCreatorID(int creatorID) {
 		this.creatorID = creatorID;
 	}
-	public String getType() {
+	public int getType() {
 		return type;
 	}
-	public void setType(String type) {
+	public void setType(int type) {
 		this.type = type;
 	}
 	public String getMessage() {

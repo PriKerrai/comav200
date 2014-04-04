@@ -14,7 +14,7 @@ public interface DatabaseConnectionAsync {
 	void createNewUser(String name, String password,
 			AsyncCallback<Void> callback);
 	void getUserID(String email, AsyncCallback<Integer> callback);
-	void saveModel(int userID, String type, String model,
+	void saveModel(int groupID, int userID, int modelType, String modelString,
 			AsyncCallback<Void> asyncCallback);
 	void getModel(int modelID, AsyncCallback<Model> asyncCallback);
 	void getVoteList(AsyncCallback<List<DiagramInfo>> callback);
