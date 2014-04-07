@@ -28,7 +28,6 @@ public class Comav200 implements EntryPoint {
 
 	private MessageFrame oryxFrame = null;
 
-
 	public static Comav200 GetInstance(){
 		if(instance == null){
 			instance = new Comav200();
@@ -50,6 +49,10 @@ public class Comav200 implements EntryPoint {
 	}
 
 	public Button importButton = new Button("Import");
+	public Button importButton1 = new Button("Import1");
+	public Button exportButton1 = new Button("Export1");
+	public Button importButton12 = new Button("Import12");
+	public Button exportButton12 = new Button("Export12");
 	public Button exportButton = new Button("Export");
 	public Button createGroup = new Button("Create group");
 	public Button inviteGroup = new Button("Invite to group");
@@ -174,6 +177,20 @@ public class Comav200 implements EntryPoint {
 			else if(event.getSource().equals(exportButton)){
 				loadModel("hej");
 			}
+			else if(event.getSource().equals(importButton1)){
+				//new SaveModel().saveModel(oryxFrame);
+				saveModel();
+			}
+			else if(event.getSource().equals(exportButton1)){
+				loadModel("hej");
+			}
+			else if(event.getSource().equals(importButton12)){
+				//new SaveModel().saveModel(oryxFrame);
+				saveModel();
+			}
+			else if(event.getSource().equals(exportButton12)){
+				loadModel("hej");
+			}
 
 		}
 	}
@@ -184,8 +201,8 @@ public class Comav200 implements EntryPoint {
 		
 		final TabPanel panel = new TabPanel();
 		panel.add(initMain(), "Main");
-		panel.add(topMenuButtons(), "Group Model");
-		//panel.add(diagramButtons(), "Proposals");		
+		panel.add(topMenuButton(), "Group Model");
+		panel.add(topMenuButto(), "Proposals");		
 		panel.setSize("100%", "100%");
 		panel.selectTab(0);
 		
@@ -193,12 +210,11 @@ public class Comav200 implements EntryPoint {
 			@Override
 			public void onSelection(SelectionEvent<Integer> event) {
 				int tabId = event.getSelectedItem();
-				
-				
+				Panel p = (Panel)panel.getWidget(tabId);
+				p.add(oryxFrame);
 			}
 			});
-
-
+		
 		return panel;
 	}
 
@@ -231,6 +247,44 @@ public class Comav200 implements EntryPoint {
 		panel.add(createGroup);
 		panel.add(inviteGroup);
 		panel.add(switchGroup);
+
+		return panel;  
+	}
+	
+	private Panel topMenuButton()
+	{ 	
+		HorizontalPanel panel = new HorizontalPanel();
+
+		importButton1 = new Button("Import1");
+		exportButton1 = new Button("Export1");
+		importButton1.getElement().setClassName("utilityButton");
+		exportButton1.getElement().setClassName("utilityButton");
+
+		MyHandler handler = new MyHandler();
+		importButton1.addClickHandler(handler);
+		exportButton1.addClickHandler(handler);
+
+		panel.add(importButton1);
+		panel.add(exportButton1);
+
+		return panel;  
+	}
+	
+	private Panel topMenuButto()
+	{ 	
+		HorizontalPanel panel = new HorizontalPanel();
+
+		importButton12 = new Button("Import12");
+		exportButton12 = new Button("Export12");
+		importButton12.getElement().setClassName("utilityButton");
+		exportButton12.getElement().setClassName("utilityButton");
+
+		MyHandler handler = new MyHandler();
+		importButton12.addClickHandler(handler);
+		exportButton12.addClickHandler(handler);
+
+		panel.add(importButton12);
+		panel.add(exportButton12);
 
 		return panel;  
 	}
@@ -309,20 +363,19 @@ public class Comav200 implements EntryPoint {
 
 	private Panel initMain(){
 		VerticalPanel panel = new VerticalPanel();
-		initializeOryx();
+		initializeOryxFrame();
 		panel.add(topMenuButtons());
 		panel.add(oryxFrame);
 		return panel;
 	}
 
-	public void initializeOryx() {
-
+	//Creates the frame which Oryx is loaded into
+	public void initializeOryxFrame() {
 		oryxFrame = new MessageFrame("oryxFrame");
 		oryxFrame.init();
 		oryxFrame.setUrl("http://localhost/oryx/oryx.xhtml");
 		oryxFrame.setHeight("600px");
 		oryxFrame.setWidth("100%");
-		//return oryxFrame;
 	}
 
 	public void initializeSignUp() {
@@ -334,18 +387,8 @@ public class Comav200 implements EntryPoint {
 		RootPanel.get("mainDiv").add(signUp.screen());
 	}
 
-	public void getPasswordFromDatabase(String email) {
-
-		databaseConnection.getPasswordForAuthorization(email, new AsyncCallback<String>() {
-			public void onFailure(Throwable caught) {
-			}
-
-			public void onSuccess(String result) {
-				setResult(result);	
-			}
-		});
-	}
-
+	
+	//Gets active users ID from database and sets the ID in the User class
 	public void getAndSetUserIDFromDatabase(String email) {
 
 		databaseConnection.getUserID(email, new AsyncCallback<Integer>() {
@@ -354,23 +397,9 @@ public class Comav200 implements EntryPoint {
 			@Override
 			public void onSuccess(Integer result) {
 				User.getInstance().setUserId(result);
+				initMainProgram();
 			}
 		});
-	}
-
-	public void addUserToDatabase(String email, String password) {
-
-		databaseConnection.createNewUser(email, password,
-				new AsyncCallback<Void>() {
-			public void onFailure(Throwable caught) {
-
-			}
-
-			public void onSuccess(Void result) {
-				initializeOryx();
-			}
-		});
-
 	}
 
 	public void initMainProgram() {

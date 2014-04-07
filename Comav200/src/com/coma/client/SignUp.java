@@ -82,13 +82,28 @@ public class SignUp {
 		}
 		return hashtext;
 	}
+
+	public void addUserToDatabase(String emailString, String password) {
+		final String email = emailString;
+		databaseConnection.createNewUser(email, password,
+				new AsyncCallback<Void>() {
+			public void onFailure(Throwable caught) {
+
+			}
+
+			public void onSuccess(Void result) {
+				Comav200.GetInstance().getAndSetUserIDFromDatabase(email);
+				
+			}
+		});
+
+	}
 	
 	class MyHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent event) {
 
-			String email = emailTextBox.getValue();
 			String password = passwordTextbox.getValue();
 			String passwordRepeated = passwordRepeatedTextbox.getValue();
 
@@ -98,10 +113,9 @@ public class SignUp {
 					return;
 				}
 				if (password.equals(passwordRepeated)) {
-					Comav200.GetInstance().addUserToDatabase(
+					addUserToDatabase(
 							emailTextBox.getText(), encryptPassword(passwordTextbox.getValue()));
-					Comav200.GetInstance().initMainProgram();
-					Comav200.GetInstance().getAndSetUserIDFromDatabase(email);
+					
 				} else {
 					return;
 				}

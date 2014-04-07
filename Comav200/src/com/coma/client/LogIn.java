@@ -30,8 +30,9 @@ public class LogIn {
 
 	Button logInButton = new Button("Log In");
 	Button signUpButton = new Button("Sign Up");
-	TextBox email = new TextBox();
-	PasswordTextBox password = new PasswordTextBox();
+	TextBox emailTextBox = new TextBox();
+	PasswordTextBox passwordTextBox = new PasswordTextBox();
+	String password = null;
 
 	private final DatabaseConnectionAsync databaseConnection = GWT
 			.create(DatabaseConnection.class);
@@ -46,12 +47,12 @@ public class LogIn {
         	VerticalPanel holder = new VerticalPanel();
         	
         	holder.add(new Label("Email"));
-        	email.setName("email");
-        	holder.add(email);
+        	emailTextBox.setName("email");
+        	holder.add(emailTextBox);
         	
         	holder.add(new Label("Password"));
-        	password.setName("password");
-        	holder.add(password);
+        	passwordTextBox.setName("password");
+        	holder.add(passwordTextBox);
 
         	MyHandler handler = new MyHandler();
             logInButton.addClickHandler(handler);
@@ -63,7 +64,6 @@ public class LogIn {
             form.add(holder);    
             return form;
         }
-        
         
     	private String encryptPassword(String password){
     		
@@ -87,37 +87,42 @@ public class LogIn {
     	}
 
          	
-        private boolean checkAuthantication(String email, String password){
-        	String encryptedPassword = encryptPassword(password);
-        	String dbPassword = null;
-        	
-        	Comav200.GetInstance().getPasswordFromDatabase(email);
-        	dbPassword = Comav200.GetInstance().getResult();
-        	
-        	if(encryptedPassword.equals(dbPassword)){        		
-        		return true;
+        private void checkAuthantication(String email, String password){
+        	String encryptedPassword = encryptPassword(passwordTextBox.getValue());
+        	if(encryptedPassword.equals(password)){        		
+        		Comav200.GetInstance().getAndSetUserIDFromDatabase(emailTextBox.getText());
+        		
         	}
         	else{
-        		return false;
+        		//show pop up login fail
+        		System.out.println("Log in failed");
         	}
         }
         
+    	public void getPasswordFromDatabase(String emailString) {
+
+    		final String email = emailString;
+    		databaseConnection.getPasswordForAuthorization(email, new AsyncCallback<String>() {
+    			public void onFailure(Throwable caught) {
+    			}
+
+    			public void onSuccess(String result) {
+    				checkAuthantication(email, result);
+    			}
+    		});
+    	}
         
         class MyHandler implements ClickHandler{
 
             @Override
             public void onClick(ClickEvent event) {
 
-                    if(event.getSource().equals(logInButton)){
-                    	if(checkAuthantication(email.getText(), password.getValue())){
-                    		Comav200.GetInstance().initMainProgram();
-                    		Comav200.GetInstance().getAndSetUserIDFromDatabase(email.getText());
-                    	}
+                    if(event.getSource().equals(logInButton)){                  	
+                    	getPasswordFromDatabase(emailTextBox.getText());
                     }
                     if(event.getSource().equals(signUpButton)){
-                    	System.out.print(email.getText());
-                    	Comav200.GetInstance().initializeSignUp();
-                    	
+                    	System.out.print(emailTextBox.getText());
+                    	Comav200.GetInstance().initializeSignUp();	
                     }
             }
     }
