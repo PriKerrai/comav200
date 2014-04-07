@@ -424,7 +424,7 @@ public class Comav200 implements EntryPoint {
 	//Initialize proposal view
 	private Panel initProposalView(){
 		VerticalPanel panel = new VerticalPanel();
-		panel.add(topMenuButto());
+		panel.add(topMenuButtonsProposalView());
 		return panel;
 	}
 
