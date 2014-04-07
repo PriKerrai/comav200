@@ -170,22 +170,20 @@ public class Comav200 implements EntryPoint {
 			@Override
 			public void onSelection(SelectionEvent<Integer> event) {
 				int tabId = event.getSelectedItem();
-					 if (tabId == 0 || tabId == 1) {   
-						 Panel p = (Panel)panel.getWidget(tabId);
-						 p.add(oryxFrame);
-						    }
-					 if (tabId == 2) {
-						 getVoteMapData();
-						 DockPanel dockPanel = new DockPanel();
-						 dockPanel.setWidth("100%");
-						 dockPanel.add(oryxFrame, DockPanel.WEST);
-						 dockPanel.add(voteCellList.votingPanel(), DockPanel.EAST);
-					 }
-					 if(tabId == 3){
-						    	
-					 }	    
+				Panel p = (Panel)panel.getWidget(tabId);
+				p.add(oryxFrame);
+				
+				if (tabId == 2) {
+					System.out.println("PREDINNERSNACK");
+					getVoteMapData();
+					System.out.println("AFTERDINNESNACK");
+					DockPanel dockPanel = new DockPanel();
+		            dockPanel.setWidth("100%");
+		            dockPanel.add(oryxFrame, DockPanel.WEST);
+		            dockPanel.add(voteCellList.votingPanel(), DockPanel.EAST);
 				}
-			});
+			
+		}});
 		
 		return panel;
 	}
@@ -274,7 +272,8 @@ public class Comav200 implements EntryPoint {
 	}
 	
 	public void getVoteMapData () {
-		databaseConnection.getVoteList(new AsyncCallback<List<DiagramInfo>>() {
+		int groupID = 1;
+		databaseConnection.getAllModelsFromSpecificGroupThatIsProposed(groupID, new AsyncCallback<List<ModelInfo>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -294,10 +293,11 @@ public class Comav200 implements EntryPoint {
 			}
 
 			@Override
-			public void onSuccess(List<DiagramInfo> result) {
+			public void onSuccess(List<ModelInfo> result) {
 				// TODO Auto-generated method stub
-				voteCellList.setMap(result);
+				voteCellList.setModelInfoList(result);
 			}
+
 		});
 	}
 

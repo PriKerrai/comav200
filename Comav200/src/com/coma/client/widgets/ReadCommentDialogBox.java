@@ -14,65 +14,81 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 
 public class ReadCommentDialogBox{
-        private TextBox nameBox;
-       
-        private final DatabaseConnectionAsync databaseConnection = GWT
-                        .create(DatabaseConnection.class);
-       
-        public DialogBox createDialogBox(){
-        		// Create the popup dialog box
-                final DialogBox dialogBox = new DialogBox();
-                dialogBox.setAnimationEnabled(true);
-                dialogBox.setText("Create group");
-               
-                final Button sendButton = new Button("Send");
-                sendButton.getElement().setId("sendButton");
-                VerticalPanel dialogVPanel = new VerticalPanel();
-                dialogVPanel.addStyleName("dialogVPanel");
-                dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
-               
-                dialogVPanel.add(new Label("Group name:"));
-               
-                nameBox = new TextBox();
-               
-                dialogVPanel.add(nameBox);
-               
-                dialogVPanel.add(sendButton);
-                dialogBox.setWidget(dialogVPanel);
+    private TextBox nameBox;
+    
+    private final DatabaseConnectionAsync databaseConnection = GWT
+                    .create(DatabaseConnection.class);
+   
+    public DialogBox createDialogBox(){
+    		// Create the popup dialog box
+            final DialogBox dialogBox = new DialogBox();
+            dialogBox.setAnimationEnabled(true);
+            dialogBox.setText("Write comment");
+           
+            final Button sendButton = new Button("Send");
+            sendButton.getElement().setId("sendButton");
+            final Button closeButton = new Button("close");
+            closeButton.getElement().setId("closeButton");
+            
+            VerticalPanel dialogVPanel = new VerticalPanel();
+            dialogVPanel.addStyleName("dialogVPanel");
+            dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
+           
+            dialogVPanel.add(new Label("Write comment:"));
+           
+            final TextArea ta = new TextArea();
+            ta.setCharacterWidth(50);
+            ta.setVisibleLines(20);
+           
+            dialogVPanel.add(ta);
+           
+            dialogVPanel.add(sendButton);
+            dialogVPanel.add(closeButton);
+            dialogBox.setWidget(dialogVPanel);
+            dialogBox.setAnimationEnabled(false);
 
-                // Add a handler to close the DialogBox
-                sendButton.addClickHandler(new ClickHandler() {
-                        public void onClick(ClickEvent event) {
-                                String groupName = nameBox.getText();
-                                int userID = User.getInstance().getUserId();
-                                java.util.Date date = new Date();
+            // Add a handler to close the DialogBox
+            sendButton.addClickHandler(new ClickHandler() {
+                    public void onClick(ClickEvent event) {
+                            String comment = ta.getText();
+                            int userID = User.getInstance().getUserId();
 
-                                createNewGroup(userID, groupName);
+                            addComment(userID, comment);
 
-                                dialogBox.hide();
+                            dialogBox.hide();
 
-                        }
-                });
-               
-                return dialogBox;
-        }
+                    }
+            });
+            
+            closeButton.addClickHandler(new ClickHandler() {
+                public void onClick(ClickEvent event) {
 
-        public void createNewGroup(int userID, String groupName) {
-               
-                databaseConnection.createNewGroup(userID, groupName, new AsyncCallback<Void>() {
-                                        public void onFailure(Throwable caught) {
-                                        }
+                        dialogBox.hide();
 
-                                        @Override
-                                        public void onSuccess(Void result) {
-                                                // TODO Auto-generated method stub
-                                               
-                                        }
-                                });
                 }
+        });
+           
+            return dialogBox;
+    }
+
+    protected void addComment(int userID, String comment) {
+    	
+    	databaseConnection.addCommentToModel(userID, comment, new AsyncCallback<Void>() {
+            public void onFailure(Throwable caught) {
+            }
+
+            @Override
+            public void onSuccess(Void result) {
+                    // TODO Auto-generated method stub
+                   
+            }
+    });
+		
+	}
 }

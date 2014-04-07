@@ -19,6 +19,9 @@ public interface DatabaseConnectionAsync {
 
 	
 	void loadModel(int modelID, AsyncCallback<Model> asyncCallback);
-	void getVoteList(AsyncCallback<List<DiagramInfo>> callback);
+	void addCommentToModel(int userID, String comment,
+			AsyncCallback<Void> asyncCallback);
+	void addVoteToModel(int userID, int index, AsyncCallback<Void> asyncCallback);
+	void getAllModelsFromSpecificGroupThatIsProposed(int activeGroup, AsyncCallback<List<ModelInfo>> callback);
 
 }

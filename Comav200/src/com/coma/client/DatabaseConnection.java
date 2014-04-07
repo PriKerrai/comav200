@@ -1,7 +1,5 @@
 package com.coma.client;
 
-import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -18,7 +16,10 @@ public interface DatabaseConnection extends RemoteService {
 	int getUserID(String email);
 	void saveModel(int groupID, int userID, String modelName, int modelType,
 			String modelString, int isProposal);
-	List<DiagramInfo> getVoteList();
+	void addCommentToModel(int userID, String comment);
+	void addVoteToModel(int userID, int index);
+	List<ModelInfo> getAllModelsFromSpecificGroupThatIsProposed(int activeGroup)
+			throws IllegalArgumentException;
 	Model loadModel(int modelID);
 	
 }

@@ -12,6 +12,7 @@ public class Model implements IsSerializable {
 	private int modelType;
 	private String modelString;
 	private int isProposal;
+	private String message;
 	
 	public Model(){}
 
@@ -70,8 +71,11 @@ public class Model implements IsSerializable {
 	public void setIsProposal(int isProposal) {
 		this.isProposal = isProposal;
 	}
-	
 
+	public void setMessage(String message) {
+		this.message = message;
+		
+	}
 	
 	
 }

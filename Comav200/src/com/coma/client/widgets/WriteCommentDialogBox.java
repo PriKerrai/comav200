@@ -14,6 +14,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -28,51 +29,66 @@ public class WriteCommentDialogBox{
         		// Create the popup dialog box
                 final DialogBox dialogBox = new DialogBox();
                 dialogBox.setAnimationEnabled(true);
-                dialogBox.setText("Create group");
+                dialogBox.setText("Write comment");
                
                 final Button sendButton = new Button("Send");
                 sendButton.getElement().setId("sendButton");
+                final Button closeButton = new Button("close");
+                closeButton.getElement().setId("closeButton");
+                
                 VerticalPanel dialogVPanel = new VerticalPanel();
                 dialogVPanel.addStyleName("dialogVPanel");
                 dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
                
-                dialogVPanel.add(new Label("Group name:"));
+                dialogVPanel.add(new Label("Write comment:"));
                
-                nameBox = new TextBox();
+                final TextArea ta = new TextArea();
+                ta.setCharacterWidth(50);
+                ta.setVisibleLines(20);
                
-                dialogVPanel.add(nameBox);
+                dialogVPanel.add(ta);
                
                 dialogVPanel.add(sendButton);
+                dialogVPanel.add(closeButton);
                 dialogBox.setWidget(dialogVPanel);
+                dialogBox.setAnimationEnabled(false);
 
                 // Add a handler to close the DialogBox
                 sendButton.addClickHandler(new ClickHandler() {
                         public void onClick(ClickEvent event) {
-                                String groupName = nameBox.getText();
+                                String comment = ta.getText();
                                 int userID = User.getInstance().getUserId();
-                                java.util.Date date = new Date();
 
-                                createNewGroup(userID, groupName);
+                                addComment(userID, comment);
 
                                 dialogBox.hide();
 
                         }
                 });
+                
+                closeButton.addClickHandler(new ClickHandler() {
+                    public void onClick(ClickEvent event) {
+
+                            dialogBox.hide();
+
+                    }
+            });
                
                 return dialogBox;
         }
 
-        public void createNewGroup(int userID, String groupName) {
-               
-                databaseConnection.createNewGroup(userID, groupName, new AsyncCallback<Void>() {
-                                        public void onFailure(Throwable caught) {
-                                        }
-
-                                        @Override
-                                        public void onSuccess(Void result) {
-                                                // TODO Auto-generated method stub
-                                               
-                                        }
-                                });
+        protected void addComment(int userID, String comment) {
+        	
+        	databaseConnection.addCommentToModel(userID, comment, new AsyncCallback<Void>() {
+                public void onFailure(Throwable caught) {
                 }
+
+                @Override
+                public void onSuccess(Void result) {
+                        // TODO Auto-generated method stub
+                       
+                }
+        });
+			
+		}
 }
