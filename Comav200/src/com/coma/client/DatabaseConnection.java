@@ -16,8 +16,9 @@ public interface DatabaseConnection extends RemoteService {
 	void createNewGroup(int userID, String groupName);
 	String getPasswordForAuthorization(String email);
 	int getUserID(String email);
-	void saveModel(int groupID, int userID, int modelType, String modelString);
-	Model getModel(int modelID);
+	void saveModel(int groupID, int userID, String modelName, int modelType,
+			String modelString, int isProposal);
 	List<DiagramInfo> getVoteList();
+	Model loadModel(int modelID);
 	
 }

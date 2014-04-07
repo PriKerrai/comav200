@@ -55,7 +55,7 @@ public class LoadModel {
 	*/
 	private void getModelFromDatabase(int modelID) {
 		
-		databaseConnection.getModel(modelID, new AsyncCallback<Model>() {
+		databaseConnection.loadModel(modelID, new AsyncCallback<Model>() {
 					public void onFailure(Throwable caught) {
 					}
 

@@ -172,21 +172,24 @@ public class DatabaseConnectionImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public void saveModel(int groupID, int userID, int modelType, String modelString) {
+	public void saveModel(int groupID, int userID, String modelName,
+			int modelType, String modelString, int isProposal) {
 		
 		String creationDate = getDate();
 		
 		Connection dbCon = null;
 
-        String query = "INSERT INTO model (groupID, modelCreator, modelType, modelString, creationDate) VALUES (?,?,?,?,?)";
+        String query = "INSERT INTO model (groupID, modelCreator, modelName, modelType, modelString, creationDate, isProposal) VALUES (?,?,?,?,?,?,?)";
            try{
         	      dbCon = initializeDBConnection(); 
         	      PreparedStatement preparedStatement = dbCon.prepareStatement(query);
         	      preparedStatement.setInt(1, groupID);
         	      preparedStatement.setInt(2, userID);
-        	      preparedStatement.setInt(3, modelType);
-        	      preparedStatement.setString(4, modelString);
-        	      preparedStatement.setString(5, creationDate);
+        	      preparedStatement.setString(3, modelName);
+        	      preparedStatement.setInt(4, modelType);
+        	      preparedStatement.setString(5, modelString);
+        	      preparedStatement.setString(6, creationDate);
+        	      preparedStatement.setInt(7, isProposal);
         	      preparedStatement.executeUpdate();
            } catch (SQLException ex) {
                Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
@@ -195,7 +198,7 @@ public class DatabaseConnectionImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public Model getModel(int modelID) {
+	public Model loadModel(int modelID) {
 		Connection dbCon = null;
 		int userID = 0;
 		Model model = new Model();
@@ -219,6 +222,7 @@ public class DatabaseConnectionImpl extends RemoteServiceServlet implements
            }      
 		return null;
 	}
+
 }
 
 

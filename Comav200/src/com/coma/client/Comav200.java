@@ -175,15 +175,15 @@ public class Comav200 implements EntryPoint {
 				b.show();
 			}
 			else if(event.getSource().equals(saveButton)){
-				//new SaveModel().saveModel(oryxFrame);
-				saveModel();
+				new SaveModel().saveModel(oryxFrame);
+				//saveModel();
 			}
 			else if(event.getSource().equals(loadButton)){
 				loadModel("hej");
 			}
 			else if(event.getSource().equals(importButton)){
 				//new SaveModel().saveModel(oryxFrame);
-				saveModel();
+				//saveModel();
 			}
 			else if(event.getSource().equals(exportButton12)){
 				loadModel("hej");

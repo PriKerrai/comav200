@@ -35,10 +35,10 @@ public class SaveModel {
                	System.out.println("This was a triumph, I'm making a note here: Not a success");
                    return;
                }else{
-               	System.out.println("This was a triumph, I'm making a note here: Huge success! " + data.get("message"));
+               	System.out.println("This was a triumph, I'm making a note here: Huge success11! " + data.get("message"));
                }
                // Save the model that is in variable "message" (very long string/text)
-              //saveModelToDatabase(User.getInstance().getUserId(), "TYPE", data.get("message"));
+              saveModelToDatabase(User.getInstance().getActiveGroupID(), User.getInstance().getUserId(), "NAME", 0 , data.get("message"), 0);
                
            }
        });
@@ -46,9 +46,8 @@ public class SaveModel {
 	}
 	
 	
-	 private void saveModelToDatabase(int groupID, int userID, int modelType, String modelString) {
-			
-			databaseConnection.saveModel(groupID, userID, modelType, modelString,
+	 private void saveModelToDatabase(int groupID, int userID, String modelName, int modelType, String modelString, int isProposal) {
+			databaseConnection.saveModel(groupID, userID, modelName, modelType, modelString, isProposal,
 					new AsyncCallback<Void>() {
 						public void onFailure(Throwable caught) {
 							
