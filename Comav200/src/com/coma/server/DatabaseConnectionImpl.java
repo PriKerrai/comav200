@@ -200,7 +200,6 @@ public class DatabaseConnectionImpl extends RemoteServiceServlet implements
 	@Override
 	public Model loadModel(int modelID) {
 		Connection dbCon = null;
-		int userID = 0;
 		Model model = new Model();
 		
         String query = "SELECT * FROM model WHERE modelID = ?";
@@ -210,10 +209,13 @@ public class DatabaseConnectionImpl extends RemoteServiceServlet implements
         	      preparedStatement.setInt(1, modelID);
         	      ResultSet rs = preparedStatement.executeQuery();
         	      while (rs.next()) {
-        	    	  model.setId(rs.getInt("modelID"));
+        	    	  model.setModelID(rs.getInt("modelID"));
+        	    	  model.setGroupID(rs.getInt("groupID"));
         	    	  model.setCreatorID(rs.getInt("modelCreator"));
-        	    	  model.setType(rs.getInt("type"));
-        	    	  model.setMessage(rs.getString("message"));
+        	    	  model.setModelName(rs.getString("modelName"));
+        	    	  model.setModelType(rs.getInt("modelType"));
+        	    	  model.setModelString(rs.getString("modelString"));
+        	    	  model.setIsProposal(rs.getInt("isProposal"));
         	      }
         	      return model;
            

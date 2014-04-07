@@ -48,8 +48,9 @@ public class Comav200 implements EntryPoint {
 		result = value;
 	}
 
-	public Button saveButton = new Button("Save");
-	public Button loadButton = new Button("Load");
+	public Button newButton = new Button("New Model");
+	public Button saveButton = new Button("Save Model");
+	public Button loadButton = new Button("Load Model");
 	public Button importButton = new Button("Import");
 	public Button exportButton = new Button("Export");
 	public Button importButton12 = new Button("Import12");
@@ -88,69 +89,7 @@ public class Comav200 implements EntryPoint {
 		//RootPanel.get("mainDiv").add(logIn.screen());
 		initMainProgram();
 	}
-
-	public void saveModel(){
-		// When saving a model
-		HashMap<String, String> oryxCmd = new HashMap<String, String>();
-		oryxCmd.put("target", "oryx");
-		oryxCmd.put("action", "sendshapes");
-		oryxCmd.put("message", "");
-		oryxFrame.removeAllCallbackHandlers();
-		oryxFrame.addCallbackHandler(new CallbackHandler() {
-
-			@Override
-			public void callBack(final HashMap<String, String> data) {
-				oryxFrame.removeAllCallbackHandlers();
-				if (!data.get("action").equals("receiveshapes")) {
-					// Display error message that editor does not respond
-					System.out.println("This was a triumph, I'm making a note here: Not a success");
-					return;
-				}else{
-					System.out.println("This was a triumph, I'm making a note here: Huge success!");
-				}
-				// Save the model that is in variable "message" (very long string/text)
-				String veryLongText = data.get("message");
-				HEJ = veryLongText;
-				//shave to database
-			}
-		});
-		oryxFrame.sendJSON(oryxCmd);
-	}
-
-	public void loadModel(String dbModel){
-		//final String model = dbModel;
-
-		final String model = HEJ;
-		// When loading a model that is stored in string variable "model"
-		oryxFrame.setVisible(false);
-		oryxFrame.removeAllCallbackHandlers();
-		oryxFrame.addCallbackHandler(new LoadingCompletehandler(new LoadingCompleteEventListener() {
-
-			@Override
-			public void loadingComplete() {
-				oryxFrame.removeAllCallbackHandlers();
-				oryxFrame.setVisible(true);
-				oryxFrame.addCallbackHandler(new CallbackHandler() {
-					@Override
-					public void callBack(final HashMap<String, String> data) {
-						oryxFrame.removeAllCallbackHandlers();
-						if (!data.get("action").equals("shapesloaded")) {
-							// Display error message that model cannot be loaded
-							return;
-						}
-					}
-				});
-				HashMap<String, String> oryxCmd = new HashMap<String, String>();
-				oryxCmd.put("target", "oryx");
-				oryxCmd.put("action", "loadshapes");
-				oryxCmd.put("message", model);
-				oryxFrame.sendJSON(oryxCmd);
-			}
-
-		}));
-		oryxFrame.setUrl("http://localhost/oryx/oryx.xhtml");
-	}
-
+	
 	class MyHandler implements ClickHandler{
 
 		@Override
@@ -174,19 +113,20 @@ public class Comav200 implements EntryPoint {
 				b.center();
 				b.show();
 			}
+			else if(event.getSource().equals(newButton)){
+
+			}
 			else if(event.getSource().equals(saveButton)){
 				new SaveModel().saveModel(oryxFrame);
-				//saveModel();
 			}
 			else if(event.getSource().equals(loadButton)){
-				loadModel("hej");
+				new LoadModel().getModelFromDatabase(2,oryxFrame);
 			}
 			else if(event.getSource().equals(importButton)){
-				//new SaveModel().saveModel(oryxFrame);
-				//saveModel();
+
 			}
-			else if(event.getSource().equals(exportButton12)){
-				loadModel("hej");
+			else if(event.getSource().equals(exportButton)){
+
 			}
 			else if(event.getSource().equals(writeCommentButton)){
 				WriteCommentDialogBox wcdb = new WriteCommentDialogBox();
@@ -219,9 +159,10 @@ public class Comav200 implements EntryPoint {
 	public TabPanel initTabPanel(){
 		
 		final TabPanel panel = new TabPanel();
-		panel.add(initMyModelView(), "Main");
+		panel.add(initMyModelView(), "My Model");
 		panel.add(initGroupModelView(), "Group Model");
-		panel.add(initProposalView(), "Proposals");		
+		panel.add(initProposalView(), "Proposals");	
+		panel.add(initPreferencesView(), "Preferences");	
 		panel.setSize("100%", "100%");
 		panel.selectTab(0);
 		
@@ -229,9 +170,21 @@ public class Comav200 implements EntryPoint {
 			@Override
 			public void onSelection(SelectionEvent<Integer> event) {
 				int tabId = event.getSelectedItem();
-				Panel p = (Panel)panel.getWidget(tabId);
-				p.add(oryxFrame);
-			}
+					 if (tabId == 0 || tabId == 1) {   
+						 Panel p = (Panel)panel.getWidget(tabId);
+						 p.add(oryxFrame);
+						    }
+					 if (tabId == 2) {
+						 getVoteMapData();
+						 DockPanel dockPanel = new DockPanel();
+						 dockPanel.setWidth("100%");
+						 dockPanel.add(oryxFrame, DockPanel.WEST);
+						 dockPanel.add(voteCellList.votingPanel(), DockPanel.EAST);
+					 }
+					 if(tabId == 3){
+						    	
+					 }	    
+				}
 			});
 		
 		return panel;
@@ -241,24 +194,18 @@ public class Comav200 implements EntryPoint {
 	{ 	
 		HorizontalPanel panel = new HorizontalPanel();
 
+		newButton.getElement().setClassName("utilityButton");
 		saveButton.getElement().setClassName("utilityButton");
 		loadButton.getElement().setClassName("utilityButton");
-		createGroup.getElement().setClassName("utilityButton");
-		inviteGroup.getElement().setClassName("utilityButton");
-		switchGroup.getElement().setClassName("utilityButton");
 
 		MyHandler handler = new MyHandler();
+		newButton.addClickHandler(handler);
 		saveButton.addClickHandler(handler);
 		loadButton.addClickHandler(handler);
-		createGroup.addClickHandler(handler);
-		inviteGroup.addClickHandler(handler);
-		switchGroup.addClickHandler(handler);
 
+		panel.add(newButton);
 		panel.add(saveButton);
 		panel.add(loadButton);
-		panel.add(createGroup);
-		panel.add(inviteGroup);
-		panel.add(switchGroup);
 
 		return panel;  
 	}
@@ -306,7 +253,26 @@ public class Comav200 implements EntryPoint {
 		return panel;  
 	}
 
+	private Panel topMenuButtonsPreferencesView()
+	{ 	
+		HorizontalPanel panel = new HorizontalPanel();
 
+		createGroup.getElement().setClassName("utilityButton");
+		inviteGroup.getElement().setClassName("utilityButton");
+		switchGroup.getElement().setClassName("utilityButton");
+
+		MyHandler handler = new MyHandler();
+		createGroup.addClickHandler(handler);
+		inviteGroup.addClickHandler(handler);
+		switchGroup.addClickHandler(handler);
+
+		panel.add(createGroup);
+		panel.add(inviteGroup);
+		panel.add(switchGroup);
+
+		return panel;  
+	}
+	
 	public void getVoteMapData () {
 		databaseConnection.getVoteList(new AsyncCallback<List<DiagramInfo>>() {
 
@@ -363,6 +329,15 @@ public class Comav200 implements EntryPoint {
 		panel.add(topMenuButtonsProposalView());
 		return panel;
 	}
+	
+	/**
+	* Initialize Proposal view
+	*/
+	private Panel initPreferencesView(){
+		VerticalPanel panel = new VerticalPanel();
+		panel.add(topMenuButtonsPreferencesView());
+		return panel;
+	}
 
 	/**
 	*Creates the frame which Oryx is loaded into
@@ -381,7 +356,9 @@ public class Comav200 implements EntryPoint {
 		RootPanel.get("mainDiv").add(signUp.screen());
 	}
 	
-	//Gets active users ID from database and sets the ID in the User class
+	/**
+	*Gets active users ID from database and sets the ID in the User class
+	*/
 	public void getAndSetUserIDFromDatabase(String email) {
 
 		databaseConnection.getUserID(email, new AsyncCallback<Integer>() {

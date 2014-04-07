@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.coma.client.oryxhandlers.LoadingCompleteEventListener;
 import com.coma.client.oryxhandlers.LoadingCompletehandler;
 import com.coma.client.widgets.CallbackHandler;
+import com.coma.client.widgets.MessageFrame;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -16,13 +17,9 @@ public class LoadModel {
 	
 	public LoadModel(){	}
 	
-	public void getModel(int modelID){
-		getModelFromDatabase(modelID);
-	}
-	/*
-	private void loadModel(Model result){
-		
-		final String model = result.getMessage();
+	private void loadModel(Model result, MessageFrame orFrame){
+		final MessageFrame oryxFrame = orFrame;
+		final String model = result.getModelString();
 		// When loading a model that is stored in string variable "model"
 		oryxFrame.setVisible(false);
         oryxFrame.removeAllCallbackHandlers();
@@ -50,17 +47,18 @@ public class LoadModel {
             }
 
         }));
-        //oryxFrame.setUrl("http://cpi2.xepos.be:9999/oryx/oryx.xhtml");
+        oryxFrame.setUrl("http://localhost/oryx/oryx.xhtml");
 	}
-	*/
-	private void getModelFromDatabase(int modelID) {
-		
+	
+	public void getModelFromDatabase(int modelID, MessageFrame orFrame) {
+
+		final MessageFrame oryxFrame = orFrame;
 		databaseConnection.loadModel(modelID, new AsyncCallback<Model>() {
 					public void onFailure(Throwable caught) {
 					}
 
 					public void onSuccess(Model result) {
-						//loadModel(result);
+						loadModel(result, oryxFrame);
 					}
 				});
 		}

@@ -4,20 +4,33 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class Model implements IsSerializable {
 
-	private int id;
+	
+	private int modelID;
+	private int groupID;
 	private int creatorID;
-	private int type;
-	private String message;
+	private String modelName;
+	private int modelType;
+	private String modelString;
+	private int isProposal;
 	
 	public Model(){}
-	
-	public int getId() {
-		return id;
+
+	public int getModelID() {
+		return modelID;
 	}
-	public void setId(int id) {
-		this.id = id;
+
+	public void setModelID(int modelID) {
+		this.modelID = modelID;
 	}
-	
+
+	public int getGroupID() {
+		return groupID;
+	}
+
+	public void setGroupID(int groupID) {
+		this.groupID = groupID;
+	}
+
 	public int getCreatorID() {
 		return creatorID;
 	}
@@ -25,18 +38,40 @@ public class Model implements IsSerializable {
 	public void setCreatorID(int creatorID) {
 		this.creatorID = creatorID;
 	}
-	public int getType() {
-		return type;
+
+	public String getModelName() {
+		return modelName;
 	}
-	public void setType(int type) {
-		this.type = type;
+
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
 	}
-	public String getMessage() {
-		return message;
+
+	public int getModelType() {
+		return modelType;
 	}
-	public void setMessage(String message) {
-		this.message = message;
+
+	public void setModelType(int modelType) {
+		this.modelType = modelType;
 	}
+
+	public String getModelString() {
+		return modelString;
+	}
+
+	public void setModelString(String modelString) {
+		this.modelString = modelString;
+	}
+
+	public int getIsProposal() {
+		return isProposal;
+	}
+
+	public void setIsProposal(int isProposal) {
+		this.isProposal = isProposal;
+	}
+	
+
 	
 	
 }
