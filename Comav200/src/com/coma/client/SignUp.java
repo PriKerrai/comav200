@@ -62,6 +62,13 @@ public class SignUp {
 		return form;
 	}
 
+	/**
+	 * 
+	 * Encrypts the password before it is written to the database
+	 * 
+	 * @param password
+	 * @return Encrypted password
+	 */
 	private String encryptPassword(String password){
 		
 		MessageDigest m = null;

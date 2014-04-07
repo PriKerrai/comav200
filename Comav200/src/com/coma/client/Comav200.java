@@ -185,13 +185,6 @@ public class Comav200 implements EntryPoint {
 				//new SaveModel().saveModel(oryxFrame);
 				saveModel();
 			}
-			else if(event.getSource().equals(exportButton)){
-				loadModel("hej");
-			}
-			else if(event.getSource().equals(importButton12)){
-				//new SaveModel().saveModel(oryxFrame);
-				saveModel();
-			}
 			else if(event.getSource().equals(exportButton12)){
 				loadModel("hej");
 			}
@@ -270,7 +263,6 @@ public class Comav200 implements EntryPoint {
 		return panel;  
 	}
 	
-	
 	private Panel topMenuButtonsGroupModelView()
 	{ 	
 		HorizontalPanel panel = new HorizontalPanel();
@@ -287,25 +279,6 @@ public class Comav200 implements EntryPoint {
 
 		panel.add(importButton);
 		panel.add(exportButton);
-
-		return panel;  
-	}
-	
-	private Panel topMenuButto()
-	{ 	
-		HorizontalPanel panel = new HorizontalPanel();
-
-		importButton12 = new Button("Import12");
-		exportButton12 = new Button("Export12");
-		importButton12.getElement().setClassName("utilityButton");
-		exportButton12.getElement().setClassName("utilityButton");
-
-		MyHandler handler = new MyHandler();
-		importButton12.addClickHandler(handler);
-		exportButton12.addClickHandler(handler);
-
-		panel.add(importButton12);
-		panel.add(exportButton12);
 
 		return panel;  
 	}
@@ -333,20 +306,6 @@ public class Comav200 implements EntryPoint {
 		return panel;  
 	}
 
-	//Buttons for diagrams in rightDiv
-	/*
-	private DockPanel diagramButtons()
-	{
-		Frame oryxFrame = initializeOryx();
-		oryxFrame.setWidth("99%");
-
-		DockPanel dockPanel = new DockPanel();
-		dockPanel.setWidth("100%");
-		dockPanel.add(oryxFrame, DockPanel.WEST);
-		dockPanel.add(voteCellList.votingPanel(), DockPanel.EAST);
-
-		return dockPanel;
-	}*/
 
 	public void getVoteMapData () {
 		databaseConnection.getVoteList(new AsyncCallback<List<DiagramInfo>>() {
@@ -376,36 +335,9 @@ public class Comav200 implements EntryPoint {
 		});
 	}
 
-	private Panel votingPanel(String title, String preview, int id)
-	{
-		ScrollPanel cp = new ScrollPanel();
-		cp.setHeight("100%");
-
-		VerticalPanel mainPanel = new VerticalPanel();
-		for(int i = 0; i<5; i++){
-			HorizontalPanel panel = new HorizontalPanel();
-			VerticalPanel vPanel = new VerticalPanel();
-			HorizontalPanel hPanel = new HorizontalPanel();
-
-			panel.add(new Label(preview));
-			panel.add(vPanel);
-			vPanel.add(new Label(title));
-			vPanel.add(hPanel);
-
-			hPanel.add(new Button("1"));
-			hPanel.add(new Button("2"));
-			hPanel.add(new Button("3"));
-			hPanel.add(new Button("4"));
-			hPanel.add(new Button("5"));
-
-			mainPanel.add(panel);
-		}
-		cp.add(mainPanel);
-
-		return cp;
-	}
-
-	//Initialize my model view
+	/**
+	*Initialize My Model view
+	*/
 	private Panel initMyModelView(){
 		VerticalPanel panel = new VerticalPanel();
 		initializeOryxFrame();
@@ -414,21 +346,27 @@ public class Comav200 implements EntryPoint {
 		return panel;
 	}
 	
-	//Initialize group model view
+	/**
+	*Initialize Group Model view
+	*/
 	private Panel initGroupModelView(){
 		VerticalPanel panel = new VerticalPanel();
 		panel.add(topMenuButtonsGroupModelView());
 		return panel;
 	}
 	
-	//Initialize proposal view
+	/**
+	*Initialize Proposal view
+	*/
 	private Panel initProposalView(){
 		VerticalPanel panel = new VerticalPanel();
 		panel.add(topMenuButtonsProposalView());
 		return panel;
 	}
 
-	//Creates the frame which Oryx is loaded into
+	/**
+	*Creates the frame which Oryx is loaded into
+	*/
 	public void initializeOryxFrame() {
 		oryxFrame = new MessageFrame("oryxFrame");
 		oryxFrame.init();
@@ -442,7 +380,6 @@ public class Comav200 implements EntryPoint {
 		SignUp signUp = new SignUp();
 		RootPanel.get("mainDiv").add(signUp.screen());
 	}
-
 	
 	//Gets active users ID from database and sets the ID in the User class
 	public void getAndSetUserIDFromDatabase(String email) {
