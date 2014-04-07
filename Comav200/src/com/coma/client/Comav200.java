@@ -48,12 +48,13 @@ public class Comav200 implements EntryPoint {
 		result = value;
 	}
 
+	public Button saveButton = new Button("Save");
+	public Button loadButton = new Button("Load");
 	public Button importButton = new Button("Import");
-	public Button importButton1 = new Button("Import1");
-	public Button exportButton1 = new Button("Export1");
+	public Button exportButton = new Button("Export");
 	public Button importButton12 = new Button("Import12");
 	public Button exportButton12 = new Button("Export12");
-	public Button exportButton = new Button("Export");
+
 	public Button createGroup = new Button("Create group");
 	public Button inviteGroup = new Button("Invite to group");
 	public Button switchGroup = new Button("Switch group");
@@ -84,8 +85,8 @@ public class Comav200 implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-		RootPanel.get("mainDiv").add(logIn.screen());
-		//initMainProgram();
+		//RootPanel.get("mainDiv").add(logIn.screen());
+		initMainProgram();
 	}
 
 	public void saveModel(){
@@ -173,18 +174,18 @@ public class Comav200 implements EntryPoint {
 				b.center();
 				b.show();
 			}
+			else if(event.getSource().equals(saveButton)){
+				//new SaveModel().saveModel(oryxFrame);
+				saveModel();
+			}
+			else if(event.getSource().equals(loadButton)){
+				loadModel("hej");
+			}
 			else if(event.getSource().equals(importButton)){
 				//new SaveModel().saveModel(oryxFrame);
 				saveModel();
 			}
 			else if(event.getSource().equals(exportButton)){
-				loadModel("hej");
-			}
-			else if(event.getSource().equals(importButton1)){
-				//new SaveModel().saveModel(oryxFrame);
-				saveModel();
-			}
-			else if(event.getSource().equals(exportButton1)){
 				loadModel("hej");
 			}
 			else if(event.getSource().equals(importButton12)){
@@ -223,13 +224,11 @@ public class Comav200 implements EntryPoint {
 	}
 
 	public TabPanel initTabPanel(){
-
-		//SpecialFrame myFrame = new SpecialFrame();
 		
 		final TabPanel panel = new TabPanel();
-		panel.add(initMain(), "Main");
-		panel.add(topMenuButton(), "Group Model");
-		panel.add(topMenuButto(), "Proposals");		
+		panel.add(initMyModelView(), "Main");
+		panel.add(initGroupModelView(), "Group Model");
+		panel.add(initProposalView(), "Proposals");		
 		panel.setSize("100%", "100%");
 		panel.selectTab(0);
 		
@@ -245,32 +244,25 @@ public class Comav200 implements EntryPoint {
 		return panel;
 	}
 
-	private Panel topMenuButtons()
+	private Panel topMenuButtonsMyModelView()
 	{ 	
 		HorizontalPanel panel = new HorizontalPanel();
 
-		importButton = new Button("Import");
-		exportButton = new Button("Export");
-		createGroup = new Button("Create group");
-		inviteGroup = new Button("Invite to group");
-		switchGroup = new Button("Switch group");
-
-
-		importButton.getElement().setClassName("utilityButton");
-		exportButton.getElement().setClassName("utilityButton");
+		saveButton.getElement().setClassName("utilityButton");
+		loadButton.getElement().setClassName("utilityButton");
 		createGroup.getElement().setClassName("utilityButton");
 		inviteGroup.getElement().setClassName("utilityButton");
 		switchGroup.getElement().setClassName("utilityButton");
 
 		MyHandler handler = new MyHandler();
-		importButton.addClickHandler(handler);
-		exportButton.addClickHandler(handler);
+		saveButton.addClickHandler(handler);
+		loadButton.addClickHandler(handler);
 		createGroup.addClickHandler(handler);
 		inviteGroup.addClickHandler(handler);
 		switchGroup.addClickHandler(handler);
 
-		panel.add(importButton);
-		panel.add(exportButton);
+		panel.add(saveButton);
+		panel.add(loadButton);
 		panel.add(createGroup);
 		panel.add(inviteGroup);
 		panel.add(switchGroup);
@@ -278,21 +270,23 @@ public class Comav200 implements EntryPoint {
 		return panel;  
 	}
 	
-	private Panel topMenuButton()
+	
+	private Panel topMenuButtonsGroupModelView()
 	{ 	
 		HorizontalPanel panel = new HorizontalPanel();
 
-		importButton1 = new Button("Import1");
-		exportButton1 = new Button("Export1");
-		importButton1.getElement().setClassName("utilityButton");
-		exportButton1.getElement().setClassName("utilityButton");
+		importButton = new Button("Import");
+		exportButton = new Button("Export");
+		
+		importButton.getElement().setClassName("utilityButton");
+		exportButton.getElement().setClassName("utilityButton");
 
 		MyHandler handler = new MyHandler();
-		importButton1.addClickHandler(handler);
-		exportButton1.addClickHandler(handler);
+		importButton.addClickHandler(handler);
+		exportButton.addClickHandler(handler);
 
-		panel.add(importButton1);
-		panel.add(exportButton1);
+		panel.add(importButton);
+		panel.add(exportButton);
 
 		return panel;  
 	}
@@ -411,11 +405,26 @@ public class Comav200 implements EntryPoint {
 		return cp;
 	}
 
-	private Panel initMain(){
+	//Initialize my model view
+	private Panel initMyModelView(){
 		VerticalPanel panel = new VerticalPanel();
 		initializeOryxFrame();
-		panel.add(topMenuButtons());
+		panel.add(topMenuButtonsMyModelView());
 		panel.add(oryxFrame);
+		return panel;
+	}
+	
+	//Initialize group model view
+	private Panel initGroupModelView(){
+		VerticalPanel panel = new VerticalPanel();
+		panel.add(topMenuButtonsGroupModelView());
+		return panel;
+	}
+	
+	//Initialize proposal view
+	private Panel initProposalView(){
+		VerticalPanel panel = new VerticalPanel();
+		panel.add(topMenuButto());
 		return panel;
 	}
 
@@ -429,11 +438,8 @@ public class Comav200 implements EntryPoint {
 	}
 
 	public void initializeSignUp() {
-
 		RootPanel.get("mainDiv").clear();
-
 		SignUp signUp = new SignUp();
-
 		RootPanel.get("mainDiv").add(signUp.screen());
 	}
 
