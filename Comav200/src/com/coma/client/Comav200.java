@@ -97,24 +97,27 @@ public class Comav200 implements EntryPoint {
 
 			if(event.getSource().equals(createGroup)){
 				GroupDialogBox gdb = new GroupDialogBox();
-				DialogBox b = gdb.createDialogBox();
-				b.center();
-				b.show();
+				DialogBox dialogBox = gdb.createDialogBox();
+				dialogBox.center();
+				dialogBox.show();
 			}
 			else if(event.getSource().equals(switchGroup)){
 				SwitchGroupDialogBox sgdb = new SwitchGroupDialogBox();
-				DialogBox b = sgdb.createDialogBox();
-				b.center();
-				b.show();
+				DialogBox dialogBox = sgdb.createDialogBox();
+				dialogBox.center();
+				dialogBox.show();
 			}
 			else if(event.getSource().equals(inviteGroup)){
 				InviteToGroupDialogBox itgdb = new InviteToGroupDialogBox();
-				DialogBox b = itgdb.createDialogBox();
-				b.center();
-				b.show();
+				DialogBox dialogBox = itgdb.createDialogBox();
+				dialogBox.center();
+				dialogBox.show();
 			}
 			else if(event.getSource().equals(newButton)){
-
+				NewModelDialogBox nmdb = new NewModelDialogBox();
+				DialogBox dialogBox = nmdb.createDialogBox();
+				dialogBox.center();
+				dialogBox.show();
 			}
 			else if(event.getSource().equals(saveButton)){
 				new SaveModel().saveModel(oryxFrame);
@@ -130,27 +133,27 @@ public class Comav200 implements EntryPoint {
 			}
 			else if(event.getSource().equals(writeCommentButton)){
 				WriteCommentDialogBox wcdb = new WriteCommentDialogBox();
-				DialogBox b = wcdb.createDialogBox();
-				b.center();
-				b.show();
+				DialogBox dialogBox = wcdb.createDialogBox();
+				dialogBox.center();
+				dialogBox.show();
 			}
 			else if(event.getSource().equals(readCommentButton)){
 				ReadCommentDialogBox rcdb = new ReadCommentDialogBox();
-				DialogBox b = rcdb.createDialogBox();
-				b.center();
-				b.show();
+				DialogBox dialogBox = rcdb.createDialogBox();
+				dialogBox.center();
+				dialogBox.show();
 			}
 			else if(event.getSource().equals(voteButtonButton)){
 				VoteDialogBox vdb = new VoteDialogBox();
-				DialogBox b = vdb.createDialogBox();
-				b.center();
-				b.show();
+				DialogBox dialogBox = vdb.createDialogBox();
+				dialogBox.center();
+				dialogBox.show();
 			}
 			else if(event.getSource().equals(acceptProposalButton)){
 				AcceptProposalDialogBox apdb = new AcceptProposalDialogBox();
-				DialogBox b = apdb.createDialogBox();
-				b.center();
-				b.show();
+				DialogBox dialogBox = apdb.createDialogBox();
+				dialogBox.center();
+				dialogBox.show();
 			}
 
 		}
@@ -174,15 +177,14 @@ public class Comav200 implements EntryPoint {
 				p.add(oryxFrame);
 				
 				if (tabId == 2) {
-					System.out.println("PREDINNERSNACK");
-					getVoteMapData();
-					System.out.println("AFTERDINNESNACK");
 					DockPanel dockPanel = new DockPanel();
-		            dockPanel.setWidth("100%");
-		            dockPanel.add(oryxFrame, DockPanel.WEST);
-		            dockPanel.add(voteCellList.votingPanel(), DockPanel.EAST);
-				}
-			
+					System.out.println("PREDINNERSNACK");
+					dockPanel.setWidth("100%");
+					dockPanel.add(oryxFrame, DockPanel.WEST);
+					getVoteMapData(dockPanel);
+					System.out.println("AFTERDINNESNACK");
+					p.add(dockPanel);
+				}		
 		}});
 		
 		return panel;
@@ -271,7 +273,8 @@ public class Comav200 implements EntryPoint {
 		return panel;  
 	}
 	
-	public void getVoteMapData () {
+	public void getVoteMapData (DockPanel dPanel) {
+		final DockPanel dockPanel = dPanel;
 		int groupID = 1;
 		databaseConnection.getAllModelsFromSpecificGroupThatIsProposed(groupID, new AsyncCallback<List<ModelInfo>>() {
 
@@ -295,7 +298,9 @@ public class Comav200 implements EntryPoint {
 			@Override
 			public void onSuccess(List<ModelInfo> result) {
 				// TODO Auto-generated method stub
+				 
 				voteCellList.setModelInfoList(result);
+				dockPanel.add(voteCellList.votingPanel(), DockPanel.EAST);
 			}
 
 		});
@@ -377,6 +382,3 @@ public class Comav200 implements EntryPoint {
 		RootPanel.get("mainDiv").add(initTabPanel());
 	}
 }
-
-
-

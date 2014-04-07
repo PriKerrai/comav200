@@ -19,60 +19,60 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 
 public class GroupDialogBox{
-        private TextBox nameBox;
-       
-        private final DatabaseConnectionAsync databaseConnection = GWT
-                        .create(DatabaseConnection.class);
-       
-        public DialogBox createDialogBox(){
-        		// Create the popup dialog box
-                final DialogBox dialogBox = new DialogBox();
-                dialogBox.setAnimationEnabled(true);
-                dialogBox.setText("Create group");
-               
-                final Button sendButton = new Button("Send");
-                sendButton.getElement().setId("sendButton");
-                VerticalPanel dialogVPanel = new VerticalPanel();
-                dialogVPanel.addStyleName("dialogVPanel");
-                dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
-               
-                dialogVPanel.add(new Label("Group name:"));
-               
-                nameBox = new TextBox();
-               
-                dialogVPanel.add(nameBox);
-               
-                dialogVPanel.add(sendButton);
-                dialogBox.setWidget(dialogVPanel);
+	private TextBox nameBox;
 
-                // Add a handler to close the DialogBox
-                sendButton.addClickHandler(new ClickHandler() {
-                        public void onClick(ClickEvent event) {
-                                String groupName = nameBox.getText();
-                                int userID = User.getInstance().getUserId();
-                                java.util.Date date = new Date();
+	private final DatabaseConnectionAsync databaseConnection = GWT
+			.create(DatabaseConnection.class);
 
-                                createNewGroup(userID, groupName);
+	public DialogBox createDialogBox(){
+		// Create the popup dialog box
+		final DialogBox dialogBox = new DialogBox();
+		dialogBox.setAnimationEnabled(true);
+		dialogBox.setText("Create group");
 
-                                dialogBox.hide();
+		final Button sendButton = new Button("Send");
+		sendButton.getElement().setId("sendButton");
+		VerticalPanel dialogVPanel = new VerticalPanel();
+		dialogVPanel.addStyleName("dialogVPanel");
+		dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
 
-                        }
-                });
-               
-                return dialogBox;
-        }
+		dialogVPanel.add(new Label("Group name:"));
 
-        public void createNewGroup(int userID, String groupName) {
-               
-                databaseConnection.createNewGroup(userID, groupName, new AsyncCallback<Void>() {
-                                        public void onFailure(Throwable caught) {
-                                        }
+		nameBox = new TextBox();
 
-                                        @Override
-                                        public void onSuccess(Void result) {
-                                                // TODO Auto-generated method stub
-                                               
-                                        }
-                                });
-                }
+		dialogVPanel.add(nameBox);
+
+		dialogVPanel.add(sendButton);
+		dialogBox.setWidget(dialogVPanel);
+
+		// Add a handler to close the DialogBox
+		sendButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				String groupName = nameBox.getText();
+				int userID = User.getInstance().getUserId();
+				java.util.Date date = new Date();
+
+				createNewGroup(userID, groupName);
+
+				dialogBox.hide();
+
+			}
+		});
+
+		return dialogBox;
+	}
+
+	public void createNewGroup(int userID, String groupName) {
+
+		databaseConnection.createNewGroup(userID, groupName, new AsyncCallback<Void>() {
+			public void onFailure(Throwable caught) {
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+	}
 }

@@ -16,6 +16,7 @@ import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
@@ -55,7 +56,8 @@ public class VoteCellList {
 
 	public static List<ModelInfo> modelInfoList;
 
-	public CellList<String> votingPanel()
+	//public CellList<String> votingPanel()
+	public Panel votingPanel()
 	{
 		// Create a CellList.
 		CellList<String> cellList = new CellList<String>(new TextCell());
@@ -88,7 +90,8 @@ public class VoteCellList {
 		vPanel.add(cellList);
 		cellList.setWidth("100%");
 
-		return cellList;
+		//return cellList;
+		return vPanel;
 	}
 
 	public static List<ModelInfo> getModelInfoList() {
