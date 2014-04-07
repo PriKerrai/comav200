@@ -57,7 +57,10 @@ public class Comav200 implements EntryPoint {
 	public Button createGroup = new Button("Create group");
 	public Button inviteGroup = new Button("Invite to group");
 	public Button switchGroup = new Button("Switch group");
-
+	public Button voteButtonButton = new Button("Leave vote");
+	public Button writeCommentButton = new Button("Write comment");
+	public Button readCommentButton = new Button("Read comments");
+	public Button acceptProposalButton = new Button("Accept proposal");
 
 	LogIn logIn = new LogIn();
 	SignUp signUp = new SignUp();
@@ -191,6 +194,30 @@ public class Comav200 implements EntryPoint {
 			else if(event.getSource().equals(exportButton12)){
 				loadModel("hej");
 			}
+			else if(event.getSource().equals(writeCommentButton)){
+				WriteCommentDialogBox wcdb = new WriteCommentDialogBox();
+				DialogBox b = wcdb.createDialogBox();
+				b.center();
+				b.show();
+			}
+			else if(event.getSource().equals(readCommentButton)){
+				ReadCommentDialogBox rcdb = new ReadCommentDialogBox();
+				DialogBox b = rcdb.createDialogBox();
+				b.center();
+				b.show();
+			}
+			else if(event.getSource().equals(voteButtonButton)){
+				VoteDialogBox vdb = new VoteDialogBox();
+				DialogBox b = vdb.createDialogBox();
+				b.center();
+				b.show();
+			}
+			else if(event.getSource().equals(acceptProposalButton)){
+				AcceptProposalDialogBox apdb = new AcceptProposalDialogBox();
+				DialogBox b = apdb.createDialogBox();
+				b.center();
+				b.show();
+			}
 
 		}
 	}
@@ -285,6 +312,29 @@ public class Comav200 implements EntryPoint {
 
 		panel.add(importButton12);
 		panel.add(exportButton12);
+
+		return panel;  
+	}
+	
+	private Panel topMenuButtonsProposalView()
+	{ 	
+		HorizontalPanel panel = new HorizontalPanel();
+
+		writeCommentButton.getElement().setClassName("utilityButton");
+		readCommentButton.getElement().setClassName("utilityButton");
+		voteButtonButton.getElement().setClassName("utilityButton");
+		acceptProposalButton.getElement().setClassName("utilityButton");
+
+		MyHandler handler = new MyHandler();
+		writeCommentButton.addClickHandler(handler);
+		readCommentButton.addClickHandler(handler);
+		voteButtonButton.addClickHandler(handler);
+		acceptProposalButton.addClickHandler(handler);		
+
+		panel.add(writeCommentButton);
+		panel.add(readCommentButton);
+		panel.add(voteButtonButton);
+		panel.add(acceptProposalButton);
 
 		return panel;  
 	}
@@ -405,7 +455,6 @@ public class Comav200 implements EntryPoint {
 	public void initMainProgram() {
 		RootPanel.get("mainDiv").clear();
 		RootPanel.get("mainDiv").add(initTabPanel());
-
 	}
 }
 
