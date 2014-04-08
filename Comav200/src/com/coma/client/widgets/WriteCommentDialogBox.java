@@ -3,6 +3,7 @@ package com.coma.client.widgets;
 import java.awt.TextField;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import com.coma.client.DatabaseConnection;
 import com.coma.client.DatabaseConnectionAsync;
@@ -20,75 +21,132 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 
 public class WriteCommentDialogBox{
-        private TextBox nameBox;
-       
-        private final DatabaseConnectionAsync databaseConnection = GWT
-                        .create(DatabaseConnection.class);
-       
-        public DialogBox createDialogBox(){
-        		// Create the popup dialog box
-                final DialogBox dialogBox = new DialogBox();
-                dialogBox.setAnimationEnabled(true);
-                dialogBox.setText("Write comment");
-               
-                final Button sendButton = new Button("Send");
-                sendButton.getElement().setId("sendButton");
-                final Button closeButton = new Button("close");
-                closeButton.getElement().setId("closeButton");
-                
-                VerticalPanel dialogVPanel = new VerticalPanel();
-                dialogVPanel.addStyleName("dialogVPanel");
-                dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
-               
-                dialogVPanel.add(new Label("Write comment:"));
-               
-                final TextArea ta = new TextArea();
-                ta.setCharacterWidth(50);
-                ta.setVisibleLines(20);
-               
-                dialogVPanel.add(ta);
-               
-                dialogVPanel.add(sendButton);
-                dialogVPanel.add(closeButton);
-                dialogBox.setWidget(dialogVPanel);
-                dialogBox.setAnimationEnabled(false);
 
-                // Add a handler to close the DialogBox
-                sendButton.addClickHandler(new ClickHandler() {
-                        public void onClick(ClickEvent event) {
-                                String comment = ta.getText();
-                                int userID = User.getInstance().getUserId();
+	private final DatabaseConnectionAsync databaseConnection = GWT
+			.create(DatabaseConnection.class);
 
-                                addComment(userID, comment);
+	private int activeModelID;
+	private List<String> commentList; 
 
-                                dialogBox.hide();
+	public List<String> getCommentList() {
+		return commentList;
+	}
 
-                        }
-                });
-                
-                closeButton.addClickHandler(new ClickHandler() {
-                    public void onClick(ClickEvent event) {
+	public void setCommentList(List<String> commentList) {
+		this.commentList = commentList;
+	}
+	
+	public int getModelID() {
+		return activeModelID;
+	}
 
-                            dialogBox.hide();
+	public void setModelID(int modelID) {
+		this.activeModelID = modelID;
+	}
 
-                    }
-            });
-               
-                return dialogBox;
-        }
+	public WriteCommentDialogBox() {
+	}
 
-        protected void addComment(int userID, String comment) {
-        	
-        	databaseConnection.addCommentToModel(userID, comment, new AsyncCallback<Void>() {
-                public void onFailure(Throwable caught) {
-                }
+	public WriteCommentDialogBox(int modelID) {
+		setModelID(modelID);
+		getCommentsOnModel(activeModelID);
+	}
 
-                @Override
-                public void onSuccess(Void result) {
-                        // TODO Auto-generated method stub
-                       
-                }
-        });
-			
-		}
+	public DialogBox createDialogBox(){
+		// Create the popup dialog box
+		final DialogBox dialogBox = new DialogBox();
+		dialogBox.setAnimationEnabled(true);
+		dialogBox.setText("Write comment");
+
+		final Button sendButton = new Button("Send");
+		sendButton.getElement().setId("sendButton");
+		final Button closeButton = new Button("close");
+		closeButton.getElement().setId("closeButton");
+
+		VerticalPanel dialogVPanel = new VerticalPanel();
+		dialogVPanel.addStyleName("dialogVPanel");
+		dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
+
+		dialogVPanel.add(new Label("Write comment:"));
+		
+		final TextArea writeCommentTextArea = new TextArea();
+		writeCommentTextArea.setCharacterWidth(50);
+		writeCommentTextArea.setVisibleLines(10);
+		
+		final TextArea readCommentTextArea = new TextArea();
+		readCommentTextArea.setCharacterWidth(50);
+		readCommentTextArea.setVisibleLines(10);
+		
+		StringBuilder comments = new StringBuilder();
+		for (int i = 0; i < commentList.size(); i++) {
+				comments.append(commentList.get(i) + "\n");
+				
+			}
+		
+		readCommentTextArea.setText(comments.toString());
+
+		dialogVPanel.add(readCommentTextArea);
+		dialogVPanel.add(writeCommentTextArea);
+
+		dialogVPanel.add(sendButton);
+		dialogVPanel.add(closeButton);
+		dialogBox.setWidget(dialogVPanel);
+		dialogBox.setAnimationEnabled(false);
+
+		// Add a handler to close the DialogBox
+		sendButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				String comment = writeCommentTextArea.getText();
+				int userID = User.getInstance().getUserId();
+
+				addComment(userID, getModelID(), comment);
+				dialogBox.hide();
+
+			}
+		});
+
+		closeButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+
+				dialogBox.hide();
+
+			}
+		});
+
+		return dialogBox;
+	}
+
+	protected void getCommentsOnModel(int modelID) {
+
+		databaseConnection.getCommentsOnModel(modelID, new AsyncCallback<List<String>>() {
+			public void onFailure(Throwable caught) {
+			}
+
+			@Override
+			public void onSuccess(List<String> result) {
+				
+				setCommentList(result);
+				DialogBox dialogBox = createDialogBox();
+				dialogBox.center();
+				dialogBox.show();
+			}
+		});
+
+	}
+	
+	protected void addComment(int userID, int modelID, String comment) {
+
+		databaseConnection.addCommentToModel(userID, modelID, comment, new AsyncCallback<Void>() {
+			public void onFailure(Throwable caught) {
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				System.out.println("Success from addComment");
+
+			}
+		});
+
+	}
+
 }

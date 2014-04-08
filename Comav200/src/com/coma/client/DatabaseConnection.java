@@ -16,10 +16,11 @@ public interface DatabaseConnection extends RemoteService {
 	int getUserID(String email);
 	void saveModel(int groupID, int userID, String modelName, int modelType,
 			String modelString, int isProposal);
-	void addCommentToModel(int userID, String comment);
-	void addVoteToModel(int userID, int index);
+	void addVoteToModel(int userID, int modelID, int index);
 	List<ModelInfo> getAllModelsFromSpecificGroupThatIsProposed(int activeGroup)
 			throws IllegalArgumentException;
 	ModelInfo loadModel(int modelID);
+	void addCommentToModel(int userID, int modelID, String comment);
+	List<String> getCommentsOnModel(int modelID);
 	
 }

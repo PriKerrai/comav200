@@ -87,6 +87,7 @@ public class VoteCellList {
               String[] modelID = selected.split("/");
               //Window.alert("You selected: " + modelID[1] + "ModelID: " + modelID[0]); 
               Comav200.GetInstance().loadModelFromCellList(Integer.parseInt(modelID[0]));
+              Comav200.GetInstance().setActiveModelID((Integer.parseInt(modelID[0])));
               }
           }
         });

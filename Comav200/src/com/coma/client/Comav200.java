@@ -80,6 +80,7 @@ public class Comav200 {
 	 */
 	private final DatabaseConnectionAsync databaseConnection = GWT
 			.create(DatabaseConnection.class);
+	private int activeModelID;
 
 
 	public void initialize(){
@@ -134,19 +135,11 @@ public class Comav200 {
 
 			}
 			else if(event.getSource().equals(writeCommentButton)){
-				WriteCommentDialogBox wcdb = new WriteCommentDialogBox();
-				DialogBox dialogBox = wcdb.createDialogBox();
-				dialogBox.center();
-				dialogBox.show();
-			}
-			else if(event.getSource().equals(readCommentButton)){
-				ReadCommentDialogBox rcdb = new ReadCommentDialogBox();
-				DialogBox dialogBox = rcdb.createDialogBox();
-				dialogBox.center();
-				dialogBox.show();
+				WriteCommentDialogBox wcdb = new WriteCommentDialogBox(activeModelID);
+
 			}
 			else if(event.getSource().equals(voteButtonButton)){
-				VoteDialogBox vdb = new VoteDialogBox();
+				VoteDialogBox vdb = new VoteDialogBox(activeModelID);
 				DialogBox dialogBox = vdb.createDialogBox();
 				dialogBox.center();
 				dialogBox.show();
@@ -399,6 +392,9 @@ public class Comav200 {
 		RootPanel.get("mainDiv").add(initTabPanel());
 	}
 	
+	public void setActiveModelID(int modelID) {
+		this.activeModelID = modelID;
+	}
 	
 	public void clearOryx(){
 		final MessageFrame oryxFrame = this.oryxFrame;

@@ -15,12 +15,12 @@ public interface DatabaseConnectionAsync {
 			AsyncCallback<Void> callback);
 	void getUserID(String email, AsyncCallback<Integer> asyncCallback);	void saveModel(int groupID, int userID, String modelName, int modelType, String modelString, int isProposal,
 			AsyncCallback<Void> asyncCallback);
-
-	
 	void loadModel(int modelID, AsyncCallback<ModelInfo> asyncCallback);
-	void addCommentToModel(int userID, String comment,
-			AsyncCallback<Void> asyncCallback);
-	void addVoteToModel(int userID, int index, AsyncCallback<Void> asyncCallback);
+	void addVoteToModel(int userID, int modelID, int index, AsyncCallback<Void> asyncCallback);
 	void getAllModelsFromSpecificGroupThatIsProposed(int activeGroup, AsyncCallback<List<ModelInfo>> callback);
+	void addCommentToModel(int userID, int modelID, String comment,
+			AsyncCallback<Void> callback);
+	void getCommentsOnModel(int modelID,
+			AsyncCallback<List<String>> asyncCallback);
 
 }

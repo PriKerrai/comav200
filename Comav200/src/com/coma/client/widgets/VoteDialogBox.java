@@ -6,6 +6,7 @@ import java.util.Date;
 
 import com.coma.client.DatabaseConnection;
 import com.coma.client.DatabaseConnectionAsync;
+import com.coma.client.ModelInfo;
 import com.coma.client.User;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -18,7 +19,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
+import com.coma.client.widgets.*;
 
 public class VoteDialogBox{
 	final ListBox listBox = new ListBox(); 
@@ -26,6 +27,22 @@ public class VoteDialogBox{
 
 	private final DatabaseConnectionAsync databaseConnection = GWT
 			.create(DatabaseConnection.class);
+	public int activeModelID;
+
+	public int getModelID() {
+		return activeModelID;
+	}
+
+	public void setModelID(int modelID) {
+		this.activeModelID = modelID;
+	}
+
+	public VoteDialogBox() {
+	}
+
+	public VoteDialogBox(int modelID) {
+		setModelID(modelID);
+	}
 
 	public DialogBox createDialogBox(){
 		// Create the popup dialog box
@@ -61,13 +78,10 @@ public class VoteDialogBox{
 		// Add a handler to close the DialogBox
 		sendButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-
-		int index = listBox.getSelectedIndex();
-		String myValue = listBox.getValue(index);
-		System.out.print("\nIndex: " + index);
-		System.out.print("\nValue:" + myValue);
-
-		dialogBox.hide();
+				int index = listBox.getSelectedIndex();
+				int userID = User.getInstance().getUserId();
+				addVoteToModel(userID, getModelID(), index);
+				dialogBox.hide();
 
 			}
 		});
@@ -76,22 +90,21 @@ public class VoteDialogBox{
 			public void onClick(ClickEvent event) {
 
 				dialogBox.hide();
-
 			}
 		});
 
 		return dialogBox;
 	}
 
-	protected void addVoteToModel(int userID, int index) {
+	protected void addVoteToModel(int userID, int modelID, int index) {
 
-		databaseConnection.addVoteToModel(userID, index, new AsyncCallback<Void>() {
+		databaseConnection.addVoteToModel(userID, modelID, index, new AsyncCallback<Void>() {
 			public void onFailure(Throwable caught) {
 			}
 
 			@Override
 			public void onSuccess(Void result) {
-				// TODO Auto-generated method stub
+				System.out.println("Success from addVoteToModel");
 
 			}
 		});
