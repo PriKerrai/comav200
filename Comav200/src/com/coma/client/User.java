@@ -5,6 +5,15 @@ public class User {
 	private static User instance = null;
 	private int userId;
 	private int activeGroupID;
+	private String userEmail;
+
+	public String getUserEmail() {
+		return userEmail;
+	}
+
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
+	}
 
 	public int getActiveGroupID() {
 		return activeGroupID;

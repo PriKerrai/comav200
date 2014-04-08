@@ -13,8 +13,7 @@ public interface DatabaseConnectionAsync {
 	void createNewGroup(int userID, String groupName, AsyncCallback<Void> callback);
 	void createNewUser(String name, String password,
 			AsyncCallback<Void> callback);
-	void getUserID(String email, AsyncCallback<Integer> callback);
-	void saveModel(int groupID, int userID, String modelName, int modelType, String modelString, int isProposal,
+	void getUserID(String email, AsyncCallback<Integer> asyncCallback);	void saveModel(int groupID, int userID, String modelName, int modelType, String modelString, int isProposal,
 			AsyncCallback<Void> asyncCallback);
 
 	

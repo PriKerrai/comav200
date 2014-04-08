@@ -38,27 +38,17 @@ public class Comav200 implements EntryPoint {
 		}
 	}
 
-	private String result;
-
-	public String getResult() {
-		return result;
-	}
-
-	public void setResult(String value) {
-		result = value;
-	}
-
 	public Button newButton = new Button("New Model");
 	public Button saveButton = new Button("Save Model");
 	public Button loadButton = new Button("Load Model");
 	public Button importButton = new Button("Import");
 	public Button exportButton = new Button("Export");
-	public Button importButton12 = new Button("Import12");
-	public Button exportButton12 = new Button("Export12");
+	public Button editProfileButton = new Button("Edit profile");
 
-	public Button createGroup = new Button("Create group");
-	public Button inviteGroup = new Button("Invite to group");
-	public Button switchGroup = new Button("Switch group");
+
+	public Button createGroupButton = new Button("Create group");
+	public Button inviteGroupButton = new Button("Invite to group");
+	public Button switchGroupButton = new Button("Switch group");
 	public Button voteButtonButton = new Button("Leave vote");
 	public Button writeCommentButton = new Button("Write comment");
 	public Button readCommentButton = new Button("Read comments");
@@ -86,8 +76,8 @@ public class Comav200 implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-		//RootPanel.get("mainDiv").add(logIn.screen());
-		initMainProgram();
+		RootPanel.get("mainDiv").add(logIn.screen());
+		//initMainProgram();
 	}
 	
 	class MyHandler implements ClickHandler{
@@ -95,19 +85,19 @@ public class Comav200 implements EntryPoint {
 		@Override
 		public void onClick(ClickEvent event) {
 
-			if(event.getSource().equals(createGroup)){
+			if(event.getSource().equals(createGroupButton)){
 				GroupDialogBox gdb = new GroupDialogBox();
 				DialogBox dialogBox = gdb.createDialogBox();
 				dialogBox.center();
 				dialogBox.show();
 			}
-			else if(event.getSource().equals(switchGroup)){
+			else if(event.getSource().equals(switchGroupButton)){
 				SwitchGroupDialogBox sgdb = new SwitchGroupDialogBox();
 				DialogBox dialogBox = sgdb.createDialogBox();
 				dialogBox.center();
 				dialogBox.show();
 			}
-			else if(event.getSource().equals(inviteGroup)){
+			else if(event.getSource().equals(inviteGroupButton)){
 				InviteToGroupDialogBox itgdb = new InviteToGroupDialogBox();
 				DialogBox dialogBox = itgdb.createDialogBox();
 				dialogBox.center();
@@ -178,11 +168,9 @@ public class Comav200 implements EntryPoint {
 				
 				if (tabId == 2) {
 					DockPanel dockPanel = new DockPanel();
-					System.out.println("PREDINNERSNACK");
 					dockPanel.setWidth("100%");
 					dockPanel.add(oryxFrame, DockPanel.WEST);
 					getVoteMapData(dockPanel);
-					System.out.println("AFTERDINNESNACK");
 					p.add(dockPanel);
 				}		
 		}});
@@ -206,6 +194,7 @@ public class Comav200 implements EntryPoint {
 		panel.add(newButton);
 		panel.add(saveButton);
 		panel.add(loadButton);
+		panel.add(new Label("Logged in as: " + User.getInstance().getUserEmail()+ " id: " + User.getInstance().getUserId()));
 
 		return panel;  
 	}
@@ -257,18 +246,21 @@ public class Comav200 implements EntryPoint {
 	{ 	
 		HorizontalPanel panel = new HorizontalPanel();
 
-		createGroup.getElement().setClassName("utilityButton");
-		inviteGroup.getElement().setClassName("utilityButton");
-		switchGroup.getElement().setClassName("utilityButton");
+		createGroupButton.getElement().setClassName("utilityButton");
+		inviteGroupButton.getElement().setClassName("utilityButton");
+		switchGroupButton.getElement().setClassName("utilityButton");
+		editProfileButton.getElement().setClassName("utilityButton");
 
 		MyHandler handler = new MyHandler();
-		createGroup.addClickHandler(handler);
-		inviteGroup.addClickHandler(handler);
-		switchGroup.addClickHandler(handler);
+		createGroupButton.addClickHandler(handler);
+		inviteGroupButton.addClickHandler(handler);
+		switchGroupButton.addClickHandler(handler);
+		editProfileButton.addClickHandler(handler);
 
-		panel.add(createGroup);
-		panel.add(inviteGroup);
-		panel.add(switchGroup);
+		panel.add(createGroupButton);
+		panel.add(inviteGroupButton);
+		panel.add(switchGroupButton);
+		panel.add(editProfileButton);
 
 		return panel;  
 	}
@@ -366,14 +358,22 @@ public class Comav200 implements EntryPoint {
 	*/
 	public void getAndSetUserIDFromDatabase(String email) {
 
+		//make this method to return id, group and name
+		
+		
+		
 		databaseConnection.getUserID(email, new AsyncCallback<Integer>() {
 			public void onFailure(Throwable caught) {
 			}
+
 			@Override
 			public void onSuccess(Integer result) {
+				// TODO Auto-generated method stub
 				User.getInstance().setUserId(result);
-				initMainProgram();
+				initMainProgram();	
+				
 			}
+
 		});
 	}
 
@@ -381,4 +381,38 @@ public class Comav200 implements EntryPoint {
 		RootPanel.get("mainDiv").clear();
 		RootPanel.get("mainDiv").add(initTabPanel());
 	}
+	
+	
+	public void clearOryx(){
+		final MessageFrame oryxFrame = this.oryxFrame;
+		final String model = "Empty model";
+		oryxFrame.setVisible(false);
+        oryxFrame.removeAllCallbackHandlers();
+        oryxFrame.addCallbackHandler(new LoadingCompletehandler(new LoadingCompleteEventListener() {
+
+            @Override
+            public void loadingComplete() {
+                oryxFrame.removeAllCallbackHandlers();
+                oryxFrame.setVisible(true);
+                oryxFrame.addCallbackHandler(new CallbackHandler() {
+                        @Override
+                        public void callBack(final HashMap<String, String> data) {
+                            oryxFrame.removeAllCallbackHandlers();
+                            if (!data.get("action").equals("shapesloaded")) {
+                                // Display error message that model cannot be loaded
+                                return;
+                            }
+                        }
+                });
+        	HashMap<String, String> oryxCmd = new HashMap<String, String>();
+        	oryxCmd.put("target", "oryx");
+        	oryxCmd.put("action", "loadshapes");
+        	oryxCmd.put("message", model);
+        	oryxFrame.sendJSON(oryxCmd);
+            }
+
+        }));
+        oryxFrame.setUrl("http://localhost/oryx/oryx.xhtml");
+	}
+	
 }

@@ -91,6 +91,7 @@ public class LogIn {
         	String encryptedPassword = encryptPassword(passwordTextBox.getValue());
         	if(encryptedPassword.equals(password)){        		
         		Comav200.GetInstance().getAndSetUserIDFromDatabase(emailTextBox.getText());
+        		User.getInstance().setUserEmail(emailTextBox.getText());
         		
         	}
         	else{

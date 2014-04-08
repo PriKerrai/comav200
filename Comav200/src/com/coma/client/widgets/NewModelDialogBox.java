@@ -2,6 +2,7 @@ package com.coma.client.widgets;
 
 import java.util.Date;
 
+import com.coma.client.Comav200;
 import com.coma.client.DatabaseConnection;
 import com.coma.client.DatabaseConnectionAsync;
 import com.coma.client.User;
@@ -18,7 +19,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class NewModelDialogBox {
 
 	
-	private TextBox nameBox;
+	private TextBox modelNameBox;
+	private ListBox modelTypeBox;
 
 	private final DatabaseConnectionAsync databaseConnection = GWT
 			.create(DatabaseConnection.class);
@@ -36,19 +38,19 @@ public class NewModelDialogBox {
 		dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
 
 		dialogVPanel.add(new Label("Model name:"));
-		nameBox = new TextBox();
-		dialogVPanel.add(nameBox);
+		modelNameBox = new TextBox();
+		dialogVPanel.add(modelNameBox);
 
-		ListBox typeBox = new ListBox();
-		typeBox.addItem("UML Class Diagram");
-		typeBox.addItem("UML Activity Diagram");
-		typeBox.addItem("UML Use Case Diagram");
-		typeBox.addItem("UML Sequence Diagram");
-		typeBox.addItem("UML State Diagram");
+		modelTypeBox = new ListBox();
+		modelTypeBox.addItem("UML Class Diagram");
+		modelTypeBox.addItem("UML Activity Diagram");
+		modelTypeBox.addItem("UML Use Case Diagram");
+		modelTypeBox.addItem("UML Sequence Diagram");
+		modelTypeBox.addItem("UML State Diagram");
 		
-		typeBox.setVisibleItemCount(1);
+		modelTypeBox.setVisibleItemCount(1);
 		
-		dialogVPanel.add(typeBox);
+		dialogVPanel.add(modelTypeBox);
 		dialogVPanel.add(sendButton);
 		
 		dialogBox.setWidget(dialogVPanel);
@@ -56,11 +58,11 @@ public class NewModelDialogBox {
 		// Add a handler to close the DialogBox
 		sendButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				String groupName = nameBox.getText();
+				//need a different entrypoint
+				//Comav200.GetInstance().clearOryx();
+				String modelName = modelNameBox.getText();
+				int modelType = modelTypeBox.getSelectedIndex();
 				int userID = User.getInstance().getUserId();
-				java.util.Date date = new Date();
-
-				//createNewGroup(userID, groupName);
 
 				dialogBox.hide();
 
