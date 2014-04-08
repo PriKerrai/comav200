@@ -19,12 +19,12 @@ import com.coma.client.widgets.*;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class Comav200 implements EntryPoint {
+public class Comav200 {
 
 	private static Comav200 instance = null;
 	public static String problemOwner;
 	public static String problemLocation;
-	public static String HEJ;
+	private ModelInfo newModel;
 
 	private MessageFrame oryxFrame = null;
 
@@ -72,12 +72,9 @@ public class Comav200 implements EntryPoint {
 	private final DatabaseConnectionAsync databaseConnection = GWT
 			.create(DatabaseConnection.class);
 
-	/**
-	 * This is the entry point method.
-	 */
-	public void onModuleLoad() {
+
+	public void initialize(){
 		RootPanel.get("mainDiv").add(logIn.screen());
-		//initMainProgram();
 	}
 	
 	class MyHandler implements ClickHandler{
@@ -104,8 +101,9 @@ public class Comav200 implements EntryPoint {
 				dialogBox.show();
 			}
 			else if(event.getSource().equals(newButton)){
+				newModel = new ModelInfo();
 				NewModelDialogBox nmdb = new NewModelDialogBox();
-				DialogBox dialogBox = nmdb.createDialogBox();
+				DialogBox dialogBox = nmdb.createDialogBox(newModel);
 				dialogBox.center();
 				dialogBox.show();
 			}
@@ -164,12 +162,13 @@ public class Comav200 implements EntryPoint {
 			public void onSelection(SelectionEvent<Integer> event) {
 				int tabId = event.getSelectedItem();
 				Panel p = (Panel)panel.getWidget(tabId);
+				
 				if (tabId == 0 || tabId == 1) {
 				p.add(oryxFrame);
 				}
 				
 				if (tabId == 2) {
-					
+					p.clear();
 					DockPanel dockPanel = new DockPanel();
 					dockPanel.setWidth("100%");
 					dockPanel.add(oryxFrame, DockPanel.CENTER);
@@ -293,7 +292,6 @@ public class Comav200 implements EntryPoint {
 			@Override
 			public void onSuccess(List<ModelInfo> result) {
 				// TODO Auto-generated method stub
-				 
 				VoteCellList.setModelInfoList(result);
 				dockPanel.add(voteCellList.votingPanel(), DockPanel.EAST);
 			}

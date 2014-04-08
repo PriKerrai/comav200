@@ -25,8 +25,7 @@ public class ModelInfo implements IsSerializable {
     	this.modelString = modelString;
     	this.modelName = modelName;
     	this.IsProposal = IsProposal;
-    	this.modelCreationDate = modelCreationDate;
-    	
+    	this.modelCreationDate = modelCreationDate;	
     }
 
 	public int getModelID() {

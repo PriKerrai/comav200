@@ -5,6 +5,7 @@ import java.util.Date;
 import com.coma.client.Comav200;
 import com.coma.client.DatabaseConnection;
 import com.coma.client.DatabaseConnectionAsync;
+import com.coma.client.ModelInfo;
 import com.coma.client.User;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -25,7 +26,7 @@ public class NewModelDialogBox {
 	private final DatabaseConnectionAsync databaseConnection = GWT
 			.create(DatabaseConnection.class);
 
-	public DialogBox createDialogBox( ){
+	public DialogBox createDialogBox(ModelInfo newModel){
 		// Create the popup dialog box
 		final DialogBox dialogBox = new DialogBox();
 		dialogBox.setAnimationEnabled(true);
@@ -63,7 +64,6 @@ public class NewModelDialogBox {
 				String modelName = modelNameBox.getText();
 				int modelType = modelTypeBox.getSelectedIndex();
 				int userID = User.getInstance().getUserId();
-
 				dialogBox.hide();
 
 			}
