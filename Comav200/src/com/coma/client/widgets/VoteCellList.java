@@ -50,7 +50,7 @@ public class VoteCellList {
 				int modelCreator = modelInfo.getModelCreator();
 				String modelName = modelInfo.getModelName();
 				String modelCreationDate = modelInfo.getModelCreationDate();
-				newData.add("ModelID:" + modelID + "Creator: " + modelCreator + " Diagram name: " + modelName + " Diagram creation date " + modelCreationDate);
+				newData.add(modelID + "/" + "Creator: " + modelCreator + " Diagram name: " + modelName + " Diagram creation date " + modelCreationDate);
 			}
 
 			// Push the data to the displays. AsyncDataProvider will only update
@@ -84,12 +84,12 @@ public class VoteCellList {
           public void onSelectionChange(SelectionChangeEvent event) {
             String selected = selectionModel.getSelectedObject();
             if (selected != null) {
-              Window.alert("You selected: " + selected);
-            }
+              String[] modelID = selected.split("/");
+              Window.alert("You selected: " + modelID[1] + "ModelID: " + modelID[0]); 
+              Comav200.GetInstance().loadModelFromCellList(Integer.parseInt(modelID[0]));
+              }
           }
         });
-       
-        cellList.setRowCount(modelInfoList.size(), true);      
         cellList.setWidth("100%");
 
 		return cellList;

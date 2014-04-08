@@ -169,6 +169,7 @@ public class Comav200 implements EntryPoint {
 				}
 				
 				if (tabId == 2) {
+					
 					DockPanel dockPanel = new DockPanel();
 					dockPanel.setWidth("100%");
 					dockPanel.add(oryxFrame, DockPanel.CENTER);
@@ -379,8 +380,8 @@ public class Comav200 implements EntryPoint {
 		});
 	}
 	
-	public void loadModelFromCellList(String modelString) {
-		new LoadModel().loadModelFromCellist(modelString, oryxFrame);
+	public void loadModelFromCellList(int modelID) {
+		new LoadModel().getModelFromDatabase(modelID, oryxFrame);
 	}
 
 	public void initMainProgram() {
