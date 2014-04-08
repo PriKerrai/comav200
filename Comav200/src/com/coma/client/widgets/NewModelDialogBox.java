@@ -26,14 +26,17 @@ public class NewModelDialogBox {
 	private final DatabaseConnectionAsync databaseConnection = GWT
 			.create(DatabaseConnection.class);
 
-	public DialogBox createDialogBox(ModelInfo newModel){
+	public DialogBox createDialogBox(){
 		// Create the popup dialog box
 		final DialogBox dialogBox = new DialogBox();
 		dialogBox.setAnimationEnabled(true);
 		dialogBox.setText("New model");
 
-		final Button sendButton = new Button("Send");
-		sendButton.getElement().setId("sendButton");
+		final Button createButton = new Button("Create");
+		createButton.getElement().setId("createButton");
+		
+		final Button cancelButton = new Button("Cancel");
+		cancelButton.getElement().setId("cancelButton");
 		VerticalPanel dialogVPanel = new VerticalPanel();
 		dialogVPanel.addStyleName("dialogVPanel");
 		dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
@@ -52,22 +55,29 @@ public class NewModelDialogBox {
 		modelTypeBox.setVisibleItemCount(1);
 		
 		dialogVPanel.add(modelTypeBox);
-		dialogVPanel.add(sendButton);
+		dialogVPanel.add(cancelButton);
+		dialogVPanel.add(createButton);
 		
 		dialogBox.setWidget(dialogVPanel);
 
 		// Add a handler to close the DialogBox
-		sendButton.addClickHandler(new ClickHandler() {
+		createButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				//need a different entrypoint
-				//Comav200.GetInstance().clearOryx();
-				String modelName = modelNameBox.getText();
-				int modelType = modelTypeBox.getSelectedIndex();
-				int userID = User.getInstance().getUserId();
+				Comav200.GetInstance().clearOryx();
+				ModelInfo model = Comav200.GetInstance().getModel();
+				model.setModelName(modelNameBox.getText());
+				model.setModelType(modelTypeBox.getSelectedIndex());
 				dialogBox.hide();
-
 			}
 		});
+		
+		// Add a handler to close the DialogBox
+				cancelButton.addClickHandler(new ClickHandler() {
+					public void onClick(ClickEvent event) {
+						dialogBox.hide();
+
+					}
+				});
 
 		return dialogBox;
 	}

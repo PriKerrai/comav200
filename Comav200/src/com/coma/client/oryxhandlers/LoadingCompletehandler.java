@@ -25,4 +25,3 @@ public class LoadingCompletehandler implements CallbackHandler {
     }
 
 }
-

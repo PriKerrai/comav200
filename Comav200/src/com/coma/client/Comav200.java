@@ -23,7 +23,17 @@ public class Comav200 {
 	private static Comav200 instance = null;
 	public static String problemOwner;
 	public static String problemLocation;
-	private ModelInfo newModel;
+	private ModelInfo model;
+	
+	
+
+	public ModelInfo getModel() {
+		return model;
+	}
+
+	public void setModel(ModelInfo model) {
+		this.model = model;
+	}
 
 	private MessageFrame oryxFrame = null;
 
@@ -44,7 +54,7 @@ public class Comav200 {
 	public Button exportButton = new Button("Export");
 	public Button editProfileButton = new Button("Edit profile");
 
-
+	public Button proposeButton = new Button("Propose as group model");
 	public Button createGroupButton = new Button("Create group");
 	public Button inviteGroupButton = new Button("Invite to group");
 	public Button switchGroupButton = new Button("Switch group");
@@ -100,17 +110,22 @@ public class Comav200 {
 				dialogBox.show();
 			}
 			else if(event.getSource().equals(newButton)){
-				newModel = new ModelInfo();
+				model = new ModelInfo();
 				NewModelDialogBox nmdb = new NewModelDialogBox();
-				DialogBox dialogBox = nmdb.createDialogBox(newModel);
+				DialogBox dialogBox = nmdb.createDialogBox();
 				dialogBox.center();
 				dialogBox.show();
 			}
 			else if(event.getSource().equals(saveButton)){
+				model.setIsProposal(0);
 				new SaveModel().saveModel(oryxFrame);
 			}
 			else if(event.getSource().equals(loadButton)){
 				new LoadModel().getModelFromDatabase(2,oryxFrame);
+			}
+			else if(event.getSource().equals(proposeButton)){
+				model.setIsProposal(1);
+				new SaveModel().saveModel(oryxFrame);
 			}
 			else if(event.getSource().equals(importButton)){
 
@@ -187,15 +202,18 @@ public class Comav200 {
 		newButton.getElement().setClassName("utilityButton");
 		saveButton.getElement().setClassName("utilityButton");
 		loadButton.getElement().setClassName("utilityButton");
+		proposeButton.getElement().setClassName("utilityButton");
 
 		MyHandler handler = new MyHandler();
 		newButton.addClickHandler(handler);
 		saveButton.addClickHandler(handler);
 		loadButton.addClickHandler(handler);
+		proposeButton.addClickHandler(handler);
 
 		panel.add(newButton);
 		panel.add(saveButton);
 		panel.add(loadButton);
+		panel.add(proposeButton);
 		panel.add(new Label("Logged in as: " + User.getInstance().getUserEmail()+ " id: " + User.getInstance().getUserId()));
 
 		return panel;  
@@ -358,11 +376,6 @@ public class Comav200 {
 	*Gets active users ID from database and sets the ID in the User class
 	*/
 	public void getAndSetUserIDFromDatabase(String email) {
-
-		//make this method to return id, group and name
-		
-		
-		
 		databaseConnection.getUserID(email, new AsyncCallback<Integer>() {
 			public void onFailure(Throwable caught) {
 			}
@@ -371,8 +384,7 @@ public class Comav200 {
 			public void onSuccess(Integer result) {
 				// TODO Auto-generated method stub
 				User.getInstance().setUserId(result);
-				initMainProgram();	
-				
+				initMainProgram();		
 			}
 
 		});

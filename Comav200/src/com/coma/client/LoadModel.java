@@ -56,8 +56,8 @@ public class LoadModel {
 		databaseConnection.loadModel(modelID, new AsyncCallback<ModelInfo>() {
 					public void onFailure(Throwable caught) {
 					}
-
 					public void onSuccess(ModelInfo result) {
+						Comav200.GetInstance().setModel(result);
 						loadModel(result, oryxFrame);
 					}
 				});
