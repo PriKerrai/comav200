@@ -19,7 +19,6 @@ public class LoadingCompletehandler implements CallbackHandler {
 
     @Override
     public void callBack(HashMap<String, String> data) {
-    	System.out.println("callback");
         if (data.get("action").equals("loaded")) {
             listener.loadingComplete();
         }
