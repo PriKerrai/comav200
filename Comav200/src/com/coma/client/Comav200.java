@@ -164,12 +164,14 @@ public class Comav200 implements EntryPoint {
 			public void onSelection(SelectionEvent<Integer> event) {
 				int tabId = event.getSelectedItem();
 				Panel p = (Panel)panel.getWidget(tabId);
+				if (tabId == 0 || tabId == 1) {
 				p.add(oryxFrame);
+				}
 				
 				if (tabId == 2) {
 					DockPanel dockPanel = new DockPanel();
 					dockPanel.setWidth("100%");
-					dockPanel.add(oryxFrame, DockPanel.WEST);
+					dockPanel.add(oryxFrame, DockPanel.CENTER);
 					getVoteMapData(dockPanel);
 					p.add(dockPanel);
 				}		
@@ -291,7 +293,7 @@ public class Comav200 implements EntryPoint {
 			public void onSuccess(List<ModelInfo> result) {
 				// TODO Auto-generated method stub
 				 
-				voteCellList.setModelInfoList(result);
+				VoteCellList.setModelInfoList(result);
 				dockPanel.add(voteCellList.votingPanel(), DockPanel.EAST);
 			}
 
@@ -375,6 +377,10 @@ public class Comav200 implements EntryPoint {
 			}
 
 		});
+	}
+	
+	public void loadModelFromCellList(String modelString) {
+		new LoadModel().loadModelFromCellist(modelString, oryxFrame);
 	}
 
 	public void initMainProgram() {

@@ -125,10 +125,10 @@ public class DatabaseConnectionImpl extends RemoteServiceServlet implements
 
 		List<ModelInfo> modelInfoList = new ArrayList<ModelInfo>();
 
-		String modelID;
-		String modelGroupID;
-		String modelCreator;
-		String modelType;
+		int modelID;
+		int modelGroupID;
+		int modelCreator;
+		int modelType;
 		String modelString;
 		String modelName;	
 		int IsProposal;
@@ -138,26 +138,23 @@ public class DatabaseConnectionImpl extends RemoteServiceServlet implements
 		try{
 			dbCon = initializeDBConnection(); 
 			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
-			preparedStatement.setString(1, "1");
+			preparedStatement.setInt(1, 1);
 			preparedStatement.setInt(2, 1);
 			
 			ResultSet rs = preparedStatement.executeQuery();
-			System.out.println("I DATABSEN FÖRE WHEIL MEN EFTER RS");
 			while (rs.next()) {
-				modelID = rs.getString("modelID");
-				modelGroupID = rs.getString("groupID");
-				modelCreator = rs.getString("modelCreator");
-				modelType = rs.getString("modelType");
+				modelID = rs.getInt("modelID");
+				modelGroupID = rs.getInt("groupID");
+				modelCreator = rs.getInt("modelCreator");
+				modelType = rs.getInt("modelType");
 				modelString = rs.getString("modelString");
 				modelName	 = rs.getString("modelName");
 				IsProposal = rs.getInt("isProposal");
 				modelCreationDate = rs.getString("creationDate");
 
 				ModelInfo mI = new ModelInfo(modelID, modelGroupID, modelCreator,modelType,modelString,modelName,IsProposal,modelCreationDate);
-
 				modelInfoList.add(mI);
 			}
-			System.out.println("I DATABSEN INNAN RETURNM");
 			return  modelInfoList;
 		} catch (SQLException ex) {
 			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);

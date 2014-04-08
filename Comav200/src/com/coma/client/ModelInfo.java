@@ -4,10 +4,10 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class ModelInfo implements IsSerializable {
 
-	private String modelID;
-	private String modelGroupID;
-	private String modelCreator;
-	private String modelType;
+	private int modelID;
+	private int modelGroupID;
+	private int modelCreator;
+	private int modelType;
 	private String modelString;
 	private String modelName;	
 	private int IsProposal;
@@ -15,8 +15,8 @@ public class ModelInfo implements IsSerializable {
 	
 	public ModelInfo() {}
 
-    public ModelInfo(String modelID, String modelGroupID, String modelCreator, 
-    		String modelType, String modelString, String modelName, 
+    public ModelInfo(int modelID, int modelGroupID, int modelCreator, 
+    		int modelType, String modelString, String modelName, 
     		int IsProposal, String modelCreationDate) {
     	this.modelID = modelID;
     	this.modelGroupID = modelGroupID;
@@ -29,35 +29,35 @@ public class ModelInfo implements IsSerializable {
     	
     }
 
-	public String getModelID() {
+	public int getModelID() {
 		return modelID;
 	}
 
-	public void setModelID(String modelID) {
+	public void setModelID(int modelID) {
 		this.modelID = modelID;
 	}
 
-	public String getModelGroupID() {
+	public int getModelGroupID() {
 		return modelGroupID;
 	}
 
-	public void setModelGroupID(String modelGroupID) {
+	public void setModelGroupID(int modelGroupID) {
 		this.modelGroupID = modelGroupID;
 	}
 
-	public String getModelCreator() {
+	public int getModelCreator() {
 		return modelCreator;
 	}
 
-	public void setModelCreator(String modelCreator) {
+	public void setModelCreator(int modelCreator) {
 		this.modelCreator = modelCreator;
 	}
 
-	public String getModelType() {
+	public int getModelType() {
 		return modelType;
 	}
 
-	public void setModelType(String modelType) {
+	public void setModelType(int modelType) {
 		this.modelType = modelType;
 	}
 
