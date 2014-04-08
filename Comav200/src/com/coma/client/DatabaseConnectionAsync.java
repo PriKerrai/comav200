@@ -17,7 +17,7 @@ public interface DatabaseConnectionAsync {
 			AsyncCallback<Void> asyncCallback);
 
 	
-	void loadModel(int modelID, AsyncCallback<Model> asyncCallback);
+	void loadModel(int modelID, AsyncCallback<ModelInfo> asyncCallback);
 	void addCommentToModel(int userID, String comment,
 			AsyncCallback<Void> asyncCallback);
 	void addVoteToModel(int userID, int index, AsyncCallback<Void> asyncCallback);

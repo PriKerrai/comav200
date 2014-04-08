@@ -20,6 +20,6 @@ public interface DatabaseConnection extends RemoteService {
 	void addVoteToModel(int userID, int index);
 	List<ModelInfo> getAllModelsFromSpecificGroupThatIsProposed(int activeGroup)
 			throws IllegalArgumentException;
-	Model loadModel(int modelID);
+	ModelInfo loadModel(int modelID);
 	
 }

@@ -212,9 +212,9 @@ public class DatabaseConnectionImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public Model loadModel(int modelID) {
+	public ModelInfo loadModel(int modelID) {
 		Connection dbCon = null;
-		Model model = new Model();
+		ModelInfo modelInfo = new ModelInfo();
 
 		String query = "SELECT * FROM model WHERE modelID = ?";
 		try{
@@ -223,12 +223,16 @@ public class DatabaseConnectionImpl extends RemoteServiceServlet implements
 			preparedStatement.setInt(1, modelID);
 			ResultSet rs = preparedStatement.executeQuery();
 			while (rs.next()) {
-				model.setGroupID(rs.getInt("modelID"));
-				model.setCreatorID(rs.getInt("modelCreator"));
-				model.setModelType(rs.getInt("type"));
-				model.setMessage(rs.getString("message"));
+				modelInfo.setModelID(rs.getInt("modelID"));
+				modelInfo.setModelGroupID(rs.getInt("groupID"));
+				modelInfo.setModelCreator(rs.getInt("modelCreator"));
+				modelInfo.setModelType(rs.getInt("modelType"));
+				modelInfo.setModelString(rs.getString("modelString"));
+				modelInfo.setModelName(rs.getString("modelName"));
+				modelInfo.setIsProposal(rs.getInt("isProposal"));
+				modelInfo.setModelCreationDate(rs.getString("creationDate"));
 			}
-			return model;
+			return modelInfo;
 
 		} catch (SQLException ex) {
 			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);

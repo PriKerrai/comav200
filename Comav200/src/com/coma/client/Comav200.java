@@ -3,7 +3,6 @@ package com.coma.client;
 import java.util.HashMap;
 import java.util.List;
 
-import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.logical.shared.SelectionEvent;
@@ -169,6 +168,7 @@ public class Comav200 {
 				
 				if (tabId == 2) {
 					p.clear();
+					p.add(initProposalView());
 					DockPanel dockPanel = new DockPanel();
 					dockPanel.setWidth("100%");
 					dockPanel.add(oryxFrame, DockPanel.CENTER);

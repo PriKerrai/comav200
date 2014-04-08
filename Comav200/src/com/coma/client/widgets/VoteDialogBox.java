@@ -47,10 +47,9 @@ public class VoteDialogBox{
 		// Initialize the List with data from Item0
 		for (int i = 0; i < Items.length; i++) {
 			listBox.addItem(Items[i]);
-			
 		}
 
-		listBox.setVisibleItemCount(10);	        
+		listBox.setVisibleItemCount(1);	        
 
 		dialogVPanel.add(listBox);
 
