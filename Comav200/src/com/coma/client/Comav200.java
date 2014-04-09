@@ -66,6 +66,7 @@ public class Comav200 {
 	LogIn logIn = new LogIn();
 	SignUp signUp = new SignUp();
 	VoteCellList voteCellList = new VoteCellList();
+	EditProfileView editProfile = new EditProfileView();
 
 	/**
 	 * The message displayed to the user when the server cannot be reached or
@@ -186,7 +187,10 @@ public class Comav200 {
 					dockPanel.add(oryxFrame, DockPanel.CENTER);
 					getVoteMapData(dockPanel);
 					p.add(dockPanel);
-				}		
+				}
+				if (tabId == 3) {
+					p.add(editProfile.screen());
+					}
 		}});
 		
 		return panel;
