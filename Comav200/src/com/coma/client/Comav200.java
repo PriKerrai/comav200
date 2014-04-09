@@ -24,8 +24,15 @@ public class Comav200 {
 	public static String problemOwner;
 	public static String problemLocation;
 	private ModelInfo model;
-	
-	
+	private List<String> userProfile;
+
+	public List<String> getUserProfile() {
+		return userProfile;
+	}
+
+	public void setUserProfile(List<String> userProfile) {
+		this.userProfile = userProfile;
+	}
 
 	public ModelInfo getModel() {
 		return model;
@@ -164,6 +171,7 @@ public class Comav200 {
 		panel.add(initPreferencesView(), "Preferences");	
 		panel.setSize("100%", "100%");
 		panel.selectTab(0);
+		getUserProfile(User.getInstance().getUserId());
 		
 		panel.addSelectionHandler(new SelectionHandler<Integer>(){
 			@Override
@@ -189,7 +197,8 @@ public class Comav200 {
 					p.add(dockPanel);
 				}
 				if (tabId == 3) {
-					p.add(editProfile.screen());
+					
+					p.add(editProfile.screen(userProfile));
 					}
 		}});
 		
@@ -438,5 +447,48 @@ public class Comav200 {
         }));
         oryxFrame.setUrl("http://localhost/oryx/oryx.xhtml");
 	}
+	
+	/**
+	 * @param phoneNr 
+	 * @param bDay 
+	 * @param sName 
+	*
+	*/
+	public void addUserProfileToUser(String fName, String sName, String bDay, String phoneNr) {
+		databaseConnection.addUserProfileToUser(User.getInstance().getUserId(), fName, sName, bDay, phoneNr, new AsyncCallback<Void>() {
+			public void onFailure(Throwable caught) {
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+			
+			}
+
+		});
+	}
+	
+	/**
+	 * @param phoneNr 
+	 * @param bDay 
+	 * @param sName 
+	 * @return 
+	*
+	*/
+	public void getUserProfile(int userID) {
+		databaseConnection.getUserProfile(userID, new AsyncCallback<List<String>>() {
+
+			public void onFailure(Throwable caught) {
+			}
+
+			@Override
+			public void onSuccess(List<String> result) {
+				setUserProfile(result);
+			}
+
+		});
+		
+	}
+	
+
 	
 }

@@ -23,5 +23,8 @@ public interface DatabaseConnectionAsync {
 			AsyncCallback<Void> callback);
 	void getCommentsOnModel(int modelID,
 			AsyncCallback<List<String>> asyncCallback);
+	void addUserProfileToUser(int userID, String firstName, String surName,
+			String birthday, String phoneNumber, AsyncCallback<Void> callback);
+	void getUserProfile(int userID, AsyncCallback<List<String>> callback);
 
 }
