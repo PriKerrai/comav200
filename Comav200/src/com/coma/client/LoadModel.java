@@ -63,4 +63,15 @@ public class LoadModel {
 				});
 		}
 	
+	public void getActiveGroupModelFromDatabase(MessageFrame orFrame){
+		final MessageFrame oryxFrame = orFrame;
+		databaseConnection.loadGroupModel(User.getInstance().getActiveGroupID(), new AsyncCallback<ModelInfo>() {
+					public void onFailure(Throwable caught) {
+					}
+					public void onSuccess(ModelInfo result) {
+						loadModel(result, oryxFrame);
+					}
+				});
+		}
+	
 }

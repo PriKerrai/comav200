@@ -27,7 +27,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
  */
 @SuppressWarnings("serial")
 public class DatabaseConnectionImpl extends RemoteServiceServlet implements
-DatabaseConnection {
+		DatabaseConnection {
 	/**
 	 * Escape an html string. Escaping data received from the client helps to
 	 * prevent cross-site script vulnerabilities.
@@ -140,7 +140,7 @@ DatabaseConnection {
 			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
 			preparedStatement.setInt(1, 1);
 			preparedStatement.setInt(2, 1);
-
+			
 			ResultSet rs = preparedStatement.executeQuery();
 			while (rs.next()) {
 				modelID = rs.getInt("modelID");
@@ -241,71 +241,79 @@ DatabaseConnection {
 	}
 
 	@Override
-	public void addCommentToModel(int userID, int modelID, String comment) {
+	 public void addCommentToModel(int userID, int modelID, String comment) {
 
-		Connection dbCon = null;
-		
-		String query = "insert into modelcomment (modelID, comment) VALUES (?,?)";
-		
-		try{
-			dbCon = initializeDBConnection(); 
-			PreparedStatement preparedStatement = dbCon.prepareStatement(query);			
-			preparedStatement.setInt(1, modelID);
-			preparedStatement.setString(2, comment);
-			preparedStatement.executeUpdate();
-		} catch (SQLException ex) {
-			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
-		} 
+	  Connection dbCon = null;
+	  
+	  String query = "insert into modelcomment (modelID, comment) VALUES (?,?)";
+	  
+	  try{
+	   dbCon = initializeDBConnection(); 
+	   PreparedStatement preparedStatement = dbCon.prepareStatement(query);   
+	   preparedStatement.setInt(1, modelID);
+	   preparedStatement.setString(2, comment);
+	   preparedStatement.executeUpdate();
+	  } catch (SQLException ex) {
+	   Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+	  } 
 
-	}
+	 }
+
+	 @Override
+	 public void addVoteToModel(int userID, int modelID, int grade) {
+
+	  Connection dbCon = null;
+	  
+	  String query = "INSERT INTO voteonmodel (modelID, userID, grade) VALUES (?,?,?)";
+	  
+	  try{
+	   dbCon = initializeDBConnection(); 
+	   PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+	   preparedStatement.setInt(1, modelID);
+	   preparedStatement.setInt(2, userID);
+	   preparedStatement.setInt(3, grade);
+	   preparedStatement.executeUpdate();
+	  } catch (SQLException ex) {
+	   Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+	  }  
+
+	 }
 
 	@Override
-	public void addVoteToModel(int userID, int modelID, int grade) {
-
+	public ModelInfo loadGroupModel(int groupID) {
 		Connection dbCon = null;
-		
-		String query = "INSERT INTO voteonmodel (modelID, userID, grade) VALUES (?,?,?)";
-		
+		ModelInfo modelInfo = new ModelInfo();
+
+		String query = "SELECT * FROM activegroupmodel as a INNER JOIN model as m ON a.modelID = m.modelID  WHERE a.groupID = ? ORDER BY a.groupModelID DESC LIMIT 1";
 		try{
 			dbCon = initializeDBConnection(); 
 			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
-			preparedStatement.setInt(1, modelID);
-			preparedStatement.setInt(2, userID);
-			preparedStatement.setInt(3, grade);
-			preparedStatement.executeUpdate();
-		} catch (SQLException ex) {
+			preparedStatement.setInt(1, 1);
+			ResultSet rs = preparedStatement.executeQuery();
+			while (rs.next()) {
+				modelInfo.setModelID(rs.getInt("modelID"));
+				modelInfo.setModelGroupID(rs.getInt("groupID"));
+				modelInfo.setGroupModelVersion(rs.getInt("version"));
+				modelInfo.setModelCreator(rs.getInt("modelCreator"));
+				modelInfo.setModelType(rs.getInt("modelType"));
+				modelInfo.setModelString(rs.getString("modelString"));
+				modelInfo.setModelName(rs.getString("modelName"));
+				modelInfo.setModelCreationDate(rs.getString("creationDate"));
+			}
+			return modelInfo;
+		}
+		 catch (SQLException ex) {
 			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
-		}  
-
+		} 
+      
+		return null;
 	}
 
 	@Override
 	public List<String> getCommentsOnModel(int modelID) {
-		Connection dbCon = null;
-
-		List<String> commentList = new ArrayList<String>();
-
-		String comment;
-
-		String query = "SELECT comment FROM modelcomment WHERE modelID = ?";
-		try{
-			dbCon = initializeDBConnection(); 
-			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
-			preparedStatement.setInt(1, modelID);
-
-			ResultSet rs = preparedStatement.executeQuery();
-			while (rs.next()) {
-				comment = rs.getString("comment");
-				commentList.add(comment);
-			}
-			return  commentList;
-		} catch (SQLException ex) {
-			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
-		}      
-		return  null;
+		// TODO Auto-generated method stub
+		return null;
 	}
-
-
 }
 
 

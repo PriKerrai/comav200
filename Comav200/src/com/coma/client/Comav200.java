@@ -172,6 +172,10 @@ public class Comav200 {
 				
 				if (tabId == 0 || tabId == 1) {
 				p.add(oryxFrame);
+					if(tabId == 1){
+						oryxFrame.setVisible(true);
+						new LoadModel().getActiveGroupModelFromDatabase(oryxFrame);
+					}
 				}
 				
 				if (tabId == 2) {
@@ -318,6 +322,7 @@ public class Comav200 {
 		initializeOryxFrame();
 		panel.add(topMenuButtonsMyModelView());
 		panel.add(oryxFrame);
+		oryxFrame.setVisible(false);
 		return panel;
 	}
 	
@@ -395,7 +400,9 @@ public class Comav200 {
 	public void setActiveModelID(int modelID) {
 		this.activeModelID = modelID;
 	}
-	
+	/**
+	 * Clear oryx workspace
+	 */
 	public void clearOryx(){
 		final MessageFrame oryxFrame = this.oryxFrame;
 		final String model = "Empty model";

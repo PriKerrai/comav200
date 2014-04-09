@@ -12,7 +12,16 @@ public class ModelInfo implements IsSerializable {
 	private String modelName;	
 	private int IsProposal;
 	private String modelCreationDate;
+	private int groupModelVersion;
 	
+	public int getGroupModelVersion() {
+		return groupModelVersion;
+	}
+
+	public void setGroupModelVersion(int groupModelVersion) {
+		this.groupModelVersion = groupModelVersion;
+	}
+
 	public ModelInfo() {}
 
     public ModelInfo(int modelID, int modelGroupID, int modelCreator, 

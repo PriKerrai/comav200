@@ -20,6 +20,7 @@ public interface DatabaseConnection extends RemoteService {
 	List<ModelInfo> getAllModelsFromSpecificGroupThatIsProposed(int activeGroup)
 			throws IllegalArgumentException;
 	ModelInfo loadModel(int modelID);
+	ModelInfo loadGroupModel(int groupID);
 	void addCommentToModel(int userID, int modelID, String comment);
 	List<String> getCommentsOnModel(int modelID);
 	

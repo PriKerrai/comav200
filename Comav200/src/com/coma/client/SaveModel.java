@@ -61,6 +61,7 @@ public class SaveModel {
 			public void onSuccess(Void result) {
 				SuccessDialogBox sdb = new SuccessDialogBox();
 				DialogBox dialogBox = sdb.successDialogBox("SAVE");
+				dialogBox.center();
 				dialogBox.show();
 				
 			}
@@ -78,6 +79,7 @@ public class SaveModel {
 			public void onSuccess(Void result) {
 				SuccessDialogBox sdb = new SuccessDialogBox();
 				DialogBox dialogBox = sdb.successDialogBox("PROPOSAL");
+				dialogBox.center();
 				dialogBox.show();
 			}
 		});

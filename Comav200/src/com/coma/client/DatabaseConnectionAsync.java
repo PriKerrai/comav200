@@ -15,6 +15,7 @@ public interface DatabaseConnectionAsync {
 			AsyncCallback<Void> callback);
 	void getUserID(String email, AsyncCallback<Integer> asyncCallback);	void saveModel(int groupID, int userID, String modelName, int modelType, String modelString, int isProposal,
 			AsyncCallback<Void> asyncCallback);
+	void loadGroupModel(int groupID, AsyncCallback<ModelInfo> asyncCallback);
 	void loadModel(int modelID, AsyncCallback<ModelInfo> asyncCallback);
 	void addVoteToModel(int userID, int modelID, int index, AsyncCallback<Void> asyncCallback);
 	void getAllModelsFromSpecificGroupThatIsProposed(int activeGroup, AsyncCallback<List<ModelInfo>> callback);
