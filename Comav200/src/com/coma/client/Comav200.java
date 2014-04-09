@@ -60,7 +60,7 @@ public class Comav200 {
 	public Button importButton = new Button("Import");
 	public Button exportButton = new Button("Export");
 	public Button editProfileButton = new Button("Edit profile");
-
+	public Button invitesButton = new Button("My group invites");
 	public Button proposeButton = new Button("Propose as group model");
 	public Button createGroupButton = new Button("Create group");
 	public Button inviteGroupButton = new Button("Invite to group");
@@ -157,6 +157,9 @@ public class Comav200 {
 				DialogBox dialogBox = apdb.createDialogBox();
 				dialogBox.center();
 				dialogBox.show();
+			}else if(event.getSource().equals(invitesButton))
+			{
+				
 			}
 
 		}
@@ -280,17 +283,20 @@ public class Comav200 {
 		inviteGroupButton.getElement().setClassName("utilityButton");
 		switchGroupButton.getElement().setClassName("utilityButton");
 		editProfileButton.getElement().setClassName("utilityButton");
+		invitesButton.getElement().setClassName("utilityButton");
 
 		MyHandler handler = new MyHandler();
 		createGroupButton.addClickHandler(handler);
 		inviteGroupButton.addClickHandler(handler);
 		switchGroupButton.addClickHandler(handler);
 		editProfileButton.addClickHandler(handler);
+		invitesButton.addClickHandler(handler);
 
 		panel.add(createGroupButton);
 		panel.add(inviteGroupButton);
 		panel.add(switchGroupButton);
 		panel.add(editProfileButton);
+		panel.add(invitesButton);
 
 		return panel;  
 	}
@@ -358,7 +364,7 @@ public class Comav200 {
 	}
 	
 	/**
-	* Initialize Proposal view
+	* Initialize preferences view
 	*/
 	private Panel initPreferencesView(){
 		VerticalPanel panel = new VerticalPanel();

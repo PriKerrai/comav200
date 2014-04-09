@@ -1,5 +1,6 @@
 package com.coma.client;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -23,6 +24,15 @@ public interface DatabaseConnectionAsync {
 			AsyncCallback<Void> callback);
 	void getCommentsOnModel(int modelID,
 			AsyncCallback<List<String>> asyncCallback);
+	
+	void inviteToGroup(int groupID, int userID, AsyncCallback<Void> callback);
+	void getGroupInfo(int activeGroupID,
+			AsyncCallback<WorkGroupInfo> asyncCallback);
+	void getGroupInvites(int userId,
+			AsyncCallback<List<WorkGroupInvite>> asyncCallback);
+	void setInviteToInactive(int inviteID, AsyncCallback<Void> asyncCallback);
+	void addUserToGroup(int groupID, int userId,
+			AsyncCallback<Void> asyncCallback);
 	void addUserProfileToUser(int userID, String firstName, String surName,
 			String birthday, String phoneNumber, AsyncCallback<Void> callback);
 	void getUserProfile(int userID, AsyncCallback<List<String>> callback);

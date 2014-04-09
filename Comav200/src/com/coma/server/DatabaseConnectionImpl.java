@@ -20,6 +20,8 @@ import java.util.logging.Logger;
 import com.coma.client.DatabaseConnection;
 import com.coma.client.Model;
 import com.coma.client.ModelInfo;
+import com.coma.client.WorkGroupInfo;
+import com.coma.client.WorkGroupInvite;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -249,7 +251,7 @@ DatabaseConnection {
 
 		try{
 			dbCon = initializeDBConnection(); 
-			PreparedStatement preparedStatement = dbCon.prepareStatement(query);			
+			PreparedStatement preparedStatement = dbCon.prepareStatement(query);   
 			preparedStatement.setInt(1, modelID);
 			preparedStatement.setString(2, comment);
 			preparedStatement.executeUpdate();
@@ -298,20 +300,16 @@ DatabaseConnection {
 				comment = rs.getString("comment");
 				commentList.add(comment);
 			}
-			return  commentList;
-		} catch (SQLException ex) {
+			return commentList;
+		}
+		catch (SQLException ex) {
 			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
-		}      
-		return  null;
-	}
+		} 
 
-	@Override
-	public ModelInfo loadGroupModel(int groupID) {
-		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
+	
+		@Override
 	public void addUserProfileToUser(int userID, String firstName,
 			String surName, String birthDay, String phoneNumber) {
 		Connection dbCon = null;
@@ -370,7 +368,100 @@ DatabaseConnection {
 		return userProfile;
 	}
 
+	@Override
+	public ModelInfo loadGroupModel(int groupID) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
+	public void inviteToGroup(int groupID, int userID) {
+
+		Connection dbCon = null;
+
+		String query = "INSERT INTO workgroupinvites (groupID, userID) VALUES (?,?)";
+		try{
+			dbCon = initializeDBConnection(); 
+			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+			preparedStatement.setInt(1, groupID);
+			preparedStatement.setInt(2, userID);
+			preparedStatement.executeUpdate();
+		} catch (SQLException ex) {
+			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+		}  
+	}
+
+	@Override
+	public WorkGroupInfo getGroupInfo(int activeGroupID) {
+		Connection dbCon = null;
+		WorkGroupInfo workGroupInfo = new WorkGroupInfo();
+		
+		String query = "SELECT * FROM workgroup WHERE groupID = ?";
+		try{
+			dbCon = initializeDBConnection(); 
+			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+			preparedStatement.setInt(1, activeGroupID);
+			ResultSet rs = preparedStatement.executeQuery();
+			while (rs.next()) {
+				workGroupInfo.setWorkGroupID(rs.getInt("groupID"));
+				workGroupInfo.setWorkGroupFacilitator(rs.getInt("groupFacilitator"));
+				workGroupInfo.setWorkGroupName(rs.getString("groupName"));
+			}
+			return workGroupInfo;
+
+		} catch (SQLException ex) {
+			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+		}      
+		return null;
+	}
+
+	@Override
+	public List<WorkGroupInvite> getGroupInvites(int userID) {
+		Connection dbCon = null;
+		List<WorkGroupInvite> invitesList = new ArrayList<WorkGroupInvite>();
+		
+		String query = "SELECT * FROM workgroupinvites as a LEFT JOIN on workgroup as b ON a.groupID = b.groupID  WHERE a.userID = ?";
+		try{
+			dbCon = initializeDBConnection(); 
+			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+			preparedStatement.setInt(1, userID);
+			ResultSet rs = preparedStatement.executeQuery();
+			while (rs.next()) {
+				WorkGroupInvite workGroupInvite = new WorkGroupInvite();
+				workGroupInvite.setWorkGroupInviteID(rs.getInt("inviteID"));
+				workGroupInvite.setWorkGroupID(rs.getInt("groupID"));
+				workGroupInvite.setWorkGroupName(rs.getString("groupName"));
+				invitesList.add(workGroupInvite);
+			}
+			return invitesList;
+
+		} catch (SQLException ex) {
+			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+		}      
+		return null;
+	}
+
+	@Override
+	public void setInviteToInactive(int inviteID) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addUserToGroup(int groupID, int userID) {
+		Connection dbCon = null;
+
+		String query = "INSERT INTO workgroupmembers (groupID, userID) VALUES (?,?)";
+		try{
+			dbCon = initializeDBConnection(); 
+			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+			preparedStatement.setInt(1, groupID);
+			preparedStatement.setInt(2, userID);
+			preparedStatement.executeUpdate();
+		} catch (SQLException ex) {
+			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+		}  
+		
+	}
 
 
 }

@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.coma.client.DatabaseConnection;
 import com.coma.client.DatabaseConnectionAsync;
+import com.coma.client.HandleGroups;
 import com.coma.client.User;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -23,27 +24,41 @@ public class InviteToGroupDialogBox {
     		// Create the popup dialog box
             final DialogBox dialogBox = new DialogBox();
             dialogBox.setAnimationEnabled(true);
-            dialogBox.setText("Switch active group");
+            dialogBox.setText("Invite to group");
            
-            final Button sendButton = new Button("Send");
+            final Button sendButton = new Button("Send invite");
             sendButton.getElement().setId("sendButton");
+            final Button cancelButton = new Button("Cancel");
+    		cancelButton.getElement().setId("cancelButton");
+            
+            final TextBox emailBox = new TextBox();
+            
             VerticalPanel dialogVPanel = new VerticalPanel();
             dialogVPanel.addStyleName("dialogVPanel");
             dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
            
-            dialogVPanel.add(new Label("Meningen är att man skall kunna invita folk till gruppen"));
-           
+            dialogVPanel.add(new Label("Email"));
+            dialogVPanel.add(emailBox);
+            dialogVPanel.add(cancelButton);
             dialogVPanel.add(sendButton);
             dialogBox.setWidget(dialogVPanel);
 
             // Add a handler to close the DialogBox
             sendButton.addClickHandler(new ClickHandler() {
                     public void onClick(ClickEvent event) {
-
-                            dialogBox.hide();
+                    	String email = emailBox.getText();
+                    	new HandleGroups().sendGroupInvite(email);
+                        dialogBox.hide();
 
                     }
             });
+            
+            cancelButton.addClickHandler(new ClickHandler() {
+				public void onClick(ClickEvent event) {
+					dialogBox.hide();
+
+				}
+			});
            
             return dialogBox;
     }
