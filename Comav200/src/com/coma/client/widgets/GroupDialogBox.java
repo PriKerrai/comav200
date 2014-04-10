@@ -30,6 +30,8 @@ public class GroupDialogBox{
 		dialogBox.setAnimationEnabled(true);
 		dialogBox.setText("Create group");
 
+		final Button cancelButton = new Button("Cancel");
+		cancelButton.getElement().setId("cancelButton");
 		final Button sendButton = new Button("Send");
 		sendButton.getElement().setId("sendButton");
 		VerticalPanel dialogVPanel = new VerticalPanel();
@@ -42,6 +44,7 @@ public class GroupDialogBox{
 
 		dialogVPanel.add(nameBox);
 
+		dialogVPanel.add(cancelButton);
 		dialogVPanel.add(sendButton);
 		dialogBox.setWidget(dialogVPanel);
 
@@ -54,6 +57,12 @@ public class GroupDialogBox{
 
 				createNewGroup(userID, groupName);
 
+				dialogBox.hide();
+
+			}
+		});
+		cancelButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
 				dialogBox.hide();
 
 			}

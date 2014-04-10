@@ -107,10 +107,7 @@ public class Comav200 {
 				dialogBox.show();
 			}
 			else if(event.getSource().equals(switchGroupButton)){
-				SwitchGroupDialogBox sgdb = new SwitchGroupDialogBox();
-				DialogBox dialogBox = sgdb.createDialogBox();
-				dialogBox.center();
-				dialogBox.show();
+				new HandleGroups().getUsersGroups();
 			}
 			else if(event.getSource().equals(inviteGroupButton)){
 				InviteToGroupDialogBox itgdb = new InviteToGroupDialogBox();
@@ -130,7 +127,7 @@ public class Comav200 {
 				new SaveModel().saveModel(oryxFrame);
 			}
 			else if(event.getSource().equals(loadButton)){
-				new LoadModel().getModelFromDatabase(2,oryxFrame);
+				new LoadModel().getModelsFromDatabase(2,oryxFrame);
 			}
 			else if(event.getSource().equals(proposeButton)){
 				model.setIsProposal(1);
@@ -408,7 +405,7 @@ public class Comav200 {
 	}
 	
 	public void loadModelFromCellList(int modelID) {
-		new LoadModel().getModelFromDatabase(modelID, oryxFrame);
+		new LoadModel().getModelsFromDatabase(modelID, oryxFrame);
 	}
 
 	public void initMainProgram() {

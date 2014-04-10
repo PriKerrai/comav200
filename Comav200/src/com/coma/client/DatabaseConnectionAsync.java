@@ -29,12 +29,14 @@ public interface DatabaseConnectionAsync {
 	void getGroupInfo(int activeGroupID,
 			AsyncCallback<WorkGroupInfo> asyncCallback);
 	void getGroupInvites(int userId,
-			AsyncCallback<List<WorkGroupInvite>> asyncCallback);
+			AsyncCallback<List<WorkGroupInfo>> asyncCallback);
 	void setInviteToInactive(int inviteID, AsyncCallback<Void> asyncCallback);
 	void addUserToGroup(int groupID, int userId,
 			AsyncCallback<Void> asyncCallback);
 	void addUserProfileToUser(int userID, String firstName, String surName,
 			String birthday, String phoneNumber, AsyncCallback<Void> callback);
 	void getUserProfile(int userID, AsyncCallback<List<String>> callback);
-
+	void getUsersGroups(int userID, AsyncCallback<List<WorkGroupInfo>> callback);
+	void getAllUsersModels(int userID, AsyncCallback<List<ModelInfo>> callback);
+	
 }

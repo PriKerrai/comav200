@@ -21,7 +21,6 @@ import com.coma.client.DatabaseConnection;
 import com.coma.client.Model;
 import com.coma.client.ModelInfo;
 import com.coma.client.WorkGroupInfo;
-import com.coma.client.WorkGroupInvite;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -370,8 +369,32 @@ DatabaseConnection {
 
 	@Override
 	public ModelInfo loadGroupModel(int groupID) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection dbCon = null;
+		ModelInfo modelInfo = new ModelInfo();
+
+		String query = "SELECT * FROM activegroupmodel as a INNER JOIN model as m ON a.modelID = m.modelID WHERE a.groupID = ? ORDER BY a.groupModelID DESC LIMIT 1 ";
+		try{
+			dbCon = initializeDBConnection(); 
+			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+			preparedStatement.setInt(1, modelInfo.getModelID());
+			ResultSet rs = preparedStatement.executeQuery();
+			while (rs.next()) {
+				modelInfo.setModelID(rs.getInt("modelID"));
+				modelInfo.setModelGroupID(rs.getInt("groupID"));
+				modelInfo.setModelCreator(rs.getInt("modelCreator"));
+				modelInfo.setModelType(rs.getInt("modelType"));
+				modelInfo.setModelString(rs.getString("modelString"));
+				modelInfo.setModelName(rs.getString("modelName"));
+				modelInfo.setIsProposal(rs.getInt("isProposal"));
+				modelInfo.setModelCreationDate(rs.getString("creationDate"));
+		
+			}			
+		return modelInfo;
+
+	} catch (SQLException ex) {
+		Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+	}      
+	return null;
 	}
 
 	public void inviteToGroup(int groupID, int userID) {
@@ -415,9 +438,9 @@ DatabaseConnection {
 	}
 
 	@Override
-	public List<WorkGroupInvite> getGroupInvites(int userID) {
+	public List<WorkGroupInfo> getGroupInvites(int userID) {
 		Connection dbCon = null;
-		List<WorkGroupInvite> invitesList = new ArrayList<WorkGroupInvite>();
+		List<WorkGroupInfo> invitesList = new ArrayList<WorkGroupInfo>();
 		
 		String query = "SELECT * FROM workgroupinvites as a LEFT JOIN on workgroup as b ON a.groupID = b.groupID  WHERE a.userID = ?";
 		try{
@@ -426,11 +449,12 @@ DatabaseConnection {
 			preparedStatement.setInt(1, userID);
 			ResultSet rs = preparedStatement.executeQuery();
 			while (rs.next()) {
-				WorkGroupInvite workGroupInvite = new WorkGroupInvite();
-				workGroupInvite.setWorkGroupInviteID(rs.getInt("inviteID"));
-				workGroupInvite.setWorkGroupID(rs.getInt("groupID"));
-				workGroupInvite.setWorkGroupName(rs.getString("groupName"));
-				invitesList.add(workGroupInvite);
+				WorkGroupInfo workGroupInfo = new WorkGroupInfo();
+				workGroupInfo.setWorkGroupInviteID(rs.getInt("inviteID"));
+				workGroupInfo.setWorkGroupID(rs.getInt("groupID"));
+				workGroupInfo.setWorkGroupName(rs.getString("groupName"));
+				workGroupInfo.setWorkGroupFacilitator(rs.getInt("groupFacilitator"));
+				invitesList.add(workGroupInfo);
 			}
 			return invitesList;
 
@@ -462,6 +486,63 @@ DatabaseConnection {
 		}  
 		
 	}
+
+	@Override
+	public List<WorkGroupInfo> getUsersGroups(int userID) {
+		Connection dbCon = null;
+		List<WorkGroupInfo> invitesList = new ArrayList<WorkGroupInfo>();
+		
+		String query = "SELECT * FROM workgroupmember as a LEFT JOIN on workgroup as b ON a.groupID = b.groupID  WHERE a.userID = ?";
+		try{
+			dbCon = initializeDBConnection(); 
+			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+			preparedStatement.setInt(1, userID);
+			ResultSet rs = preparedStatement.executeQuery();
+			while (rs.next()) {
+				WorkGroupInfo workGroupInfo = new WorkGroupInfo();
+				workGroupInfo.setWorkGroupID(rs.getInt("groupID"));
+				workGroupInfo.setWorkGroupName(rs.getString("groupName"));
+				workGroupInfo.setWorkGroupFacilitator(rs.getInt("groupFacilitator"));
+				invitesList.add(workGroupInfo);
+			}
+			return invitesList;
+
+		} catch (SQLException ex) {
+			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+		}      
+		return null;
+	}
+
+	@Override
+	public List<ModelInfo> getAllUsersModels(int userID) {
+		Connection dbCon = null;
+		List<ModelInfo> modelList = new ArrayList<ModelInfo>();
+		
+		String query = "SELECT * FROM model WHERE userID = ?";
+		try{
+			dbCon = initializeDBConnection(); 
+			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+			preparedStatement.setInt(1, userID);
+			ResultSet rs = preparedStatement.executeQuery();
+			while (rs.next()) {
+				ModelInfo modelInfo = new ModelInfo();
+				modelInfo.setModelID(rs.getInt("modelID"));
+				modelInfo.setModelGroupID(rs.getInt("groupID"));
+				modelInfo.setModelCreator(rs.getInt("modelCreator"));
+				modelInfo.setModelType(rs.getInt("modelType"));
+				modelInfo.setModelString(rs.getString("modelString"));
+				modelInfo.setModelName(rs.getString("modelName"));
+				modelInfo.setIsProposal(rs.getInt("isProposal"));
+				modelInfo.setModelCreationDate(rs.getString("creationDate"));
+			}
+			return modelList;
+
+		} catch (SQLException ex) {
+			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+		}      
+		return null;
+	}
+	
 
 
 }

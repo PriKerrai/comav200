@@ -50,7 +50,7 @@ public class LoadModel {
         oryxFrame.setUrl("http://localhost/oryx/oryx.xhtml");
 	}
 
-	public void getModelFromDatabase(int modelID, MessageFrame orFrame) {
+	public void getModelsFromDatabase(int modelID, MessageFrame orFrame) {
 
 		final MessageFrame oryxFrame = orFrame;
 		databaseConnection.loadModel(modelID, new AsyncCallback<ModelInfo>() {

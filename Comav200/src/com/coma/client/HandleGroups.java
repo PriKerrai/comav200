@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.coma.client.widgets.MessageFrame;
+import com.coma.client.widgets.SwitchGroupDialogBox;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.DialogBox;
 
 public class HandleGroups {
 
@@ -19,16 +21,16 @@ public class HandleGroups {
 	}
 	public void getGroupInvites(){
 		
-		//TODO: not yet implemented
+		getGroupInvitesFromDB();
 		
 	}
 	
-	public void acceptGroupInvite(){
-		
+	public void acceptGroupInvite(int groupID, int inviteID){
+		addUserToGroup(groupID, inviteID);
 	}
 	
-	public void declineGroupInvite(){
-		
+	public void declineGroupInvite(int inviteID){
+		setInviteToInactive(inviteID);
 	}
 	
 	private void getGroupFacilitator(String email){
@@ -64,27 +66,29 @@ public class HandleGroups {
 		}
 	
 	private void getGroupInvitesFromDB(){
-		databaseConnection.getGroupInvites(User.getInstance().getUserId(), new AsyncCallback<List<WorkGroupInvite>>() {
+		databaseConnection.getGroupInvites(User.getInstance().getUserId(), new AsyncCallback<List<WorkGroupInfo>>() {
 					public void onFailure(Throwable caught) {
 					}
 
 					@Override
-					public void onSuccess(List<WorkGroupInvite> result) {
+					public void onSuccess(List<WorkGroupInfo> result) {
 						// TODO Auto-generated method stub
 						
 					}
 				});
 		}
 	
-	private void getGroupInfo(){
-		databaseConnection.getGroupInfo(User.getInstance().getActiveGroupID(), new AsyncCallback<WorkGroupInfo>() {
+	
+	private void addUserToGroup(int groupID, int invID){
+		final int inviteID = invID;
+		databaseConnection.addUserToGroup(groupID, User.getInstance().getUserId(), new AsyncCallback<Void>() {
 					public void onFailure(Throwable caught) {
 					}
-					public void onSuccess(WorkGroupInfo result) {
+					public void onSuccess(Void result) {
+						setInviteToInactive(inviteID);
 					}
 				});
 		}
-	
 	private void setInviteToInactive(int inviteID){
 		databaseConnection.setInviteToInactive(inviteID, new AsyncCallback<Void>() {
 					public void onFailure(Throwable caught) {
@@ -93,15 +97,21 @@ public class HandleGroups {
 					}
 				});
 		}
-	private void addUserToGroup(int groupID, int invID){
-		final int inviteID = invID;
-		databaseConnection.addUserToGroup(groupID, User.getInstance().getUserId(), new AsyncCallback<Void>() {
+	
+	public void getUsersGroups(){
+		databaseConnection.getUsersGroups(User.getInstance().getUserId(), new AsyncCallback<List<WorkGroupInfo>>() {
 					public void onFailure(Throwable caught) {
 					}
-					public void onSuccess(Void result) {
+
+					@Override
+					public void onSuccess(List<WorkGroupInfo> result) {
+						SwitchGroupDialogBox sgdb = new SwitchGroupDialogBox();
+						
+						DialogBox dialogBox = sgdb.createDialogBox(result);
+						dialogBox.center();
+						dialogBox.show();
+						
 					}
 				});
 		}
-	
-	
 }
