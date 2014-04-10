@@ -521,7 +521,7 @@ DatabaseConnection {
 		Connection dbCon = null;
 		List<ModelInfo> modelList = new ArrayList<ModelInfo>();
 		
-		String query = "SELECT * FROM model WHERE userID = ?";
+		String query = "SELECT * FROM model WHERE modelCreator = ?";
 		try{
 			dbCon = initializeDBConnection(); 
 			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
@@ -537,6 +537,7 @@ DatabaseConnection {
 				modelInfo.setModelName(rs.getString("modelName"));
 				modelInfo.setIsProposal(rs.getInt("isProposal"));
 				modelInfo.setModelCreationDate(rs.getString("creationDate"));
+				modelList.add(modelInfo);
 			}
 			return modelList;
 

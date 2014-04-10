@@ -9,6 +9,8 @@ import com.coma.client.widgets.AcceptProposalDialogBox;
 import com.coma.client.widgets.CallbackHandler;
 import com.coma.client.widgets.GroupDialogBox;
 import com.coma.client.widgets.InviteToGroupDialogBox;
+import com.coma.client.widgets.LoadModelCellList;
+import com.coma.client.widgets.LoadModelDialogBox;
 import com.coma.client.widgets.MessageFrame;
 import com.coma.client.widgets.NewModelDialogBox;
 import com.coma.client.widgets.VoteCellList;
@@ -42,7 +44,6 @@ public class Comav200 {
 	public static String problemLocation;
 	private ModelInfo model;
 	private List<String> userProfile;
-	
 
 	public List<String> getUserProfile() {
 		return userProfile;
@@ -91,6 +92,7 @@ public class Comav200 {
 	LogIn logIn = new LogIn();
 	SignUp signUp = new SignUp();
 	VoteCellList voteCellList = new VoteCellList();
+	LoadModelCellList loadModelCellList = new LoadModelCellList();
 	EditProfileView editProfile = new EditProfileView();
 	DockPanel dockPanel = new DockPanel();
 
@@ -146,7 +148,8 @@ public class Comav200 {
 				new SaveModel().saveModel(oryxFrame);
 			}
 			else if(event.getSource().equals(loadButton)){
-				new LoadModel().getModelsFromDatabase(2,oryxFrame);
+				//new LoadModel().getModelsFromDatabase(2,oryxFrame);
+				getLoadModelCellListData();
 			}
 			else if(event.getSource().equals(proposeButton)){
 				model.setIsProposal(1);
@@ -178,6 +181,7 @@ public class Comav200 {
 			{
 				
 			}
+
 		}
 	}
 
@@ -191,7 +195,6 @@ public class Comav200 {
 		panel.setSize("100%", "100%");
 		panel.selectTab(0);
 		getUserProfile(User.getInstance().getUserId());
-		
 		
 		panel.addSelectionHandler(new SelectionHandler<Integer>(){
 			@Override
@@ -210,12 +213,14 @@ public class Comav200 {
 				if (tabId == 2) {
 					p.clear();
 					p.add(initProposalView());
+					DockPanel dockPanel = new DockPanel();
 					dockPanel.setWidth("100%");
 					dockPanel.add(oryxFrame, DockPanel.CENTER);
 					getVoteMapData(dockPanel);
 					p.add(dockPanel);
 				}
 				if (tabId == 3) {
+					
 					p.add(editProfile.screen(userProfile));
 					}
 		}});
@@ -343,6 +348,40 @@ public class Comav200 {
 				// TODO Auto-generated method stub
 				VoteCellList.setModelInfoList(result);
 				dockPanel.add(voteCellList.votingPanel(), DockPanel.EAST);
+			}
+
+		});
+	}
+	
+	public void getLoadModelCellListData () {
+		databaseConnection.getAllUsersModels(User.getInstance().getUserId(), new AsyncCallback<List<ModelInfo>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				try {
+					throw caught;
+				} catch (IncompatibleRemoteServiceException e) {
+					// this client is not compatible with the server; cleanup and refresh the 
+					// browser
+					System.out.println("IncompatibleRemoteServiceException");
+				} catch (InvocationException e) {
+					// the call didn't complete cleanly
+					System.out.println("InvocationException");
+				} catch (Throwable e) {
+					System.out.println("Throwable");
+				}
+			}
+
+			@Override
+			public void onSuccess(List<ModelInfo> result) {
+				// TODO Auto-generated method stub
+				LoadModelCellList.setModelInfoList(result);
+				LoadModelDialogBox lmdb = new LoadModelDialogBox();
+				DialogBox dialogBox = lmdb.createDialogBox(loadModelCellList.loadModelPanel());
+				dialogBox.center();
+				dialogBox.show();
+				
 			}
 
 		});
