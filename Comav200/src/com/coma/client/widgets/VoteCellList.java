@@ -34,8 +34,6 @@ public class VoteCellList {
 		protected void onRangeChanged(HasData<String> display) {
 			// Get the new range.
 			final Range range = display.getVisibleRange();
-			
-			
 
 			/*
 			 * Query the data asynchronously. If you are using a database, you can

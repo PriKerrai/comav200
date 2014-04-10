@@ -50,6 +50,20 @@ public class LoadModel {
         oryxFrame.setUrl("http://localhost/oryx/oryx.xhtml");
 	}
 
+	
+	public void getModelFromDatabase(int modelID, MessageFrame orFrame) {
+
+		final MessageFrame oryxFrame = orFrame;
+		databaseConnection.loadModel(modelID, new AsyncCallback<ModelInfo>() {
+					public void onFailure(Throwable caught) {
+					}
+					public void onSuccess(ModelInfo result) {
+						Comav200.GetInstance().setModel(result);
+						loadModel(result, oryxFrame);
+					}
+				});
+		}
+	
 	public void getModelsFromDatabase(int modelID, MessageFrame orFrame) {
 
 		final MessageFrame oryxFrame = orFrame;

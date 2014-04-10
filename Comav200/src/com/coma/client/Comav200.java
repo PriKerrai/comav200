@@ -405,7 +405,7 @@ public class Comav200 {
 	}
 	
 	public void loadModelFromCellList(int modelID) {
-		new LoadModel().getModelsFromDatabase(modelID, oryxFrame);
+		new LoadModel().getModelFromDatabase(modelID, oryxFrame);
 	}
 
 	public void initMainProgram() {
