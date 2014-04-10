@@ -1,8 +1,5 @@
 package com.coma.client.widgets;
 
-import java.awt.TextField;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import com.coma.client.DatabaseConnection;
@@ -16,7 +13,6 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 

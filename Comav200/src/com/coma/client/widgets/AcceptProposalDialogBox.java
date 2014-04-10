@@ -1,9 +1,5 @@
 package com.coma.client.widgets;
 
-import java.awt.TextField;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import com.coma.client.DatabaseConnection;
 import com.coma.client.DatabaseConnectionAsync;
 import com.coma.client.User;
@@ -19,10 +15,20 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 
 public class AcceptProposalDialogBox{
-        private TextBox nameBox;
+        private TextBox versionBox;
        
         private final DatabaseConnectionAsync databaseConnection = GWT
                         .create(DatabaseConnection.class);
+
+		private int activeModelID;
+        
+        public int getModelID() {
+    		return activeModelID;
+    	}
+
+    	public void setModelID(int modelID) {
+    		this.activeModelID = modelID;
+    	}
        
         public DialogBox createDialogBox(){
         		// Create the popup dialog box
@@ -30,41 +36,49 @@ public class AcceptProposalDialogBox{
                 dialogBox.setAnimationEnabled(true);
                 dialogBox.setText("Create group");
                
-                final Button sendButton = new Button("Send");
-                sendButton.getElement().setId("sendButton");
+                final Button acceptProposalButton = new Button("Use as group model");
+                acceptProposalButton.getElement().setId("acceptProposalButton");
                 VerticalPanel dialogVPanel = new VerticalPanel();
+                dialogVPanel.addStyleName("dialogVPanel");
+                dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_LEFT);
+                
+                final Button cancelButton = new Button("Cancel");
+                cancelButton.getElement().setId("cancelButton");
                 dialogVPanel.addStyleName("dialogVPanel");
                 dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
                
-                dialogVPanel.add(new Label("Group name:"));
+                dialogVPanel.add(new Label("Are you sure this is the diagram\n you want to accept as the new group model?\n"));
                
-                nameBox = new TextBox();
+                versionBox = new TextBox();
+                dialogVPanel.add(new Label("Please enter version: "));
+                dialogVPanel.add(versionBox);
                
-                dialogVPanel.add(nameBox);
-               
-                dialogVPanel.add(sendButton);
+                dialogVPanel.add(acceptProposalButton);
+                dialogVPanel.add(cancelButton);
                 dialogBox.setWidget(dialogVPanel);
 
                 // Add a handler to close the DialogBox
-                sendButton.addClickHandler(new ClickHandler() {
+                acceptProposalButton.addClickHandler(new ClickHandler() {
                         public void onClick(ClickEvent event) {
-                                String groupName = nameBox.getText();
-                                int userID = User.getInstance().getUserId();
-                                java.util.Date date = new Date();
-
-                                createNewGroup(userID, groupName);
-
+                                int activeGroupID = User.getInstance().getActiveGroupID();
+                                int modelID = getModelID();
+                                String version = versionBox.getText();
+                                
+                                updateActiveGroupModel(1, modelID, version);
                                 dialogBox.hide();
-
                         }
                 });
-               
+                
+                cancelButton.addClickHandler(new ClickHandler() {
+                    public void onClick(ClickEvent event) {
+                    	 dialogBox.hide();
+                }
+        });
                 return dialogBox;
         }
 
-        public void createNewGroup(int userID, String groupName) {
-               
-                databaseConnection.createNewGroup(userID, groupName, new AsyncCallback<Void>() {
+        public void updateActiveGroupModel(int activeGroupID, int modelID, String version) {
+                databaseConnection.updateActiveGroupModel(activeGroupID, modelID, version, new AsyncCallback<Void>() {
                                         public void onFailure(Throwable caught) {
                                         }
 

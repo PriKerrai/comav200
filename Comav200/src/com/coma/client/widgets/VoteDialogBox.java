@@ -1,12 +1,7 @@
 package com.coma.client.widgets;
 
-import java.awt.TextField;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import com.coma.client.DatabaseConnection;
 import com.coma.client.DatabaseConnectionAsync;
-import com.coma.client.ModelInfo;
 import com.coma.client.User;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -16,10 +11,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.coma.client.widgets.*;
 
 public class VoteDialogBox{
 	final ListBox listBox = new ListBox(); 

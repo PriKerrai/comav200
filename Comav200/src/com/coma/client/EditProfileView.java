@@ -1,9 +1,7 @@
 package com.coma.client;
 
-import java.awt.TextArea;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
@@ -22,9 +20,7 @@ public class EditProfileView {
 	//TextArea userDescriptionTextArea = new TextArea();
 	TextBox birthDay = new TextBox();
 	TextBox phoneNumber = new TextBox();
-
-	private final DatabaseConnectionAsync databaseConnection = GWT
-			.create(DatabaseConnection.class);
+	VerticalPanel holder = new VerticalPanel();
 
 	public FormPanel screen(List<String> userProfile){
 		Comav200.GetInstance().getUserProfile(User.getInstance().getUserId());
@@ -57,7 +53,6 @@ public class EditProfileView {
 			birthDay.setText(userProfile.get(2));
 			phoneNumber.setText(userProfile.get(3));
 		}
-
 
 		holder.add(firstNameTextBox);
 		holder.add(surNameTextBox);

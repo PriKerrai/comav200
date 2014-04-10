@@ -3,17 +3,34 @@ package com.coma.client;
 import java.util.HashMap;
 import java.util.List;
 
+import com.coma.client.oryxhandlers.LoadingCompleteEventListener;
+import com.coma.client.oryxhandlers.LoadingCompletehandler;
+import com.coma.client.widgets.AcceptProposalDialogBox;
+import com.coma.client.widgets.CallbackHandler;
+import com.coma.client.widgets.GroupDialogBox;
+import com.coma.client.widgets.InviteToGroupDialogBox;
+import com.coma.client.widgets.MessageFrame;
+import com.coma.client.widgets.NewModelDialogBox;
+import com.coma.client.widgets.VoteCellList;
+import com.coma.client.widgets.VoteDialogBox;
+import com.coma.client.widgets.WriteCommentDialogBox;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.*;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
 import com.google.gwt.user.client.rpc.InvocationException;
-import com.google.gwt.user.client.ui.*;
-import com.coma.client.oryxhandlers.LoadingCompleteEventListener;
-import com.coma.client.oryxhandlers.LoadingCompletehandler;
-import com.coma.client.widgets.*;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -25,6 +42,7 @@ public class Comav200 {
 	public static String problemLocation;
 	private ModelInfo model;
 	private List<String> userProfile;
+	
 
 	public List<String> getUserProfile() {
 		return userProfile;
@@ -74,6 +92,7 @@ public class Comav200 {
 	SignUp signUp = new SignUp();
 	VoteCellList voteCellList = new VoteCellList();
 	EditProfileView editProfile = new EditProfileView();
+	DockPanel dockPanel = new DockPanel();
 
 	/**
 	 * The message displayed to the user when the server cannot be reached or
@@ -151,6 +170,7 @@ public class Comav200 {
 			}
 			else if(event.getSource().equals(acceptProposalButton)){
 				AcceptProposalDialogBox apdb = new AcceptProposalDialogBox();
+				apdb.setModelID(activeModelID);
 				DialogBox dialogBox = apdb.createDialogBox();
 				dialogBox.center();
 				dialogBox.show();
@@ -158,7 +178,6 @@ public class Comav200 {
 			{
 				
 			}
-
 		}
 	}
 
@@ -172,6 +191,7 @@ public class Comav200 {
 		panel.setSize("100%", "100%");
 		panel.selectTab(0);
 		getUserProfile(User.getInstance().getUserId());
+		
 		
 		panel.addSelectionHandler(new SelectionHandler<Integer>(){
 			@Override
@@ -190,14 +210,12 @@ public class Comav200 {
 				if (tabId == 2) {
 					p.clear();
 					p.add(initProposalView());
-					DockPanel dockPanel = new DockPanel();
 					dockPanel.setWidth("100%");
 					dockPanel.add(oryxFrame, DockPanel.CENTER);
 					getVoteMapData(dockPanel);
 					p.add(dockPanel);
 				}
 				if (tabId == 3) {
-					
 					p.add(editProfile.screen(userProfile));
 					}
 		}});

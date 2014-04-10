@@ -1,29 +1,17 @@
 package com.coma.client.widgets;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Arrays;
-import java.util.Map;
 
 import com.coma.client.Comav200;
-import com.coma.client.LoadModel;
 import com.coma.client.ModelInfo;
 import com.google.gwt.cell.client.TextCell;
-import com.google.gwt.cell.client.TextInputCell;
-import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.cellview.client.SimplePager;
-import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
-import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.SelectionChangeEvent;
-import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
 
 public class VoteCellList {

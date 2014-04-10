@@ -1,7 +1,5 @@
 package com.coma.client.widgets;
 
-import java.awt.TextField;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.coma.client.DatabaseConnection;

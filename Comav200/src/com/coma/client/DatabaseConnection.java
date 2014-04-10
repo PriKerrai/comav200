@@ -1,6 +1,5 @@
 package com.coma.client;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -33,4 +32,5 @@ public interface DatabaseConnection extends RemoteService {
 	List<String> getUserProfile(int userID) throws IllegalArgumentException;
 	List<WorkGroupInfo> getUsersGroups(int userID);
 	List<ModelInfo> getAllUsersModels(int userID);
+	void updateActiveGroupModel(int activeGroupID, int modelID, String version);
 }
