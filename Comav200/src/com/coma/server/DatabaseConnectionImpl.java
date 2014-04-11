@@ -47,7 +47,6 @@ DatabaseConnection {
 		Connection dbCon = null;
 
 		return dbCon = DriverManager.getConnection(dbURL, username, password);
-
 	}
 
 	@Override
@@ -488,8 +487,6 @@ DatabaseConnection {
 		
 	}
 	
-
-
 	@Override
 	public List<WorkGroupInfo> getUsersGroups(int userID) {
 		Connection dbCon = null;
@@ -549,7 +546,18 @@ DatabaseConnection {
 
 	@Override
 	public void setInviteToInactive(int inviteID) {
-		// TODO Auto-generated method stub
+		Connection dbCon = null;
+
+		String query = "UPDATE workgroupinvites SET isActive = ? WHERE inviteID = ?";
+		try{
+			dbCon = initializeDBConnection(); 
+			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+			preparedStatement.setInt(1, 0);
+			preparedStatement.setInt(2, inviteID);
+			preparedStatement.executeUpdate();
+		} catch (SQLException ex) {
+			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+		}  
 		
 	}
 

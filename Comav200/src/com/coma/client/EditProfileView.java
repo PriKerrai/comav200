@@ -23,7 +23,6 @@ public class EditProfileView {
 	VerticalPanel holder = new VerticalPanel();
 
 	public FormPanel screen(List<String> userProfile){
-		Comav200.GetInstance().getUserProfile(User.getInstance().getUserId());
 		final FormPanel form = new FormPanel();
 		form.setEncoding(FormPanel.ENCODING_MULTIPART);
 		form.setMethod(FormPanel.METHOD_POST);

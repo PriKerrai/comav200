@@ -44,7 +44,8 @@ public class Comav200 {
 	public static String problemLocation;
 	private ModelInfo model;
 	private List<String> userProfile;
-
+	private boolean isFirstTime = true;
+	
 	public List<String> getUserProfile() {
 		return userProfile;
 	}
@@ -186,7 +187,7 @@ public class Comav200 {
 	}
 
 	public TabPanel initTabPanel(){
-		
+		getUserProfile(User.getInstance().getUserId());
 		final TabPanel panel = new TabPanel();
 		panel.add(initMyModelView(), "My Model");
 		panel.add(initGroupModelView(), "Group Model");
@@ -194,7 +195,7 @@ public class Comav200 {
 		panel.add(initPreferencesView(), "Preferences");	
 		panel.setSize("100%", "100%");
 		panel.selectTab(0);
-		getUserProfile(User.getInstance().getUserId());
+		
 		
 		panel.addSelectionHandler(new SelectionHandler<Integer>(){
 			@Override
@@ -220,9 +221,11 @@ public class Comav200 {
 					p.add(dockPanel);
 				}
 				if (tabId == 3) {
-					
-					p.add(editProfile.screen(userProfile));
+					if(isFirstTime){
+						p.add(editProfile.screen(userProfile));
+						isFirstTime = false;
 					}
+				}
 		}});
 		
 		return panel;
