@@ -159,7 +159,7 @@ DatabaseConnection {
 	}
 
 	@Override
-	public void createNewGroup(int userID, String groupName) {
+	public int createNewGroup(int userID, String groupName) {
 		Connection dbCon = null;
 
 		String query = "INSERT INTO workGroup (groupFacilitator, groupname) VALUES (?,?)";
@@ -172,6 +172,23 @@ DatabaseConnection {
 		} catch (SQLException ex) {
 			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
 		}  
+
+		query = "SELECT * FROM workGroup WHERE groupFacilitator = ? ORDER BY groupID DESC LIMIT 1";
+		int groupID = 0;
+		try{
+			dbCon = initializeDBConnection(); 
+			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+			preparedStatement.setInt(1, userID);
+			ResultSet rs = preparedStatement.executeQuery();
+			while (rs.next()) {
+				groupID = rs.getInt("groupID");
+			} 
+		}
+		catch (SQLException ex) {
+			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+		}  
+		return groupID;
+
 	}
 
 	public String getDate() {
@@ -320,7 +337,7 @@ DatabaseConnection {
 	public WorkGroupInfo getGroupInfo(int activeGroupID) {
 		Connection dbCon = null;
 		WorkGroupInfo workGroupInfo = new WorkGroupInfo();
-		
+
 		String query = "SELECT * FROM workgroup WHERE groupID = ?";
 		try{
 			dbCon = initializeDBConnection(); 
@@ -339,7 +356,7 @@ DatabaseConnection {
 		}      
 		return null;
 	}
-	
+
 	@Override
 	public ModelInfo loadGroupModel(int groupID) {
 		Connection dbCon = null;
@@ -360,36 +377,9 @@ DatabaseConnection {
 				modelInfo.setModelName(rs.getString("modelName"));
 				modelInfo.setIsProposal(rs.getInt("isProposal"));
 				modelInfo.setModelCreationDate(rs.getString("creationDate"));
-		
+
 			}			
-		return modelInfo;
-
-	} catch (SQLException ex) {
-		Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
-	}      
-	return null;
-	}
-
-	@Override
-	public List<WorkGroupInfo> getGroupInvites(int userID) {
-		Connection dbCon = null;
-		List<WorkGroupInfo> invitesList = new ArrayList<WorkGroupInfo>();
-		
-		String query = "SELECT * FROM workgroupinvites as a LEFT JOIN on workgroup as b ON a.groupID = b.groupID  WHERE a.userID = ?";
-		try{
-			dbCon = initializeDBConnection(); 
-			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
-			preparedStatement.setInt(1, userID);
-			ResultSet rs = preparedStatement.executeQuery();
-			while (rs.next()) {
-				WorkGroupInfo workGroupInfo = new WorkGroupInfo();
-				workGroupInfo.setWorkGroupInviteID(rs.getInt("inviteID"));
-				workGroupInfo.setWorkGroupID(rs.getInt("groupID"));
-				workGroupInfo.setWorkGroupName(rs.getString("groupName"));
-				workGroupInfo.setWorkGroupFacilitator(rs.getInt("groupFacilitator"));
-				invitesList.add(workGroupInfo);
-			}
-			return invitesList;
+			return modelInfo;
 
 		} catch (SQLException ex) {
 			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
@@ -398,13 +388,62 @@ DatabaseConnection {
 	}
 
 	@Override
+	public List<WorkGroupInfo> getGroupInvites(int userID) {
+		Connection dbCon = null;
+		List<WorkGroupInfo> invitesList = new ArrayList<WorkGroupInfo>();
+
+		String query = "SELECT * FROM workgroupinvites WHERE userID = ? AND isActive = ?";
+		try{
+			dbCon = initializeDBConnection(); 
+			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+			preparedStatement.setInt(1, userID);
+			preparedStatement.setInt(2, 1);
+			ResultSet rs = preparedStatement.executeQuery();
+			while (rs.next()) {
+				WorkGroupInfo workGroupInfo = new WorkGroupInfo();
+				workGroupInfo.setWorkGroupInviteID(rs.getInt("inviteID"));
+				workGroupInfo.setWorkGroupID(rs.getInt("groupID"));
+				invitesList.add(workGroupInfo);
+			}
+			return getGroupInvitesInfo(invitesList);
+
+		} catch (SQLException ex) {
+			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+		}      
+		return null;
+	}
+
+
+	private List<WorkGroupInfo> getGroupInvitesInfo(List<WorkGroupInfo> invitesList) {
+		Connection dbCon = null;
+
+		String query = "SELECT * FROM workgroup WHERE groupID = ?";
+		for(WorkGroupInfo groupInfo : invitesList){
+			try{
+				dbCon = initializeDBConnection(); 
+				PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+				preparedStatement.setInt(1, groupInfo.getWorkGroupID());
+				ResultSet rs = preparedStatement.executeQuery();
+				while (rs.next()) {
+					groupInfo.setWorkGroupName(rs.getString("groupName"));
+					groupInfo.setWorkGroupFacilitator(rs.getInt("groupFacilitator"));
+				}
+
+			} catch (SQLException ex) {
+				Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+			}      
+		}
+		return invitesList;
+	}
+
+
+	@Override
 	public void addUserProfileToUser(int userID, String firstName,
 			String surName, String birthDay, String phoneNumber) {
 		Connection dbCon = null;
 
 		String query = "INSERT INTO userprofile (userID, firstName, surName, birthDate, phoneNumber) VALUES (?,?,?,?,?)" +
 				"ON DUPLICATE KEY update firstName = ?,surName = ?, birthDate = ?, phoneNumber = ?";
-
 
 		try{
 			dbCon = initializeDBConnection(); 
@@ -424,13 +463,13 @@ DatabaseConnection {
 			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
 		}  
 	}
-	
+
 	@Override
 	public List<String> getUserProfile(int userID) throws IllegalArgumentException {
 		Connection dbCon = null;
 
 		List<String> userProfile = new ArrayList<String>();
-		
+
 		String query = "SELECT * FROM userprofile WHERE userID = ?";
 		try{
 			dbCon = initializeDBConnection(); 
@@ -439,15 +478,15 @@ DatabaseConnection {
 			ResultSet rs = preparedStatement.executeQuery();
 			while (rs.next()) {
 				String fName = rs.getString("firstName");
-            	String sName = rs.getString("surName");
-            	String bDay = rs.getString("birthDate");
-            	String phoneNr = rs.getString("phoneNumber");
-            	userProfile.add(fName);
-            	userProfile.add(sName);
-            	userProfile.add(bDay);
-            	userProfile.add(phoneNr);
+				String sName = rs.getString("surName");
+				String bDay = rs.getString("birthDate");
+				String phoneNr = rs.getString("phoneNumber");
+				userProfile.add(fName);
+				userProfile.add(sName);
+				userProfile.add(bDay);
+				userProfile.add(phoneNr);
 			}
-			
+
 			return userProfile;
 
 		} catch (SQLException ex) {
@@ -458,41 +497,41 @@ DatabaseConnection {
 
 	@Override
 	public void updateActiveGroupModel(int activeGroupID, int modelID, String version) {
-			Connection dbCon = null;
-			
-			String modelString = "";
-			String query = "SELECT modelString FROM model WHERE modelID = ?";
-			try{
-				dbCon = initializeDBConnection(); 
-				
-				PreparedStatement preparedStatement = dbCon.prepareStatement(query);
-				preparedStatement.setInt(1, modelID);
-				ResultSet rs = preparedStatement.executeQuery();
-				while (rs.next()) {
-					modelString = rs.getString("modelString");
-				}
+		Connection dbCon = null;
+
+		String modelString = "";
+		String query = "SELECT modelString FROM model WHERE modelID = ?";
+		try{
+			dbCon = initializeDBConnection(); 
+
+			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+			preparedStatement.setInt(1, modelID);
+			ResultSet rs = preparedStatement.executeQuery();
+			while (rs.next()) {
+				modelString = rs.getString("modelString");
+			}
 
 			String queryTwo = "INSERT INTO activegroupmodel(groupID, modelID, modelString, version) VALUES (?,?,?,?)";
 
-				PreparedStatement preparedStatementTwo = dbCon.prepareStatement(queryTwo);
-				preparedStatementTwo.setInt(1, activeGroupID);
-				preparedStatementTwo.setInt(2, modelID);
-				preparedStatementTwo.setString(3, modelString);
-				preparedStatementTwo.setString(4, version);
+			PreparedStatement preparedStatementTwo = dbCon.prepareStatement(queryTwo);
+			preparedStatementTwo.setInt(1, activeGroupID);
+			preparedStatementTwo.setInt(2, modelID);
+			preparedStatementTwo.setString(3, modelString);
+			preparedStatementTwo.setString(4, version);
 
-				preparedStatementTwo.executeUpdate();
-			} catch (SQLException ex) {
-				Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
-			} 
-		
+			preparedStatementTwo.executeUpdate();
+		} catch (SQLException ex) {
+			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+		} 
+
 	}
-	
+
 	@Override
 	public List<WorkGroupInfo> getUsersGroups(int userID) {
 		Connection dbCon = null;
 		List<WorkGroupInfo> invitesList = new ArrayList<WorkGroupInfo>();
-		
-		String query = "SELECT * FROM workgroupmember as a LEFT JOIN on workgroup as b ON a.groupID = b.groupID  WHERE a.userID = ?";
+
+		String query = "SELECT * FROM workgroupmember WHERE userID = ?";
 		try{
 			dbCon = initializeDBConnection(); 
 			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
@@ -501,11 +540,11 @@ DatabaseConnection {
 			while (rs.next()) {
 				WorkGroupInfo workGroupInfo = new WorkGroupInfo();
 				workGroupInfo.setWorkGroupID(rs.getInt("groupID"));
-				workGroupInfo.setWorkGroupName(rs.getString("groupName"));
-				workGroupInfo.setWorkGroupFacilitator(rs.getInt("groupFacilitator"));
+				//workGroupInfo.setWorkGroupName(rs.getString("groupName"));
+				//workGroupInfo.setWorkGroupFacilitator(rs.getInt("groupFacilitator"));
 				invitesList.add(workGroupInfo);
 			}
-			return invitesList;
+			return getUsersGroupsInfo(invitesList);
 
 		} catch (SQLException ex) {
 			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
@@ -513,11 +552,34 @@ DatabaseConnection {
 		return null;
 	}
 
+	public List<WorkGroupInfo> getUsersGroupsInfo(List<WorkGroupInfo> invitesList) {
+		Connection dbCon = null;
+
+		String query = "SELECT * FROM workgroup WHERE groupID = ?";
+
+		for(WorkGroupInfo groupInfo: invitesList){
+			try{
+				dbCon = initializeDBConnection(); 
+				PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+				preparedStatement.setInt(1, groupInfo.getWorkGroupID());
+				ResultSet rs = preparedStatement.executeQuery();
+				while (rs.next()) {
+					groupInfo.setWorkGroupName(rs.getString("groupName"));
+					groupInfo.setWorkGroupFacilitator(rs.getInt("groupFacilitator"));
+				}
+			} catch (SQLException ex) {
+				Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+			}
+		}
+
+		return invitesList;
+	}
+
 	@Override
 	public List<ModelInfo> getAllUsersModels(int userID) {
 		Connection dbCon = null;
 		List<ModelInfo> modelList = new ArrayList<ModelInfo>();
-		
+
 		String query = "SELECT * FROM model WHERE modelCreator = ?";
 		try{
 			dbCon = initializeDBConnection(); 
@@ -548,6 +610,8 @@ DatabaseConnection {
 	public void setInviteToInactive(int inviteID) {
 		Connection dbCon = null;
 
+
+
 		String query = "UPDATE workgroupinvites SET isActive = ? WHERE inviteID = ?";
 		try{
 			dbCon = initializeDBConnection(); 
@@ -558,14 +622,15 @@ DatabaseConnection {
 		} catch (SQLException ex) {
 			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
 		}  
-		
+
 	}
 
 	@Override
 	public void addUserToGroup(int groupID, int userID) {
 		Connection dbCon = null;
 
-		String query = "INSERT INTO workgroupmembers (groupID, userID) VALUES (?,?)";
+		System.out.println("GROUP : " + groupID + "USERID : " + userID);
+		String query = "INSERT INTO workgroupmember (groupID, userID) VALUES (?,?)";
 		try{
 			dbCon = initializeDBConnection(); 
 			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
@@ -575,9 +640,8 @@ DatabaseConnection {
 		} catch (SQLException ex) {
 			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
 		}  
-		
+
 	}
-	
 
 
 }

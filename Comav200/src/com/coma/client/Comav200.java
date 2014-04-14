@@ -180,7 +180,7 @@ public class Comav200 {
 				dialogBox.show();
 			}else if(event.getSource().equals(invitesButton))
 			{
-				
+				new HandleGroups().getGroupInvites();
 			}
 
 		}

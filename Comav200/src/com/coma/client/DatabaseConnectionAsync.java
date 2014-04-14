@@ -10,7 +10,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface DatabaseConnectionAsync {
 	void getPasswordForAuthorization(String email, AsyncCallback<String> callback)
 			throws IllegalArgumentException;
-	void createNewGroup(int userID, String groupName, AsyncCallback<Void> callback);
+	void createNewGroup(int userID, String groupName, AsyncCallback<Integer> callback);
 	void createNewUser(String name, String password,
 			AsyncCallback<Void> callback);
 	void getUserID(String email, AsyncCallback<Integer> asyncCallback);	void saveModel(int groupID, int userID, String modelName, int modelType, String modelString, int isProposal,

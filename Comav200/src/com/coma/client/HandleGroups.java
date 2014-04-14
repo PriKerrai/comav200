@@ -2,6 +2,10 @@ package com.coma.client;
 
 import java.util.List;
 
+import com.coma.client.widgets.HandleGroupInvitesCellList;
+import com.coma.client.widgets.HandleGroupInvitesDialogBox;
+import com.coma.client.widgets.LoadModelCellList;
+import com.coma.client.widgets.LoadModelDialogBox;
 import com.coma.client.widgets.SwitchGroupDialogBox;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -24,7 +28,7 @@ public class HandleGroups {
 	}
 	
 	public void acceptGroupInvite(int groupID, int inviteID){
-		addUserToGroup(groupID, inviteID);
+		addUserToGroupFromInvite(groupID, inviteID);
 	}
 	
 	public void declineGroupInvite(int inviteID){
@@ -70,14 +74,19 @@ public class HandleGroups {
 
 					@Override
 					public void onSuccess(List<WorkGroupInfo> result) {
-						// TODO Auto-generated method stub
+						HandleGroupInvitesCellList invitesList = new HandleGroupInvitesCellList();
+						HandleGroupInvitesCellList.setInviteList(result);
+						HandleGroupInvitesDialogBox hgidb = new HandleGroupInvitesDialogBox();
+						DialogBox dialogBox = hgidb.createDialogBox(invitesList.loadModelPanel());
+						dialogBox.center();
+						dialogBox.show();
 						
 					}
 				});
 		}
 	
 	
-	private void addUserToGroup(int groupID, int invID){
+	private void addUserToGroupFromInvite(int groupID, int invID){
 		final int inviteID = invID;
 		databaseConnection.addUserToGroup(groupID, User.getInstance().getUserId(), new AsyncCallback<Void>() {
 					public void onFailure(Throwable caught) {
@@ -87,6 +96,17 @@ public class HandleGroups {
 					}
 				});
 		}
+	
+	public void addUserToGroup(int groupID){
+		databaseConnection.addUserToGroup(groupID, User.getInstance().getUserId(), new AsyncCallback<Void>() {
+					public void onFailure(Throwable caught) {
+					}
+					public void onSuccess(Void result) {
+						
+					}
+				});
+		}
+	
 	private void setInviteToInactive(int inviteID){
 		databaseConnection.setInviteToInactive(inviteID, new AsyncCallback<Void>() {
 					public void onFailure(Throwable caught) {

@@ -9,9 +9,17 @@ public class WorkGroupInfo implements IsSerializable {
 	private int workGroupInviteID; 
 	
 	private int workGroupID;
-	private int workGroupFacilitator;
 	private String workGroupName;
+	private int workGroupFacilitator;
+	private String facilitatorName;
 	
+	
+	public String getFacilitatorName() {
+		return facilitatorName;
+	}
+	public void setFacilitatorName(String facilitatorName) {
+		this.facilitatorName = facilitatorName;
+	}
 	public int getWorkGroupID() {
 		return workGroupID;
 	}

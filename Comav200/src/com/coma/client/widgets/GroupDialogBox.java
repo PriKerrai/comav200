@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.coma.client.DatabaseConnection;
 import com.coma.client.DatabaseConnectionAsync;
+import com.coma.client.HandleGroups;
 import com.coma.client.User;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -71,13 +72,13 @@ public class GroupDialogBox{
 
 	public void createNewGroup(int userID, String groupName) {
 
-		databaseConnection.createNewGroup(userID, groupName, new AsyncCallback<Void>() {
+		databaseConnection.createNewGroup(userID, groupName, new AsyncCallback<Integer>() {
 			public void onFailure(Throwable caught) {
 			}
 
 			@Override
-			public void onSuccess(Void result) {
-				// TODO Auto-generated method stub
+			public void onSuccess(Integer result) {
+				new HandleGroups().addUserToGroup(result);
 
 			}
 		});
