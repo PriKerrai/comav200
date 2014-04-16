@@ -8,6 +8,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -30,6 +31,8 @@ public class HandleGroupInvitesDialogBox {
 		cancelButton.getElement().setId("cancelButton");
         
         VerticalPanel dialogVPanel = new VerticalPanel();
+        HorizontalPanel dialogHPanel = new HorizontalPanel();
+        
         dialogVPanel.addStyleName("dialogVPanel");
         dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
        
@@ -37,9 +40,13 @@ public class HandleGroupInvitesDialogBox {
 		scrollPanel.setHeight("300px");
 		scrollPanel.setWidth("300px");
 		dialogVPanel.add(scrollPanel);
-        dialogVPanel.add(declineButton);
-        dialogVPanel.add(acceptButton);
-        dialogVPanel.add(cancelButton);
+		
+		dialogHPanel.add(acceptButton);
+		dialogHPanel.add(declineButton);
+		dialogHPanel.add(cancelButton);
+		
+		dialogVPanel.add(dialogHPanel);
+
         dialogBox.setWidget(dialogVPanel);
 
         // Add a handler to close the DialogBox

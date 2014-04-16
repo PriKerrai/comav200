@@ -6,6 +6,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FormPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -30,19 +31,26 @@ public class EditProfileView {
 		form.addStyleName("demo-FormPanel");
 
 		VerticalPanel holder = new VerticalPanel();
-		holder.add(new Label("First Name"));
+		HorizontalPanel hPanel = new HorizontalPanel();
+		HorizontalPanel fnamePanel = new HorizontalPanel();
+		HorizontalPanel surNamePanel = new HorizontalPanel();
+		HorizontalPanel birthdayPanel = new HorizontalPanel();
+		HorizontalPanel phonePanel = new HorizontalPanel();
+		
+		
+		//holder.add(new Label("First Name"));
 		firstNameTextBox.setName("firstName");
 		firstNameTextBox.setEnabled(false);
 
-		holder.add(new Label("Surname"));
+		//holder.add(new Label("Surname"));
 		surNameTextBox.setName("surName");
 		surNameTextBox.setEnabled(false);
 
-		holder.add(new Label("Bithday"));
+		//holder.add(new Label("Bithday"));
 		birthDay.setName("birtday");
 		birthDay.setEnabled(false);
 
-		holder.add(new Label("Phone number"));
+		//holder.add(new Label("Phone number"));
 		phoneNumber.setName("password");
 		phoneNumber.setEnabled(false);
 
@@ -53,10 +61,25 @@ public class EditProfileView {
 			phoneNumber.setText(userProfile.get(3));
 		}
 
-		holder.add(firstNameTextBox);
-		holder.add(surNameTextBox);
-		holder.add(birthDay);        	
-		holder.add(phoneNumber);
+		fnamePanel.add(new Label("First name: "));
+		fnamePanel.add(firstNameTextBox);
+		holder.add(fnamePanel);
+		
+		surNamePanel.add(new Label("Last name: "));
+		surNamePanel.add(surNameTextBox);
+		holder.add(surNamePanel);
+		
+		birthdayPanel.add(new Label("Birthday: "));
+		birthdayPanel.add(birthDay);
+		holder.add(birthdayPanel);
+
+		phonePanel.add(new Label("Phone number: "));
+		phonePanel.add(phoneNumber);
+		holder.add(phonePanel);
+		
+		//holder.add(surNameTextBox);
+		//holder.add(birthDay);        	
+		//holder.add(phoneNumber);
 
 		//holder.add(new Label("User description"));
 		//userDescriptionTextArea.setName("surName");
@@ -69,9 +92,11 @@ public class EditProfileView {
 		saveProfileButton.addClickHandler(handler);
 		saveProfileButton.setEnabled(false);
 
-		holder.add(editProfileButton);
-		holder.add(saveProfileButton);
-		holder.add(cancelEditButton);
+		hPanel.add(editProfileButton);
+		hPanel.add(saveProfileButton);
+		hPanel.add(cancelEditButton);
+		holder.add(hPanel);
+
 
 		form.add(holder);    
 		return form;

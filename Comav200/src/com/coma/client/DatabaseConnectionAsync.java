@@ -39,5 +39,8 @@ public interface DatabaseConnectionAsync {
 	void getAllUsersModels(int userID, AsyncCallback<List<ModelInfo>> callback);
 	void updateActiveGroupModel(int activeGroupID, int modelID, String version,
 			AsyncCallback<Void> callback);
+	void getAllGroupMembers(int activeGroupID,
+			AsyncCallback<List<String>> asyncCallback);
+	void getVotes(int modelID, AsyncCallback<List<Integer>> asyncCallback);
 	
 }

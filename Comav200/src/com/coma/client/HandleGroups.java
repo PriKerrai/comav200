@@ -132,4 +132,18 @@ public class HandleGroups {
 					}
 				});
 		}
+	
+	public void getAllGroupMemebers(){
+		databaseConnection.getAllGroupMembers(User.getInstance().getActiveGroupID(), new AsyncCallback<List<String>>() {
+			public void onFailure(Throwable caught) {
+			}
+
+			@Override
+			public void onSuccess(List<String> result) {
+				
+				
+			}
+		});
+	}
+	
 }

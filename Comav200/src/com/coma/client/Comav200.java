@@ -74,11 +74,11 @@ public class Comav200 {
 		}
 	}
 
-	public Button newButton = new Button("New Model");
-	public Button saveButton = new Button("Save Model");
-	public Button loadButton = new Button("Load Model");
-	public Button importButton = new Button("Import");
-	public Button exportButton = new Button("Export");
+	public Button newModelButton = new Button("New Model");
+	public Button saveModelButton = new Button("Save Model");
+	public Button loadModelButton = new Button("Load Model");
+	public Button importModelButton = new Button("Import");
+	public Button exportModelButton = new Button("Export");
 	public Button editProfileButton = new Button("Edit profile");
 	public Button invitesButton = new Button("My group invites");
 	public Button proposeButton = new Button("Propose as group model");
@@ -89,6 +89,7 @@ public class Comav200 {
 	public Button writeCommentButton = new Button("Write comment");
 	public Button readCommentButton = new Button("Read comments");
 	public Button acceptProposalButton = new Button("Accept proposal");
+	public Button votesButton = new Button("Votes");
 
 	LogIn logIn = new LogIn();
 	SignUp signUp = new SignUp();
@@ -137,18 +138,18 @@ public class Comav200 {
 				dialogBox.center();
 				dialogBox.show();
 			}
-			else if(event.getSource().equals(newButton)){
+			else if(event.getSource().equals(newModelButton)){
 				model = new ModelInfo();
 				NewModelDialogBox nmdb = new NewModelDialogBox();
 				DialogBox dialogBox = nmdb.createDialogBox();
 				dialogBox.center();
 				dialogBox.show();
 			}
-			else if(event.getSource().equals(saveButton)){
+			else if(event.getSource().equals(saveModelButton)){
 				model.setIsProposal(0);
 				new SaveModel().saveModel(oryxFrame);
 			}
-			else if(event.getSource().equals(loadButton)){
+			else if(event.getSource().equals(loadModelButton)){
 				//new LoadModel().getModelsFromDatabase(2,oryxFrame);
 				getLoadModelCellListData();
 			}
@@ -156,10 +157,10 @@ public class Comav200 {
 				model.setIsProposal(1);
 				new SaveModel().saveModel(oryxFrame);
 			}
-			else if(event.getSource().equals(importButton)){
+			else if(event.getSource().equals(importModelButton)){
 
 			}
-			else if(event.getSource().equals(exportButton)){
+			else if(event.getSource().equals(exportModelButton)){
 
 			}
 			else if(event.getSource().equals(writeCommentButton)){
@@ -235,22 +236,22 @@ public class Comav200 {
 	{ 	
 		HorizontalPanel panel = new HorizontalPanel();
 
-		newButton.getElement().setClassName("utilityButton");
-		saveButton.getElement().setClassName("utilityButton");
-		loadButton.getElement().setClassName("utilityButton");
+		newModelButton.getElement().setClassName("utilityButton");
+		saveModelButton.getElement().setClassName("utilityButton");
+		loadModelButton.getElement().setClassName("utilityButton");
 		proposeButton.getElement().setClassName("utilityButton");
 
 		MyHandler handler = new MyHandler();
-		newButton.addClickHandler(handler);
-		saveButton.addClickHandler(handler);
-		loadButton.addClickHandler(handler);
+		newModelButton.addClickHandler(handler);
+		saveModelButton.addClickHandler(handler);
+		loadModelButton.addClickHandler(handler);
 		proposeButton.addClickHandler(handler);
 
-		panel.add(newButton);
-		panel.add(saveButton);
-		panel.add(loadButton);
+		panel.add(newModelButton);
+		panel.add(saveModelButton);
+		panel.add(loadModelButton);
 		panel.add(proposeButton);
-		panel.add(new Label("Logged in as: " + User.getInstance().getUserEmail()+ " id: " + User.getInstance().getUserId()));
+		panel.add(new Label("Logged in as: " + User.getInstance().getUserEmail()+ " id: " + User.getInstance().getUserId() + "Group: " +User.getInstance().getActiveGroupID()));
 
 		return panel;  
 	}
@@ -259,18 +260,18 @@ public class Comav200 {
 	{ 	
 		HorizontalPanel panel = new HorizontalPanel();
 
-		importButton = new Button("Import");
-		exportButton = new Button("Export");
+		importModelButton = new Button("Import");
+		exportModelButton = new Button("Export");
 		
-		importButton.getElement().setClassName("utilityButton");
-		exportButton.getElement().setClassName("utilityButton");
+		importModelButton.getElement().setClassName("utilityButton");
+		exportModelButton.getElement().setClassName("utilityButton");
 
 		MyHandler handler = new MyHandler();
-		importButton.addClickHandler(handler);
-		exportButton.addClickHandler(handler);
+		importModelButton.addClickHandler(handler);
+		exportModelButton.addClickHandler(handler);
 
-		panel.add(importButton);
-		panel.add(exportButton);
+		panel.add(importModelButton);
+		panel.add(exportModelButton);
 
 		return panel;  
 	}
@@ -283,17 +284,20 @@ public class Comav200 {
 		readCommentButton.getElement().setClassName("utilityButton");
 		voteButtonButton.getElement().setClassName("utilityButton");
 		acceptProposalButton.getElement().setClassName("utilityButton");
+		votesButton.getElement().setClassName("utilityButton");
 
 		MyHandler handler = new MyHandler();
 		writeCommentButton.addClickHandler(handler);
 		readCommentButton.addClickHandler(handler);
 		voteButtonButton.addClickHandler(handler);
-		acceptProposalButton.addClickHandler(handler);		
+		acceptProposalButton.addClickHandler(handler);
+		votesButton.addClickHandler(handler);
 
 		panel.add(writeCommentButton);
 		panel.add(readCommentButton);
 		panel.add(voteButtonButton);
 		panel.add(acceptProposalButton);
+		panel.add(votesButton);
 
 		return panel;  
 	}
@@ -462,6 +466,35 @@ public class Comav200 {
 			}
 
 		});
+	}
+	
+	/**
+	*
+	*/
+	public void getVotesOnModel(int modelID) {
+		databaseConnection.getVotes(modelID, new AsyncCallback<List<Integer>>() {
+			public void onFailure(Throwable caught) {
+			}
+
+			@Override
+			public void onSuccess(List<Integer> result) {
+				double avgVote = calculateAverageVote(result);
+		
+			}
+			
+		});
+	}
+	
+	private double calculateAverageVote(List<Integer> votes){
+		if(votes.size() < 3){
+			return -1;
+		}else{
+			int sum = 0;
+			for(Integer vote: votes){
+				sum += vote;
+			}
+			return sum/votes.size();
+		}
 	}
 	
 	public void loadModelFromCellList(int modelID) {

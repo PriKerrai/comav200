@@ -4,12 +4,16 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import com.coma.client.widgets.FailureDialogBox;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FormPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
@@ -33,8 +37,10 @@ public class LogIn {
         	form.addStyleName("table-center");
         	form.addStyleName("demo-FormPanel");
         	
-        	VerticalPanel holder = new VerticalPanel();
         	
+        	
+        	VerticalPanel holder = new VerticalPanel();
+        	HorizontalPanel hPanel = new HorizontalPanel();
         	holder.add(new Label("Email"));
         	emailTextBox.setName("email");
         	holder.add(emailTextBox);
@@ -47,10 +53,11 @@ public class LogIn {
             logInButton.addClickHandler(handler);
             signUpButton.addClickHandler(handler);
         	
-        	holder.add(logInButton);
-        	holder.add(signUpButton);
+            hPanel.add(logInButton);
+            hPanel.add(signUpButton);
+        	holder.add(hPanel);
 
-            form.add(holder);    
+            form.add(holder);  
             return form;
         }
         
@@ -84,8 +91,9 @@ public class LogIn {
         		
         	}
         	else{
-        		//show pop up login fail
-        		System.out.println("Log in failed");
+        		DialogBox dialogBox = new FailureDialogBox().logInFailDialogBox();
+        		dialogBox.center();
+        		dialogBox.show();
         	}
         }
         

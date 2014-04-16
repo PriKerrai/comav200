@@ -9,6 +9,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
@@ -35,6 +36,7 @@ public class NewModelDialogBox {
 		final Button cancelButton = new Button("Cancel");
 		cancelButton.getElement().setId("cancelButton");
 		VerticalPanel dialogVPanel = new VerticalPanel();
+		HorizontalPanel dialogHPanel = new HorizontalPanel();
 		dialogVPanel.addStyleName("dialogVPanel");
 		dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
 
@@ -52,8 +54,10 @@ public class NewModelDialogBox {
 		modelTypeBox.setVisibleItemCount(1);
 		
 		dialogVPanel.add(modelTypeBox);
-		dialogVPanel.add(cancelButton);
-		dialogVPanel.add(createButton);
+		dialogHPanel.add(createButton);
+		dialogHPanel.add(cancelButton);
+		dialogVPanel.add(dialogHPanel);
+		
 		
 		dialogBox.setWidget(dialogVPanel);
 

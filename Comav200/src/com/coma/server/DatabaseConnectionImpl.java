@@ -643,6 +643,50 @@ DatabaseConnection {
 
 	}
 
+	@Override
+	public List<String> getAllGroupMembers(int groupID) {
+		Connection dbCon = null;
+		List<String> members = new ArrayList<String>();
+
+		String query = "SELECT * FROM workgroupmember as w LEFT JOIN user as u ON w.userID = u.userID WHERE w.groupID = ?";
+		try{
+			dbCon = initializeDBConnection(); 
+			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+			preparedStatement.setInt(1, groupID);
+			ResultSet rs = preparedStatement.executeQuery();
+			while (rs.next()) {
+				members.add(rs.getString("userEmail"));
+			}
+			return members;
+
+		} catch (SQLException ex) {
+			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+		}      
+		return null;
+	}
+
+	@Override
+	public List<Integer> getVotes(int modelID) {
+		Connection dbCon = null;
+		List<Integer> votes = new ArrayList<Integer>();
+
+		String query = "SELECT * FROM votesonmodel WHERE modelID = ?";
+		try{
+			dbCon = initializeDBConnection(); 
+			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+			preparedStatement.setInt(1, modelID);
+			ResultSet rs = preparedStatement.executeQuery();
+			while (rs.next()) {
+				votes.add(rs.getInt("grade"));
+			}
+			return votes;
+
+		} catch (SQLException ex) {
+			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+		}      
+		return null;
+	}
+
 
 }
 

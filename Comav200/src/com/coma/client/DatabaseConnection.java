@@ -33,4 +33,6 @@ public interface DatabaseConnection extends RemoteService {
 	List<WorkGroupInfo> getUsersGroups(int userID);
 	List<ModelInfo> getAllUsersModels(int userID);
 	void updateActiveGroupModel(int activeGroupID, int modelID, String version);
+	List<String> getAllGroupMembers(int activeGroupID);
+	List<Integer> getVotes(int modelID);
 }
