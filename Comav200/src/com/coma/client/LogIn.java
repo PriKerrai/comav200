@@ -4,27 +4,27 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import com.coma.client.widgets.FailureDialogBox;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
+import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
+import com.sencha.gxt.widget.core.client.form.PasswordField;
+import com.sencha.gxt.widget.core.client.form.TextField;
 
 public class LogIn {
 
-	Button logInButton = new Button("Log In");
-	Button signUpButton = new Button("Sign Up");
-	TextBox emailTextBox = new TextBox();
-	PasswordTextBox passwordTextBox = new PasswordTextBox();
+	TextButton logInButton = new TextButton("Log In");
+	TextButton signUpButton = new TextButton("Sign Up");
+	TextField emailTextField = new TextField();
+	PasswordField passwordField = new PasswordField();
 	String password = null;
 
 	private final DatabaseConnectionAsync databaseConnection = GWT
@@ -35,23 +35,33 @@ public class LogIn {
         	form.setEncoding(FormPanel.ENCODING_MULTIPART);
         	form.setMethod(FormPanel.METHOD_POST);
         	form.addStyleName("table-center");
-        	form.addStyleName("demo-FormPanel");
-        	
-        	
+        	form.addStyleName("demo-FormPanel");      	
         	
         	VerticalPanel holder = new VerticalPanel();
         	HorizontalPanel hPanel = new HorizontalPanel();
         	holder.add(new Label("Email"));
-        	emailTextBox.setName("email");
-        	holder.add(emailTextBox);
+        	emailTextField.setName("email");
+        	holder.add(emailTextField);
         	
         	holder.add(new Label("Password"));
-        	passwordTextBox.setName("password");
-        	holder.add(passwordTextBox);
+        	passwordField.setName("password");
+        	holder.add(passwordField);
 
-        	MyHandler handler = new MyHandler();
-            logInButton.addClickHandler(handler);
-            signUpButton.addClickHandler(handler);
+            signUpButton.addSelectHandler(new SelectHandler() {
+				
+				@Override
+				public void onSelect(SelectEvent event) {
+					Comav200.GetInstance().initializeSignUp();			
+				}
+			});
+            
+            logInButton.addSelectHandler(new SelectHandler(){
+
+				@Override
+				public void onSelect(SelectEvent event) {
+					getPasswordFromDatabase(emailTextField.getText());	
+				}            	
+            });
         	
             hPanel.add(logInButton);
             hPanel.add(signUpButton);
@@ -84,16 +94,15 @@ public class LogIn {
 
          	
         private void checkAuthantication(String email, String password){
-        	String encryptedPassword = encryptPassword(passwordTextBox.getValue());
+        	String encryptedPassword = encryptPassword(passwordField.getValue());
         	if(encryptedPassword.equals(password)){        		
-        		Comav200.GetInstance().getAndSetUserIDFromDatabase(emailTextBox.getText());
-        		User.getInstance().setUserEmail(emailTextBox.getText());
+        		Comav200.GetInstance().getAndSetUserIDFromDatabase(emailTextField.getText());
+        		User.getInstance().setUserEmail(emailTextField.getText());
         		
         	}
         	else{
-        		DialogBox dialogBox = new FailureDialogBox().logInFailDialogBox();
-        		dialogBox.center();
-        		dialogBox.show();
+        		AlertMessageBox alert = new AlertMessageBox("Login failed", "Please check your credentials and try again.");
+        		alert.show();
         	}
         }
         
@@ -109,21 +118,4 @@ public class LogIn {
     			}
     		});
     	}
-        
-        class MyHandler implements ClickHandler{
-
-            @Override
-            public void onClick(ClickEvent event) {
-
-                    if(event.getSource().equals(logInButton)){                  	
-                    	getPasswordFromDatabase(emailTextBox.getText());
-                    }
-                    if(event.getSource().equals(signUpButton)){
-                    	System.out.print(emailTextBox.getText());
-                    	Comav200.GetInstance().initializeSignUp();	
-                    }
-            }
-    }
-        
-
 }

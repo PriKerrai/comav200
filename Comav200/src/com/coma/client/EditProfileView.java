@@ -4,23 +4,25 @@ import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
+import com.sencha.gxt.widget.core.client.form.TextField;
 
 public class EditProfileView {
 
-	Button editProfileButton = new Button("Edit Profile");
-	Button saveProfileButton = new Button("Save Profile");
-	Button cancelEditButton = new Button("Cancel");
-	TextBox firstNameTextBox = new TextBox();
-	TextBox surNameTextBox = new TextBox();
+	TextButton editProfileButton = new TextButton("Edit Profile");
+	TextButton saveProfileButton = new TextButton("Save Profile");
+	TextButton cancelEditButton = new TextButton("Cancel");
+	TextField firstNameTextField = new TextField();
+	TextField surNameTextField = new TextField();
 	//TextArea userDescriptionTextArea = new TextArea();
-	TextBox birthDay = new TextBox();
-	TextBox phoneNumber = new TextBox();
+	TextField birthDay = new TextField();
+	TextField phoneNumber = new TextField();
 	VerticalPanel holder = new VerticalPanel();
 
 	public FormPanel screen(List<String> userProfile){
@@ -39,12 +41,12 @@ public class EditProfileView {
 		
 		
 		//holder.add(new Label("First Name"));
-		firstNameTextBox.setName("firstName");
-		firstNameTextBox.setEnabled(false);
+		firstNameTextField.setName("firstName");
+		firstNameTextField.setEnabled(false);
 
 		//holder.add(new Label("Surname"));
-		surNameTextBox.setName("surName");
-		surNameTextBox.setEnabled(false);
+		surNameTextField.setName("surName");
+		surNameTextField.setEnabled(false);
 
 		//holder.add(new Label("Bithday"));
 		birthDay.setName("birtday");
@@ -55,18 +57,18 @@ public class EditProfileView {
 		phoneNumber.setEnabled(false);
 
 		if (userProfile.size() > 1) {        	        	
-			firstNameTextBox.setText(userProfile.get(0));
-			surNameTextBox.setText(userProfile.get(1));
+			firstNameTextField.setText(userProfile.get(0));
+			surNameTextField.setText(userProfile.get(1));
 			birthDay.setText(userProfile.get(2));
 			phoneNumber.setText(userProfile.get(3));
 		}
 
 		fnamePanel.add(new Label("First name: "));
-		fnamePanel.add(firstNameTextBox);
+		fnamePanel.add(firstNameTextField);
 		holder.add(fnamePanel);
 		
 		surNamePanel.add(new Label("Last name: "));
-		surNamePanel.add(surNameTextBox);
+		surNamePanel.add(surNameTextField);
 		holder.add(surNamePanel);
 		
 		birthdayPanel.add(new Label("Birthday: "));
@@ -85,11 +87,54 @@ public class EditProfileView {
 		//userDescriptionTextArea.setName("surName");
 		//holder.add(userDescriptionTextArea);
 
-		MyHandler handler = new MyHandler();
-		editProfileButton.addClickHandler(handler);
-		cancelEditButton.addClickHandler(handler);
+
+		editProfileButton.addSelectHandler(new SelectHandler(){
+
+			@Override
+			public void onSelect(SelectEvent event) {
+				firstNameTextField.setEnabled(true);
+				surNameTextField.setEnabled(true);
+				birthDay.setEnabled(true);
+				phoneNumber.setEnabled(true);
+				saveProfileButton.setEnabled(true);
+				cancelEditButton.setEnabled(true);
+				editProfileButton.setEnabled(false);
+				
+			}
+			
+		});
+		cancelEditButton.addSelectHandler(new SelectHandler() {
+			
+			@Override
+			public void onSelect(SelectEvent event) {
+				firstNameTextField.setEnabled(false);
+				surNameTextField.setEnabled(false);
+				birthDay.setEnabled(false);
+				phoneNumber.setEnabled(false);
+				saveProfileButton.setEnabled(false);
+				editProfileButton.setEnabled(true);
+				cancelEditButton.setEnabled(false);
+				
+			}
+		});
+		
 		cancelEditButton.setEnabled(false);
-		saveProfileButton.addClickHandler(handler);
+		saveProfileButton.addSelectHandler(new SelectHandler(){
+
+			@Override
+			public void onSelect(SelectEvent event) {
+				String fName = firstNameTextField.getText();
+				String sName = surNameTextField.getText();
+				String bDay = birthDay.getText();
+				String phoneNr = phoneNumber.getText();
+				Comav200.GetInstance().addUserProfileToUser(fName, sName, bDay, phoneNr);
+				editProfileButton.setEnabled(true);
+				cancelEditButton.setEnabled(false);
+				saveProfileButton.setEnabled(false);
+				
+			}
+			
+		});
 		saveProfileButton.setEnabled(false);
 
 		hPanel.add(editProfileButton);
@@ -100,40 +145,6 @@ public class EditProfileView {
 
 		form.add(holder);    
 		return form;
-	}
-
-
-	class MyHandler implements ClickHandler{
-
-		@Override
-		public void onClick(ClickEvent event) {
-
-			if(event.getSource().equals(editProfileButton)){                  	
-				firstNameTextBox.setEnabled(true);
-				surNameTextBox.setEnabled(true);
-				birthDay.setEnabled(true);
-				phoneNumber.setEnabled(true);
-				saveProfileButton.setEnabled(true);
-				cancelEditButton.setEnabled(true);
-			}
-			if(event.getSource().equals(cancelEditButton)){
-				firstNameTextBox.setEnabled(false);
-				surNameTextBox.setEnabled(false);
-				birthDay.setEnabled(false);
-				phoneNumber.setEnabled(false);
-				saveProfileButton.setEnabled(false);
-
-			}
-			if(event.getSource().equals(saveProfileButton)){
-				String fName = firstNameTextBox.getText();
-				String sName = surNameTextBox.getText();
-				String bDay = birthDay.getText();
-				String phoneNr = phoneNumber.getText();
-				Comav200.GetInstance().addUserProfileToUser(fName, sName, bDay, phoneNr);
-				editProfileButton.setEnabled(false);
-
-			}
-		}
 	}
 
 }

@@ -8,19 +8,22 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PasswordTextBox;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
+import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
+import com.sencha.gxt.widget.core.client.form.PasswordField;
+import com.sencha.gxt.widget.core.client.form.TextField;
 
 public class SignUp {
 
-	Button signUpButton = new Button("Sign Up");
-	TextBox emailTextBox = new TextBox();
-	PasswordTextBox passwordTextbox = new PasswordTextBox();
-	PasswordTextBox passwordRepeatedTextbox = new PasswordTextBox();
+	TextButton signUpButton = new TextButton("Sign Up");
+	TextField emailTextField = new TextField();
+	PasswordField passwordTextField = new PasswordField();
+	PasswordField passwordRepeatedTextField = new PasswordField();
 
 	private final DatabaseConnectionAsync databaseConnection = GWT
 			.create(DatabaseConnection.class);
@@ -35,19 +38,44 @@ public class SignUp {
 		VerticalPanel holder = new VerticalPanel();
 
 		holder.add(new Label("User Email"));
-		emailTextBox.setName("emailTextBox");
-		holder.add(emailTextBox);
+		emailTextField.setName("emailTextBox");
+		holder.add(emailTextField);
 
 		holder.add(new Label("Password"));
-		passwordTextbox.setName("password");
-		holder.add(passwordTextbox);
+		passwordTextField.setName("password");
+		holder.add(passwordTextField);
 
 		holder.add(new Label("Repeat password"));
-		passwordRepeatedTextbox.setName("passwordRepeated");
-		holder.add(passwordRepeatedTextbox);
+		passwordRepeatedTextField.setName("passwordRepeated");
+		holder.add(passwordRepeatedTextField);
 
-		MyHandler handler = new MyHandler();
-		signUpButton.addClickHandler(handler);
+		signUpButton.addSelectHandler(new SelectHandler(){
+
+			@Override
+			public void onSelect(SelectEvent event) {
+				
+				String password = passwordTextField.getValue();
+				String passwordRepeated = passwordRepeatedTextField.getValue();
+
+				if (event.getSource().equals(signUpButton)) {
+
+					if (password.length() < 10) {
+						AlertMessageBox alert = new AlertMessageBox("Too short!", "Password need to be between X and X");
+						alert.show();
+						return;
+					}
+					if (password.equals(passwordRepeated)) {
+						addUserToDatabase(
+						emailTextField.getText(), encryptPassword(passwordTextField.getValue()));					
+					} else{
+						AlertMessageBox alert = new AlertMessageBox("Incorrect", "Passwords doesn't match");
+						alert.show();
+						return;
+					}
+				}
+			}
+			
+		});
 
 		holder.add(signUpButton);
 
@@ -97,30 +125,5 @@ public class SignUp {
 			}
 		});
 
-	}
-	
-	class MyHandler implements ClickHandler {
-
-		@Override
-		public void onClick(ClickEvent event) {
-
-			String password = passwordTextbox.getValue();
-			String passwordRepeated = passwordRepeatedTextbox.getValue();
-
-			if (event.getSource().equals(signUpButton)) {
-
-				if (password.length() < 1) {
-					return;
-				}
-				if (password.equals(passwordRepeated)) {
-					addUserToDatabase(
-							emailTextBox.getText(), encryptPassword(passwordTextbox.getValue()));
-					
-				} else {
-					return;
-				}
-
-			}
-		}
 	}
 }
