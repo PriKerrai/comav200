@@ -34,7 +34,9 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.sencha.gxt.widget.core.client.Dialog;
-import com.sencha.gxt.widget.core.client.box.MessageBox;
+import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -76,22 +78,22 @@ public class Comav200 {
 		}
 	}
 
-	public Button newModelButton = new Button("New Model");
-	public Button saveModelButton = new Button("Save Model");
-	public Button loadModelButton = new Button("Load Model");
-	public Button importModelButton = new Button("Import");
-	public Button exportModelButton = new Button("Export");
-	public Button editProfileButton = new Button("Edit profile");
-	public Button invitesButton = new Button("My group invites");
-	public Button proposeButton = new Button("Propose as group model");
-	public Button createGroupButton = new Button("Create group");
-	public Button inviteGroupButton = new Button("Invite to group");
-	public Button switchGroupButton = new Button("Switch group");
-	public Button voteButtonButton = new Button("Leave vote");
-	public Button writeCommentButton = new Button("Write comment");
-	public Button readCommentButton = new Button("Read comments");
-	public Button acceptProposalButton = new Button("Accept proposal");
-	public Button votesButton = new Button("Votes");
+	public TextButton newModelButton = new TextButton("New Model");
+	public TextButton saveModelButton = new TextButton("Save Model");
+	public TextButton loadModelButton = new TextButton("Load Model");
+	public TextButton importModelButton = new TextButton("Import");
+	public TextButton exportModelButton = new TextButton("Export");
+	public TextButton editProfileButton = new TextButton("Edit profile");
+	public TextButton invitesButton = new TextButton("My group invites");
+	public TextButton proposeButton = new TextButton("Propose as group model");
+	public TextButton createGroupButton = new TextButton("Create group");
+	public TextButton inviteGroupButton = new TextButton("Invite to group");
+	public TextButton switchGroupButton = new TextButton("Switch group");
+	public TextButton voteButtonButton = new TextButton("Leave vote");
+	public TextButton writeCommentButton = new TextButton("Write comment");
+	public TextButton readCommentButton = new TextButton("Read comments");
+	public TextButton acceptProposalButton = new TextButton("Accept proposal");
+	public TextButton votesButton = new TextButton("Votes");
 	
 
 	LogIn logIn = new LogIn();
@@ -121,76 +123,6 @@ public class Comav200 {
 		RootPanel.get("mainDiv").add(logIn.screen());
 	}
 	
-	class MyHandler implements ClickHandler{
-
-		@Override
-		public void onClick(ClickEvent event) {
-
-			if(event.getSource().equals(createGroupButton)){
-				GroupDialogBox gdb = new GroupDialogBox();
-				DialogBox dialogBox = gdb.createDialogBox();
-				dialogBox.center();
-				dialogBox.show();
-			}
-			else if(event.getSource().equals(switchGroupButton)){
-				new HandleGroups().getUsersGroups();
-			}
-			else if(event.getSource().equals(inviteGroupButton)){
-				InviteToGroupDialogBox itgdb = new InviteToGroupDialogBox();
-				DialogBox dialogBox = itgdb.createDialogBox();
-				dialogBox.center();
-				dialogBox.show();
-			}
-			else if(event.getSource().equals(newModelButton)){
-				model = new ModelInfo();
-				NewModelDialogBox nmdb = new NewModelDialogBox();
-				DialogBox dialogBox = nmdb.createDialogBox();
-				dialogBox.center();
-				dialogBox.show();
-			}
-			else if(event.getSource().equals(saveModelButton)){
-				model.setIsProposal(0);
-				new SaveModel().saveModel(oryxFrame);
-			}
-			else if(event.getSource().equals(loadModelButton)){
-				//new LoadModel().getModelsFromDatabase(2,oryxFrame);
-				getLoadModelCellListData();
-			}
-			else if(event.getSource().equals(proposeButton)){
-				model.setIsProposal(1);
-				new SaveModel().saveModel(oryxFrame);
-			}
-			else if(event.getSource().equals(importModelButton)){
-
-			}
-			else if(event.getSource().equals(exportModelButton)){
-
-			}
-			else if(event.getSource().equals(writeCommentButton)){
-				WriteCommentDialogBox wcdb = new WriteCommentDialogBox(activeModelID);
-
-			}
-			else if(event.getSource().equals(voteButtonButton)){
-				VoteDialogBox vdb = new VoteDialogBox(activeModelID);
-				DialogBox dialogBox = vdb.createDialogBox();
-				dialogBox.center();
-				dialogBox.show();
-			}
-			else if(event.getSource().equals(acceptProposalButton)){
-				AcceptProposalDialog apdb = new AcceptProposalDialog();
-				apdb.setModelID(activeModelID);
-				Dialog dialogBox = apdb.acceptProposalDialog();
-				dialogBox.center();
-				dialogBox.show();
-
-			}else if(event.getSource().equals(invitesButton))
-			{
-				new HandleGroups().getGroupInvites();
-			}
-
-		}
-	}
-
 	public TabPanel initTabPanel(){
 		getUserProfile(User.getInstance().getUserId());
 		final TabPanel panel = new TabPanel();
@@ -245,11 +177,49 @@ public class Comav200 {
 		loadModelButton.getElement().setClassName("utilityButton");
 		proposeButton.getElement().setClassName("utilityButton");
 
-		MyHandler handler = new MyHandler();
-		newModelButton.addClickHandler(handler);
-		saveModelButton.addClickHandler(handler);
-		loadModelButton.addClickHandler(handler);
-		proposeButton.addClickHandler(handler);
+		newModelButton.addSelectHandler(new SelectHandler(){
+
+			@Override
+			public void onSelect(SelectEvent event) {
+				model = new ModelInfo();
+				NewModelDialogBox nmdb = new NewModelDialogBox();
+				DialogBox dialogBox = nmdb.createDialogBox();
+				dialogBox.center();
+				dialogBox.show();
+				
+			}
+			
+		});
+		saveModelButton.addSelectHandler(new SelectHandler(){
+
+			@Override
+			public void onSelect(SelectEvent event) {
+				model.setIsProposal(0);
+				new SaveModel().saveModel(oryxFrame);
+				
+			}
+			
+		});
+		loadModelButton.addSelectHandler(new SelectHandler(){
+
+			@Override
+			public void onSelect(SelectEvent event) {
+				//new LoadModel().getModelsFromDatabase(2,oryxFrame);
+				getLoadModelCellListData();
+				
+			}
+			
+		});
+		proposeButton.addSelectHandler(new SelectHandler(){
+
+			@Override
+			public void onSelect(SelectEvent event) {
+				model.setIsProposal(1);
+				new SaveModel().saveModel(oryxFrame);
+				
+			}
+			
+		});
 
 		panel.add(newModelButton);
 		panel.add(saveModelButton);
@@ -263,16 +233,28 @@ public class Comav200 {
 	private Panel topMenuButtonsGroupModelView()
 	{ 	
 		HorizontalPanel panel = new HorizontalPanel();
-
-		importModelButton = new Button("Import");
-		exportModelButton = new Button("Export");
 		
 		importModelButton.getElement().setClassName("utilityButton");
 		exportModelButton.getElement().setClassName("utilityButton");
 
-		MyHandler handler = new MyHandler();
-		importModelButton.addClickHandler(handler);
-		exportModelButton.addClickHandler(handler);
+		importModelButton.addSelectHandler(new SelectHandler(){
+
+			@Override
+			public void onSelect(SelectEvent event) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		exportModelButton.addSelectHandler(new SelectHandler(){
+
+			@Override
+			public void onSelect(SelectEvent event) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 
 		panel.add(importModelButton);
 		panel.add(exportModelButton);
@@ -290,12 +272,58 @@ public class Comav200 {
 		acceptProposalButton.getElement().setClassName("utilityButton");
 		votesButton.getElement().setClassName("utilityButton");
 
-		MyHandler handler = new MyHandler();
-		writeCommentButton.addClickHandler(handler);
-		readCommentButton.addClickHandler(handler);
-		voteButtonButton.addClickHandler(handler);
-		acceptProposalButton.addClickHandler(handler);
-		votesButton.addClickHandler(handler);
+		writeCommentButton.addSelectHandler(new SelectHandler(){
+
+			@Override
+			public void onSelect(SelectEvent event) {
+				WriteCommentDialogBox wcdb = new WriteCommentDialogBox(activeModelID);
+				
+			}
+			
+		});
+		readCommentButton.addSelectHandler(new SelectHandler(){
+
+			@Override
+			public void onSelect(SelectEvent event) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		voteButtonButton.addSelectHandler(new SelectHandler(){
+
+			@Override
+			public void onSelect(SelectEvent event) {
+				VoteDialogBox vdb = new VoteDialogBox(activeModelID);
+				DialogBox dialogBox = vdb.createDialogBox();
+				dialogBox.center();
+				dialogBox.show();
+				
+			}
+			
+		});
+		acceptProposalButton.addSelectHandler(new SelectHandler(){
+
+			@Override
+			public void onSelect(SelectEvent event) {
+				AcceptProposalDialog apdb = new AcceptProposalDialog();
+				apdb.setModelID(activeModelID);
+				Dialog dialogBox = apdb.acceptProposalDialog();
+				dialogBox.center();
+				dialogBox.show();
+				
+			}
+			
+		});
+		votesButton.addSelectHandler(new SelectHandler(){
+
+			@Override
+			public void onSelect(SelectEvent event) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 
 		panel.add(writeCommentButton);
 		panel.add(readCommentButton);
@@ -316,12 +344,57 @@ public class Comav200 {
 		editProfileButton.getElement().setClassName("utilityButton");
 		invitesButton.getElement().setClassName("utilityButton");
 
-		MyHandler handler = new MyHandler();
-		createGroupButton.addClickHandler(handler);
-		inviteGroupButton.addClickHandler(handler);
-		switchGroupButton.addClickHandler(handler);
-		editProfileButton.addClickHandler(handler);
-		invitesButton.addClickHandler(handler);
+		createGroupButton.addSelectHandler(new SelectHandler(){
+
+			@Override
+			public void onSelect(SelectEvent event) {
+				GroupDialogBox gdb = new GroupDialogBox();
+				DialogBox dialogBox = gdb.createDialogBox();
+				dialogBox.center();
+				dialogBox.show();
+				
+			}
+			
+		});
+		inviteGroupButton.addSelectHandler(new SelectHandler(){
+
+			@Override
+			public void onSelect(SelectEvent event) {
+				InviteToGroupDialogBox itgdb = new InviteToGroupDialogBox();
+				DialogBox dialogBox = itgdb.createDialogBox();
+				dialogBox.center();
+				dialogBox.show();
+				
+			}
+			
+		});
+		switchGroupButton.addSelectHandler(new SelectHandler(){
+
+			@Override
+			public void onSelect(SelectEvent event) {
+				new HandleGroups().getUsersGroups();
+				
+			}
+			
+		});
+		editProfileButton.addSelectHandler(new SelectHandler(){
+
+			@Override
+			public void onSelect(SelectEvent event) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		invitesButton.addSelectHandler(new SelectHandler(){
+
+			@Override
+			public void onSelect(SelectEvent event) {
+				new HandleGroups().getGroupInvites();
+				
+			}
+			
+		});
 
 		panel.add(createGroupButton);
 		panel.add(inviteGroupButton);
