@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.coma.client.oryxhandlers.LoadingCompleteEventListener;
 import com.coma.client.oryxhandlers.LoadingCompletehandler;
-import com.coma.client.widgets.AcceptProposalDialogBox;
+import com.coma.client.widgets.AcceptProposalDialog;
 import com.coma.client.widgets.CallbackHandler;
 import com.coma.client.widgets.GroupDialogBox;
 import com.coma.client.widgets.InviteToGroupDialogBox;
@@ -33,6 +33,8 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.sencha.gxt.widget.core.client.Dialog;
+import com.sencha.gxt.widget.core.client.box.MessageBox;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -90,6 +92,7 @@ public class Comav200 {
 	public Button readCommentButton = new Button("Read comments");
 	public Button acceptProposalButton = new Button("Accept proposal");
 	public Button votesButton = new Button("Votes");
+	
 
 	LogIn logIn = new LogIn();
 	SignUp signUp = new SignUp();
@@ -174,11 +177,12 @@ public class Comav200 {
 				dialogBox.show();
 			}
 			else if(event.getSource().equals(acceptProposalButton)){
-				AcceptProposalDialogBox apdb = new AcceptProposalDialogBox();
+				AcceptProposalDialog apdb = new AcceptProposalDialog();
 				apdb.setModelID(activeModelID);
-				DialogBox dialogBox = apdb.createDialogBox();
+				Dialog dialogBox = apdb.acceptProposalDialog();
 				dialogBox.center();
 				dialogBox.show();
+
 			}else if(event.getSource().equals(invitesButton))
 			{
 				new HandleGroups().getGroupInvites();
