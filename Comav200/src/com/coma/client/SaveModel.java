@@ -4,10 +4,9 @@ import java.util.HashMap;
 
 import com.coma.client.widgets.CallbackHandler;
 import com.coma.client.widgets.MessageFrame;
-import com.coma.client.widgets.SuccessDialogBox;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.DialogBox;
+import com.sencha.gxt.widget.core.client.info.Info;
 
 public class SaveModel {
 
@@ -34,7 +33,6 @@ public class SaveModel {
 				oryxFrame.removeAllCallbackHandlers();
 				if (!data.get("action").equals("receiveshapes")) {
 					// Display error message that editor does not respond
-					System.out.println("This was a triumph, I'm making a note here: Not a success");
 					return;
 				}
 				// Save the model that is in variable "message" (very long string/text)
@@ -59,10 +57,7 @@ public class SaveModel {
 			}
 
 			public void onSuccess(Void result) {
-				SuccessDialogBox sdb = new SuccessDialogBox();
-				DialogBox dialogBox = sdb.successDialogBox("SAVE");
-				dialogBox.center();
-				dialogBox.show();
+				Info.display("Saved", "Save successful");
 				
 			}
 		});
@@ -77,10 +72,7 @@ public class SaveModel {
 			}
 
 			public void onSuccess(Void result) {
-				SuccessDialogBox sdb = new SuccessDialogBox();
-				DialogBox dialogBox = sdb.successDialogBox("PROPOSAL");
-				dialogBox.center();
-				dialogBox.show();
+				Info.display("Proposal", "Proposal has been sent");
 			}
 		});
 
