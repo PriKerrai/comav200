@@ -9,67 +9,96 @@ import com.coma.client.User;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.layout.client.Layout.Alignment;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.sencha.gxt.widget.core.client.Dialog;
+import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
+import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
+import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
+import com.sencha.gxt.widget.core.client.form.FieldLabel;
+import com.sencha.gxt.widget.core.client.form.TextField;
+import com.sencha.gxt.widget.core.client.info.Info;
 
-
+/**
+ * Creates the dialog for creating a new group
+ * @author Martin Nilsson and Johan Magnusson
+ *
+ */
 public class GroupDialogBox{
-	private TextBox nameBox;
+	private TextField nameBox;
 
 	private final DatabaseConnectionAsync databaseConnection = GWT
 			.create(DatabaseConnection.class);
 
-	public DialogBox createDialogBox(){
+	private Dialog dialog;
+
+	/**
+	 * 
+	 * @return the created dialog for creating a group
+	 */
+	public Dialog createDialogBox(){
 		// Create the popup dialog box
-		final DialogBox dialogBox = new DialogBox();
-		dialogBox.setAnimationEnabled(true);
-		dialogBox.setText("Create group");
+		dialog = new Dialog();
+		dialog.setHeadingText("Save as new group model");
+		dialog.setWidget(new HTML("Are you sure this is the diagram\n you want to accept as the new group model?\n"));
+		dialog.setPixelSize(300, 100);
+		dialog.setHideOnButtonClick(true);
+		dialog.setPredefinedButtons(PredefinedButton.YES, PredefinedButton.CANCEL);
 
-		final Button cancelButton = new Button("Cancel");
-		cancelButton.getElement().setId("cancelButton");
-		final Button sendButton = new Button("Send");
-		sendButton.getElement().setId("sendButton");
-		VerticalPanel dialogVPanel = new VerticalPanel();
-		dialogVPanel.addStyleName("dialogVPanel");
-		dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
+		VerticalLayoutContainer verticalLayoutContainer = new VerticalLayoutContainer();
+		verticalLayoutContainer.addStyleName("dialogVPanel");
 
-		dialogVPanel.add(new Label("Group name:"));
+		nameBox = new TextField();
+		nameBox.setAllowBlank(false);
+		nameBox.setEmptyText("Enter the group name...");
 
-		nameBox = new TextBox();
+	    verticalLayoutContainer.add(new FieldLabel(nameBox, "Group Name"), new VerticalLayoutData(1, -1));
+		
+		dialog.setWidget(verticalLayoutContainer);
 
-		dialogVPanel.add(nameBox);
-
-		dialogVPanel.add(cancelButton);
-		dialogVPanel.add(sendButton);
-		dialogBox.setWidget(dialogVPanel);
-
-		// Add a handler to close the DialogBox
-		sendButton.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				String groupName = nameBox.getText();
+		// Add a handler to create the new group
+		dialog.getButton(PredefinedButton.YES).addSelectHandler(new SelectHandler() {
+			
+			@Override
+			public void onSelect(SelectEvent event) {
+				// TODO Auto-generated method stub
+				String groupName = nameBox.getValue();
 				int userID = User.getInstance().getUserId();
 				java.util.Date date = new Date();
 
 				createNewGroup(userID, groupName);
 
-				dialogBox.hide();
-
+				dialog.hide();
+				
 			}
 		});
-		cancelButton.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				dialogBox.hide();
-
+		//Add a handler to close the dialog
+		dialog.getButton(PredefinedButton.CANCEL).addSelectHandler(new SelectHandler() {
+			@Override
+			public void onSelect(SelectEvent event) {
+				System.out.println("Hejsan, CANCEL");
+				dialog.hide();
 			}
 		});
 
-		return dialogBox;
+		dialog.show();
+		return dialog;
+
 	}
 
+	/**
+	 * 
+	 * @param userID The userID of the logged in user
+	 * @param groupName The specified group name that the user has inputed 
+	 */
 	public void createNewGroup(int userID, String groupName) {
 
 		databaseConnection.createNewGroup(userID, groupName, new AsyncCallback<Integer>() {

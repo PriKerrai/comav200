@@ -14,6 +14,12 @@ import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.HasSelectHandlers;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
 
+/**
+ * Creates the dialog for accepting a proposal as the new group model. 
+ * @author Martin Nilsson and Johan Magnusson
+ *
+ */
+
 public class AcceptProposalDialog {
 
 	Dialog dialog = new Dialog();
@@ -36,6 +42,10 @@ public class AcceptProposalDialog {
 	private final DatabaseConnectionAsync databaseConnection = GWT
 			.create(DatabaseConnection.class);
 
+	/**
+	 * 
+	 * @return the dialog for accepting the proposal as the new group model
+	 */
 	public Dialog acceptProposalDialog() {
 
 		dialog = new Dialog();
@@ -71,6 +81,12 @@ public class AcceptProposalDialog {
 
 	}
 
+	/**
+	 * 
+	 * @param activeGroupID The activeGroupID that the current user has selected
+	 * @param modelID	The modelID of the proposed model
+	 * @param version	AutoIncremented versionID
+	 */
 	public void updateActiveGroupModel(int activeGroupID, int modelID, String version) {
 		databaseConnection.updateActiveGroupModel(activeGroupID, modelID, version, new AsyncCallback<Void>() {
 			public void onFailure(Throwable caught) {

@@ -123,6 +123,76 @@ public class Comav200 {
 		RootPanel.get("mainDiv").add(logIn.screen());
 	}
 	
+	class MyHandler implements ClickHandler{
+
+		@Override
+		public void onClick(ClickEvent event) {
+
+			if(event.getSource().equals(createGroupButton)){
+				GroupDialogBox gdb = new GroupDialogBox();
+				Dialog dialogBox = gdb.createDialogBox();
+				dialogBox.center();
+				dialogBox.show();
+			}
+			else if(event.getSource().equals(switchGroupButton)){
+				new HandleGroups().getUsersGroups();
+			}
+			else if(event.getSource().equals(inviteGroupButton)){
+				InviteToGroupDialogBox itgdb = new InviteToGroupDialogBox();
+				Dialog dialogBox = itgdb.createInviteToGroupDialog();
+				dialogBox.center();
+				dialogBox.show();
+			}
+			else if(event.getSource().equals(newModelButton)){
+				model = new ModelInfo();
+				NewModelDialogBox nmdb = new NewModelDialogBox();
+				DialogBox dialogBox = nmdb.createDialogBox();
+				dialogBox.center();
+				dialogBox.show();
+			}
+			else if(event.getSource().equals(saveModelButton)){
+				model.setIsProposal(0);
+				new SaveModel().saveModel(oryxFrame);
+			}
+			else if(event.getSource().equals(loadModelButton)){
+				//new LoadModel().getModelsFromDatabase(2,oryxFrame);
+				getLoadModelCellListData();
+			}
+			else if(event.getSource().equals(proposeButton)){
+				model.setIsProposal(1);
+				new SaveModel().saveModel(oryxFrame);
+			}
+			else if(event.getSource().equals(importModelButton)){
+
+			}
+			else if(event.getSource().equals(exportModelButton)){
+
+			}
+			else if(event.getSource().equals(writeCommentButton)){
+				WriteCommentDialogBox wcdb = new WriteCommentDialogBox(activeModelID);
+
+			}
+			else if(event.getSource().equals(voteButtonButton)){
+				VoteDialogBox vdb = new VoteDialogBox(activeModelID);
+				DialogBox dialogBox = vdb.createDialogBox();
+				dialogBox.center();
+				dialogBox.show();
+			}
+			else if(event.getSource().equals(acceptProposalButton)){
+				AcceptProposalDialog apdb = new AcceptProposalDialog();
+				apdb.setModelID(activeModelID);
+				Dialog dialogBox = apdb.acceptProposalDialog();
+				dialogBox.center();
+				dialogBox.show();
+
+			}else if(event.getSource().equals(invitesButton))
+			{
+				new HandleGroups().getGroupInvites();
+			}
+
+		}
+	}
+
 	public TabPanel initTabPanel(){
 		getUserProfile(User.getInstance().getUserId());
 		final TabPanel panel = new TabPanel();
@@ -349,7 +419,7 @@ public class Comav200 {
 			@Override
 			public void onSelect(SelectEvent event) {
 				GroupDialogBox gdb = new GroupDialogBox();
-				DialogBox dialogBox = gdb.createDialogBox();
+				Dialog dialogBox = gdb.createDialogBox();
 				dialogBox.center();
 				dialogBox.show();
 				
@@ -361,7 +431,7 @@ public class Comav200 {
 			@Override
 			public void onSelect(SelectEvent event) {
 				InviteToGroupDialogBox itgdb = new InviteToGroupDialogBox();
-				DialogBox dialogBox = itgdb.createDialogBox();
+				Dialog dialogBox = itgdb.createInviteToGroupDialog();
 				dialogBox.center();
 				dialogBox.show();
 				

@@ -8,55 +8,69 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.sencha.gxt.widget.core.client.Dialog;
+import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
+import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
+import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
+import com.sencha.gxt.widget.core.client.form.FieldLabel;
+import com.sencha.gxt.widget.core.client.form.TextField;
 
 public class InviteToGroupDialogBox {
     
     private final DatabaseConnectionAsync databaseConnection = GWT
                     .create(DatabaseConnection.class);
+	private Dialog dialog;
+	private TextField emailTextBox;
    
-    public DialogBox createDialogBox(){
-    		// Create the popup dialog box
-            final DialogBox dialogBox = new DialogBox();
-            dialogBox.setAnimationEnabled(true);
-            dialogBox.setText("Invite to group");
-           
-            final Button sendButton = new Button("Send invite");
-            sendButton.getElement().setId("sendButton");
-            final Button cancelButton = new Button("Cancel");
-    		cancelButton.getElement().setId("cancelButton");
-            
-            final TextBox emailBox = new TextBox();
-            
-            VerticalPanel dialogVPanel = new VerticalPanel();
-            dialogVPanel.addStyleName("dialogVPanel");
-            dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
-           
-            dialogVPanel.add(new Label("Email"));
-            dialogVPanel.add(emailBox);
-            dialogVPanel.add(cancelButton);
-            dialogVPanel.add(sendButton);
-            dialogBox.setWidget(dialogVPanel);
+    public Dialog createInviteToGroupDialog(){
+    	// Create the popup dialog box
+    			dialog = new Dialog();
+    			dialog.setHeadingText("Invite to group");
+    			dialog.setWidget(new HTML("Invite a user to join your group?"));
+    			dialog.setPixelSize(300, 100);
+    			dialog.setHideOnButtonClick(true);
+    			dialog.setPredefinedButtons(PredefinedButton.YES, PredefinedButton.CANCEL);
 
-            // Add a handler to close the DialogBox
-            sendButton.addClickHandler(new ClickHandler() {
-                    public void onClick(ClickEvent event) {
-                    	String email = emailBox.getText();
-                    	new HandleGroups().sendGroupInvite(email);
-                        dialogBox.hide();
+    			dialog.getButtonBar().getItemByItemId("YES").setTitle("changed");
+    			
+    			VerticalLayoutContainer verticalLayoutContainer = new VerticalLayoutContainer();
+    			verticalLayoutContainer.addStyleName("dialogVPanel");
 
-                    }
-            });
-            
-            cancelButton.addClickHandler(new ClickHandler() {
-				public void onClick(ClickEvent event) {
-					dialogBox.hide();
+    			emailTextBox = new TextField();
+    			emailTextBox.setAllowBlank(false);
+    			emailTextBox.setEmptyText("Enter email to invite...");
+    		    verticalLayoutContainer.add(new FieldLabel(emailTextBox, "Email: "), new VerticalLayoutData(1, -1));
+    		    
 
-				}
-			});
-           
-            return dialogBox;
+    		    dialog.setWidget(verticalLayoutContainer);
+
+    			// Add a handler to create the new group
+    			dialog.getButton(PredefinedButton.YES).addSelectHandler(new SelectHandler() {
+    				
+    				@Override
+    				public void onSelect(SelectEvent event) {
+    					// TODO Auto-generated method stub
+    					System.out.println("Send email in the future");
+    					dialog.hide();
+    					
+    				}
+    			});
+    			//Add a handler to close the dialog
+    			dialog.getButton(PredefinedButton.CANCEL).addSelectHandler(new SelectHandler() {
+    				@Override
+    				public void onSelect(SelectEvent event) {
+    					dialog.hide();
+    				}
+    			});
+
+    			dialog.show();
+    			return dialog;
     }
+
 }
