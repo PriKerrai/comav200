@@ -17,26 +17,26 @@ import com.coma.client.widgets.VoteCellList;
 import com.coma.client.widgets.VoteDialogBox;
 import com.coma.client.widgets.WriteCommentDialogBox;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
 import com.google.gwt.user.client.rpc.InvocationException;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.Dialog;
+import com.sencha.gxt.widget.core.client.TabItemConfig;
+import com.sencha.gxt.widget.core.client.TabPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
+
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -123,87 +123,54 @@ public class Comav200 {
 		RootPanel.get("mainDiv").add(logIn.screen());
 	}
 	
-	class MyHandler implements ClickHandler{
-
-		@Override
-		public void onClick(ClickEvent event) {
-
-			if(event.getSource().equals(createGroupButton)){
-				GroupDialogBox gdb = new GroupDialogBox();
-				Dialog dialogBox = gdb.createDialogBox();
-				dialogBox.center();
-				dialogBox.show();
-			}
-			else if(event.getSource().equals(switchGroupButton)){
-				new HandleGroups().getUsersGroups();
-			}
-			else if(event.getSource().equals(inviteGroupButton)){
-				InviteToGroupDialogBox itgdb = new InviteToGroupDialogBox();
-				Dialog dialogBox = itgdb.createInviteToGroupDialog();
-				dialogBox.center();
-				dialogBox.show();
-			}
-			else if(event.getSource().equals(newModelButton)){
-				model = new ModelInfo();
-				NewModelDialogBox nmdb = new NewModelDialogBox();
-				DialogBox dialogBox = nmdb.createDialogBox();
-				dialogBox.center();
-				dialogBox.show();
-			}
-			else if(event.getSource().equals(saveModelButton)){
-				model.setIsProposal(0);
-				new SaveModel().saveModel(oryxFrame);
-			}
-			else if(event.getSource().equals(loadModelButton)){
-				//new LoadModel().getModelsFromDatabase(2,oryxFrame);
-				getLoadModelCellListData();
-			}
-			else if(event.getSource().equals(proposeButton)){
-				model.setIsProposal(1);
-				new SaveModel().saveModel(oryxFrame);
-			}
-			else if(event.getSource().equals(importModelButton)){
-
-			}
-			else if(event.getSource().equals(exportModelButton)){
-
-			}
-			else if(event.getSource().equals(writeCommentButton)){
-				WriteCommentDialogBox wcdb = new WriteCommentDialogBox(activeModelID);
-
-			}
-			else if(event.getSource().equals(voteButtonButton)){
-				VoteDialogBox vdb = new VoteDialogBox(activeModelID);
-				DialogBox dialogBox = vdb.createDialogBox();
-				dialogBox.center();
-				dialogBox.show();
-			}
-			else if(event.getSource().equals(acceptProposalButton)){
-				AcceptProposalDialog apdb = new AcceptProposalDialog();
-				apdb.setModelID(activeModelID);
-				Dialog dialogBox = apdb.acceptProposalDialog();
-				dialogBox.center();
-				dialogBox.show();
-
-			}else if(event.getSource().equals(invitesButton))
-			{
-				new HandleGroups().getGroupInvites();
-			}
-
-		}
-	}
 
 	public TabPanel initTabPanel(){
 		getUserProfile(User.getInstance().getUserId());
 		final TabPanel panel = new TabPanel();
+		
 		panel.add(initMyModelView(), "My Model");
 		panel.add(initGroupModelView(), "Group Model");
 		panel.add(initProposalView(), "Proposals");	
 		panel.add(initPreferencesView(), "Preferences");	
-		panel.setSize("100%", "100%");
-		panel.selectTab(0);
+		panel.setSize("100%", "100%");	
 		
+		SelectionHandler<Widget> handler = new SelectionHandler<Widget>() {
+	        @Override
+	        public void onSelection(SelectionEvent<Widget> event) {
+	          TabPanel panel = (TabPanel) event.getSource();
+	          Widget w = event.getSelectedItem();
+	          int tabID = panel.getWidgetIndex(w);
+	          Panel p = (Panel)panel.getWidget(tabID);
+	          
+	          if (tabID == 0 || tabID == 1) {
+					p.add(oryxFrame);
+						if(tabID == 1){
+							oryxFrame.setVisible(true);
+							new LoadModel().getActiveGroupModelFromDatabase(oryxFrame);
+						}
+					}
+					
+					if (tabID == 2) {
+						p.clear();
+						p.add(initProposalView());
+						DockPanel dockPanel = new DockPanel();
+						dockPanel.setWidth("100%");
+						dockPanel.add(oryxFrame, DockPanel.CENTER);
+						getVoteMapData(dockPanel);
+						p.add(dockPanel);
+					}
+					if (tabID == 3) {
+						if(isFirstTime){
+							p.add(editProfile.screen(userProfile));
+							isFirstTime = false;
+						}
+					}
+			}};
+	          
+	      
+	      panel.addSelectionHandler(handler);
 		
+		/*
 		panel.addSelectionHandler(new SelectionHandler<Integer>(){
 			@Override
 			public void onSelection(SelectionEvent<Integer> event) {
@@ -234,7 +201,7 @@ public class Comav200 {
 					}
 				}
 		}});
-		
+		*/
 		return panel;
 	}
 
@@ -549,7 +516,7 @@ public class Comav200 {
 		initializeOryxFrame();
 		panel.add(topMenuButtonsMyModelView());
 		panel.add(oryxFrame);
-		oryxFrame.setVisible(false);
+		oryxFrame.setVisible(true);
 		return panel;
 	}
 	
