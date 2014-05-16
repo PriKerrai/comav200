@@ -499,9 +499,9 @@ public class Comav200 {
 				// TODO Auto-generated method stub
 				LoadModelCellList.setModelInfoList(result);
 				LoadModelDialogBox lmdb = new LoadModelDialogBox();
-				DialogBox dialogBox = lmdb.createDialogBox(loadModelCellList.loadModelPanel());
-				dialogBox.center();
-				dialogBox.show();
+				Dialog dialog = lmdb.createDialogBox(loadModelCellList.loadModelPanel());
+				dialog.center();
+				dialog.show();
 				
 			}
 

@@ -7,19 +7,26 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.sencha.gxt.widget.core.client.Dialog;
+import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
+import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
 
 public class LoadModelDialogBox {
 
-	public DialogBox createDialogBox(CellList<String> cellList){
+	Dialog dialog = new Dialog();
+	
+	
+	
+	
+	public Dialog createDialogBox(CellList<String> cellList){
 		// Create the popup dialog box
-		final DialogBox dialogBox = new DialogBox();
-		dialogBox.setAnimationEnabled(true);
-		dialogBox.setText("Select model");
+		
+		dialog.setHeadingText("Select model");
+		dialog.setPixelSize(400, 300);
+		dialog.setHideOnButtonClick(true);
+		dialog.setPredefinedButtons(PredefinedButton.CLOSE);
 
-		final Button sendButton = new Button("Send");
-		sendButton.getElement().setId("sendButton");
-		final Button closeButton = new Button("Close");
-		closeButton.getElement().setId("closeButton");
 		VerticalPanel dialogVPanel = new VerticalPanel();
 		dialogVPanel.addStyleName("dialogVPanel");
 		dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
@@ -27,17 +34,19 @@ public class LoadModelDialogBox {
 		ScrollPanel scrollPanel = new ScrollPanel(cellList);
 		scrollPanel.setHeight("300px");
 		dialogVPanel.add(scrollPanel);
-		dialogVPanel.add(closeButton);
-		dialogBox.setWidget(dialogVPanel);
+		dialog.setWidget(dialogVPanel);
 
-		closeButton.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				dialogBox.hide();
+		dialog.getButton(PredefinedButton.CLOSE).addSelectHandler(new SelectHandler(){
 
+			@Override
+			public void onSelect(SelectEvent event) {
+				dialog.hide();
+				
 			}
+			
 		});
 
-		return dialogBox;
+		return dialog;
 	}
 
 }
