@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
 import com.sencha.gxt.widget.core.client.Slider;
+import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
@@ -64,7 +65,6 @@ public class VoteDialogBox{
 		verticalLayoutContainer.add(new FieldLabel(slider, "Your vote:"), new VerticalLayoutData(1, -1));
 
 		dialog.setWidget(verticalLayoutContainer);
-		
 		
 		dialog.getButton(PredefinedButton.YES).addSelectHandler(new SelectHandler() {
 			@Override
