@@ -2,11 +2,9 @@ package com.coma.client.widgets;
 
 
 import com.coma.client.Comav200;
-import com.coma.client.DatabaseConnection;
-import com.coma.client.DatabaseConnectionAsync;
 import com.coma.client.ModelInfo;
 import com.coma.client.SaveModel;
-import com.google.gwt.core.client.GWT;
+import com.coma.client.User;
 import com.google.gwt.user.client.ui.Label;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
@@ -27,11 +25,10 @@ public class SendProposalDialog {
 		// Create the popup dialog box
 		dialog = new Dialog();
 		dialog.setHeadingText("Send proposal?");
-		dialog.add(new Label("Do you wish to send proposal for group: "));
+		dialog.add(new Label("Do you wish to send proposal for group: " + User.getInstance().getActiveGroupID()));
 		dialog.setPixelSize(300, 100);
 		dialog.setHideOnButtonClick(true);
 		dialog.setPredefinedButtons(PredefinedButton.YES, PredefinedButton.CANCEL);
-
 
 		// Add a handler to create the new group
 		dialog.getButton(PredefinedButton.YES).addSelectHandler(new SelectHandler() {

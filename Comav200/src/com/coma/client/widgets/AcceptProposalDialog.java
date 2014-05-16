@@ -58,7 +58,6 @@ public class AcceptProposalDialog {
 		dialog.getButton(PredefinedButton.YES).addSelectHandler(new SelectHandler() {
 			@Override
 			public void onSelect(SelectEvent event) {
-				System.out.println("Hejsan, YES");
 				 int activeGroupID = User.getInstance().getActiveGroupID();
                  int modelID = getModelID();
                  String version = "420";
@@ -71,7 +70,6 @@ public class AcceptProposalDialog {
 		dialog.getButton(PredefinedButton.CANCEL).addSelectHandler(new SelectHandler() {
 			@Override
 			public void onSelect(SelectEvent event) {
-				System.out.println("Hejsan, CANCEL");
 				dialog.hide();
 			}
 		});

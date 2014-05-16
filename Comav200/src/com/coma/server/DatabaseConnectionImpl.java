@@ -119,7 +119,7 @@ DatabaseConnection {
 		Connection dbCon = null;
 
 		List<ModelInfo> modelInfoList = new ArrayList<ModelInfo>();
-
+		System.out.println(" :modelid");
 		int modelID;
 		int modelGroupID;
 		int modelCreator;
@@ -133,9 +133,9 @@ DatabaseConnection {
 		try{
 			dbCon = initializeDBConnection(); 
 			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
-			preparedStatement.setInt(1, 1);
+			preparedStatement.setInt(1, activeGroup);
 			preparedStatement.setInt(2, 1);
-
+			System.out.println(activeGroup + " :activeGroup");
 			ResultSet rs = preparedStatement.executeQuery();
 			while (rs.next()) {
 				modelID = rs.getInt("modelID");
@@ -146,7 +146,7 @@ DatabaseConnection {
 				modelName	 = rs.getString("modelName");
 				IsProposal = rs.getInt("isProposal");
 				modelCreationDate = rs.getString("creationDate");
-
+				System.out.println(modelID+ " :modelid");
 				ModelInfo mI = new ModelInfo(modelID, modelGroupID, modelCreator,modelType,modelString,modelName,IsProposal,modelCreationDate);
 				modelInfoList.add(mI);
 			}

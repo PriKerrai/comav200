@@ -266,9 +266,7 @@ public class Comav200 {
 				Dialog dialog = new SendProposalDialog(oryxFrame).createDialogBox();
 				dialog.center();
 				dialog.show();
-				
-				
-				
+						
 			}
 			
 		});
@@ -462,8 +460,7 @@ public class Comav200 {
 	
 	public void getVoteMapData (DockPanel dPanel) {
 		final DockPanel dockPanel = dPanel;
-		int groupID = 1;
-		databaseConnection.getAllModelsFromSpecificGroupThatIsProposed(groupID, new AsyncCallback<List<ModelInfo>>() {
+		databaseConnection.getAllModelsFromSpecificGroupThatIsProposed(User.getInstance().getActiveGroupID(), new AsyncCallback<List<ModelInfo>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -486,9 +483,9 @@ public class Comav200 {
 			public void onSuccess(List<ModelInfo> result) {
 				// TODO Auto-generated method stub
 				VoteCellList.setModelInfoList(result);
+				System.out.println(result);
 				dockPanel.add(voteCellList.votingPanel(), DockPanel.EAST);
 			}
-
 		});
 	}
 	
