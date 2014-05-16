@@ -14,6 +14,7 @@ import com.coma.client.widgets.LoadModelDialogBox;
 import com.coma.client.widgets.MessageFrame;
 import com.coma.client.widgets.NameModelDialog;
 import com.coma.client.widgets.NewModelDialogBox;
+import com.coma.client.widgets.SendProposalDialog;
 import com.coma.client.widgets.ShowVotesOnProposalDialog;
 import com.coma.client.widgets.VoteCellList;
 import com.coma.client.widgets.VoteDialogBox;
@@ -262,8 +263,11 @@ public class Comav200 {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				model.setIsProposal(1);
-				new SaveModel().saveModel(oryxFrame);
+				Dialog dialog = new SendProposalDialog(oryxFrame).createDialogBox();
+				dialog.center();
+				dialog.show();
+				
+				
 				
 			}
 			

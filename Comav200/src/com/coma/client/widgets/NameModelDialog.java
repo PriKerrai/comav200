@@ -30,7 +30,6 @@ public class NameModelDialog {
 	}
 
 
-
 	public Dialog createDialogBox(){
 		// Create the popup dialog box
 		dialog = new Dialog();
