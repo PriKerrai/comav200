@@ -2,8 +2,10 @@ package com.coma.client.widgets;
 
 import java.util.List;
 
+import com.coma.client.Comav200;
 import com.coma.client.DatabaseConnection;
 import com.coma.client.DatabaseConnectionAsync;
+import com.coma.client.ModelInfo;
 import com.coma.client.User;
 import com.coma.client.WorkGroupInfo;
 import com.google.gwt.core.client.GWT;
@@ -11,55 +13,63 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.sencha.gxt.widget.core.client.Dialog;
+import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
+import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
+import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
+import com.sencha.gxt.widget.core.client.form.FieldLabel;
 
 public class SwitchGroupDialogBox {
 	private ListBox groupBox;
     private final DatabaseConnectionAsync databaseConnection = GWT
                     .create(DatabaseConnection.class);
+	private Dialog dialog;
    
-    public DialogBox createDialogBox(List<WorkGroupInfo> groups){
+    public Dialog createDialogBox(List<WorkGroupInfo> groups){
     		// Create the popup dialog box
+    			dialog = new Dialog();
+    			dialog.setHeadingText("Switch active group");
+    			dialog.setPixelSize(300, 100);
+    			dialog.setHideOnButtonClick(true);
+    			dialog.setPredefinedButtons(PredefinedButton.YES, PredefinedButton.CANCEL);
+
+    			VerticalLayoutContainer verticalLayoutContainer = new VerticalLayoutContainer();
+    			verticalLayoutContainer.addStyleName("dialogVPanel");
+    	
+    	
     		final List<WorkGroupInfo> groupList = groups;
-            final DialogBox dialogBox = new DialogBox();
-            dialogBox.setAnimationEnabled(true);
-            dialogBox.setText("Switch active group");
-           
-            final Button sendButton = new Button("Send");
-            sendButton.getElement().setId("sendButton");
-            final Button cancelButton = new Button("Cancel");
-    		cancelButton.getElement().setId("cancelButton");
-            VerticalPanel dialogVPanel = new VerticalPanel();
-            dialogVPanel.addStyleName("dialogVPanel");
-            dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
-           
             groupBox = new ListBox();
             for(WorkGroupInfo wgi: groupList){
             	groupBox.addItem(wgi.getWorkGroupName());
             }
-            
-            dialogVPanel.add(new Label("Choose group"));
-            dialogVPanel.add(groupBox);
-            dialogVPanel.add(cancelButton);
-            dialogVPanel.add(sendButton);
-            dialogBox.setWidget(dialogVPanel);
+            verticalLayoutContainer.add(new FieldLabel(groupBox, "Choose group"), new VerticalLayoutData(1, -1));
+            dialog.setWidget(verticalLayoutContainer);
 
-            // Add a handler to close the DialogBox
-            sendButton.addClickHandler(new ClickHandler() {
-                    public void onClick(ClickEvent event) {
-                    	User.getInstance().setActiveGroupID(groupList.get(groupBox.getSelectedIndex()).getWorkGroupID());
-                        dialogBox.hide();
-                    }
-            });
-            cancelButton.addClickHandler(new ClickHandler() {
-    			public void onClick(ClickEvent event) {
-    				dialogBox.hide();
+            
+        	dialog.getButton(PredefinedButton.YES).addSelectHandler(new SelectHandler() {
+    			@Override
+    			public void onSelect(SelectEvent event) {
+    				// TODO Auto-generated method stub
+    				User.getInstance().setActiveGroupID(groupList.get(groupBox.getSelectedIndex()).getWorkGroupID());
+                    dialog.hide();
 
     			}
     		});
-            return dialogBox;
+    		//Add a handler to close the dialog
+    		dialog.getButton(PredefinedButton.CANCEL).addSelectHandler(new SelectHandler() {
+    			@Override
+    			public void onSelect(SelectEvent event) {
+    				System.out.println("Hejsan, CANCEL");
+    				dialog.hide();
+    			}
+    		});
+            return dialog;
     }
     
 }

@@ -1,9 +1,12 @@
 package com.coma.client.widgets;
 
+import java.util.Date;
 import java.util.List;
 
+import com.coma.client.Comav200;
 import com.coma.client.DatabaseConnection;
 import com.coma.client.DatabaseConnectionAsync;
+import com.coma.client.ModelInfo;
 import com.coma.client.User;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -12,8 +15,15 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.sencha.gxt.widget.core.client.Dialog;
+import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
+import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
+import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
+import com.sencha.gxt.widget.core.client.form.FieldLabel;
+import com.sencha.gxt.widget.core.client.form.TextArea;
 
 
 public class WriteCommentDialogBox{
@@ -22,7 +32,9 @@ public class WriteCommentDialogBox{
 			.create(DatabaseConnection.class);
 
 	private int activeModelID;
-	private List<String> commentList; 
+	private List<String> commentList;
+
+	private Dialog dialog; 
 
 	public List<String> getCommentList() {
 		return commentList;
@@ -31,7 +43,7 @@ public class WriteCommentDialogBox{
 	public void setCommentList(List<String> commentList) {
 		this.commentList = commentList;
 	}
-	
+
 	public int getModelID() {
 		return activeModelID;
 	}
@@ -48,68 +60,60 @@ public class WriteCommentDialogBox{
 		getCommentsOnModel(activeModelID);
 	}
 
-	public DialogBox createDialogBox(){
+	public Dialog createDialogBox(){
 		// Create the popup dialog box
-		final DialogBox dialogBox = new DialogBox();
-		dialogBox.setAnimationEnabled(true);
-		dialogBox.setText("Write comment");
+		dialog = new Dialog();
+		dialog.setHeadingText("Leave and read comments on the model");
+		dialog.setHideOnButtonClick(true);
+		dialog.setPredefinedButtons(PredefinedButton.YES, PredefinedButton.CANCEL);
 
-		final Button sendButton = new Button("Send");
-		sendButton.getElement().setId("sendButton");
-		final Button closeButton = new Button("close");
-		closeButton.getElement().setId("closeButton");
+		VerticalLayoutContainer verticalLayoutContainer = new VerticalLayoutContainer();
+		verticalLayoutContainer.addStyleName("dialogVPanel");
 
-		VerticalPanel dialogVPanel = new VerticalPanel();
-		dialogVPanel.addStyleName("dialogVPanel");
-		dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
-
-		dialogVPanel.add(new Label("Write comment:"));
-		
 		final TextArea writeCommentTextArea = new TextArea();
-		writeCommentTextArea.setCharacterWidth(50);
-		writeCommentTextArea.setVisibleLines(10);
-		
+		writeCommentTextArea.setEmptyText("Write a comment...");
+		writeCommentTextArea.setPixelSize(500, 200);
+
 		final TextArea readCommentTextArea = new TextArea();
-		readCommentTextArea.setCharacterWidth(50);
-		readCommentTextArea.setVisibleLines(10);
+		readCommentTextArea.setEmptyText("Comments on the model will be shown here...");
+		readCommentTextArea.setPixelSize(500, 200);
 		
 		StringBuilder comments = new StringBuilder();
 		for (int i = 0; i < commentList.size(); i++) {
-				comments.append(commentList.get(i) + "\n");
-				
-			}
-		
+			comments.append(commentList.get(i) + "\n");
+		}
+
 		readCommentTextArea.setText(comments.toString());
+		readCommentTextArea.isEnabled();
 
-		dialogVPanel.add(readCommentTextArea);
-		dialogVPanel.add(writeCommentTextArea);
+		verticalLayoutContainer.add(new FieldLabel(writeCommentTextArea), new VerticalLayoutData(-1, -1));
+		verticalLayoutContainer.add(new FieldLabel(readCommentTextArea), new VerticalLayoutData(-1, -1));
 
-		dialogVPanel.add(sendButton);
-		dialogVPanel.add(closeButton);
-		dialogBox.setWidget(dialogVPanel);
-		dialogBox.setAnimationEnabled(false);
+		dialog.setWidget(verticalLayoutContainer);
 
-		// Add a handler to close the DialogBox
-		sendButton.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+		// Add a handler to create the new group
+		dialog.getButton(PredefinedButton.YES).addSelectHandler(new SelectHandler() {
+
+			@Override
+			public void onSelect(SelectEvent event) {
+				// TODO Auto-generated method stub
 				String comment = writeCommentTextArea.getText();
 				int userID = User.getInstance().getUserId();
 
 				addComment(userID, getModelID(), comment);
-				dialogBox.hide();
+				dialog.hide();
 
 			}
 		});
-
-		closeButton.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-
-				dialogBox.hide();
-
+		//Add a handler to close the dialog
+		dialog.getButton(PredefinedButton.CANCEL).addSelectHandler(new SelectHandler() {
+			@Override
+			public void onSelect(SelectEvent event) {
+				System.out.println("Hejsan, CANCEL");
+				dialog.hide();
 			}
 		});
-
-		return dialogBox;
+		return dialog;
 	}
 
 	protected void getCommentsOnModel(int modelID) {
@@ -120,16 +124,16 @@ public class WriteCommentDialogBox{
 
 			@Override
 			public void onSuccess(List<String> result) {
-				
+
 				setCommentList(result);
-				DialogBox dialogBox = createDialogBox();
+				Dialog dialogBox = createDialogBox();
 				dialogBox.center();
 				dialogBox.show();
 			}
 		});
 
 	}
-	
+
 	protected void addComment(int userID, int modelID, String comment) {
 
 		databaseConnection.addCommentToModel(userID, modelID, comment, new AsyncCallback<Void>() {

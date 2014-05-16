@@ -10,6 +10,7 @@ import com.coma.client.widgets.SwitchGroupDialogBox;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.sencha.gxt.widget.core.client.Dialog;
 
 public class HandleGroups {
 
@@ -125,7 +126,7 @@ public class HandleGroups {
 					public void onSuccess(List<WorkGroupInfo> result) {
 						SwitchGroupDialogBox sgdb = new SwitchGroupDialogBox();
 						
-						DialogBox dialogBox = sgdb.createDialogBox(result);
+						Dialog dialogBox = sgdb.createDialogBox(result);
 						dialogBox.center();
 						dialogBox.show();
 						

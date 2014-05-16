@@ -220,7 +220,7 @@ public class Comav200 {
 			public void onSelect(SelectEvent event) {
 				model = new ModelInfo();
 				NewModelDialogBox nmdb = new NewModelDialogBox();
-				DialogBox dialogBox = nmdb.createDialogBox();
+				Dialog dialogBox = nmdb.createDialogBox();
 				dialogBox.center();
 				dialogBox.show();
 				
@@ -332,7 +332,7 @@ public class Comav200 {
 			@Override
 			public void onSelect(SelectEvent event) {
 				VoteDialogBox vdb = new VoteDialogBox(activeModelID);
-				DialogBox dialogBox = vdb.createDialogBox();
+				Dialog dialogBox = vdb.createDialogBox();
 				dialogBox.center();
 				dialogBox.show();
 				

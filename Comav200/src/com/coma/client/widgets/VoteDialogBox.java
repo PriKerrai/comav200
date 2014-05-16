@@ -12,6 +12,14 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.sencha.gxt.widget.core.client.Dialog;
+import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
+import com.sencha.gxt.widget.core.client.Slider;
+import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
+import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
+import com.sencha.gxt.widget.core.client.form.FieldLabel;
 
 public class VoteDialogBox{
 	final ListBox listBox = new ListBox(); 
@@ -20,6 +28,7 @@ public class VoteDialogBox{
 	private final DatabaseConnectionAsync databaseConnection = GWT
 			.create(DatabaseConnection.class);
 	public int activeModelID;
+	private Dialog dialog;
 
 	public int getModelID() {
 		return activeModelID;
@@ -36,56 +45,48 @@ public class VoteDialogBox{
 		setModelID(modelID);
 	}
 
-	public DialogBox createDialogBox(){
+	public Dialog createDialogBox(){
 		// Create the popup dialog box
-		final DialogBox dialogBox = new DialogBox();
-		dialogBox.setAnimationEnabled(true);
-		dialogBox.setText("Leave a vote");
+		dialog = new Dialog();
+		dialog.setHeadingText("Leave a vote");
+		dialog.setPixelSize(300, 150);
+		dialog.setHideOnButtonClick(true);
+		dialog.setPredefinedButtons(PredefinedButton.YES, PredefinedButton.CANCEL);
 
-		final Button sendButton = new Button("Send");
-		sendButton.getElement().setId("sendButton");
-		final Button closeButton = new Button("close");
-		closeButton.getElement().setId("closeButton");
+		VerticalLayoutContainer verticalLayoutContainer = new VerticalLayoutContainer();
+		verticalLayoutContainer.addStyleName("dialogVPanel");
 
-		VerticalPanel dialogVPanel = new VerticalPanel();
-		dialogVPanel.addStyleName("dialogVPanel");
-		dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
+		final Slider slider = new Slider();
+		slider.setMinValue(0);
+		slider.setMaxValue(10);
+		slider.setIncrement(1);
+		slider.setValue(5);
+		verticalLayoutContainer.add(new FieldLabel(slider, "Your vote:"), new VerticalLayoutData(1, -1));
 
-		dialogVPanel.add(new Label("Write comment:"));
-
-		// Initialize the List with data from Item0
-		for (int i = 0; i < Items.length; i++) {
-			listBox.addItem(Items[i]);
-		}
-
-		listBox.setVisibleItemCount(1);	        
-
-		dialogVPanel.add(listBox);
-
-		dialogVPanel.add(sendButton);
-		dialogVPanel.add(closeButton);
-		dialogBox.setWidget(dialogVPanel);
-		dialogBox.setAnimationEnabled(false);
-
-		// Add a handler to close the DialogBox
-		sendButton.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+		dialog.setWidget(verticalLayoutContainer);
+		
+		
+		dialog.getButton(PredefinedButton.YES).addSelectHandler(new SelectHandler() {
+			@Override
+			public void onSelect(SelectEvent event) {
+				// TODO Auto-generated method stub
 				int index = listBox.getSelectedIndex();
 				int userID = User.getInstance().getUserId();
 				addVoteToModel(userID, getModelID(), index);
-				dialogBox.hide();
+				dialog.hide();
 
 			}
 		});
-
-		closeButton.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-
-				dialogBox.hide();
+		//Add a handler to close the dialog
+		dialog.getButton(PredefinedButton.CANCEL).addSelectHandler(new SelectHandler() {
+			@Override
+			public void onSelect(SelectEvent event) {
+				System.out.println("Hejsan, CANCEL");
+				dialog.hide();
 			}
 		});
 
-		return dialogBox;
+		return dialog;
 	}
 
 	protected void addVoteToModel(int userID, int modelID, int index) {
