@@ -47,8 +47,7 @@ public class GroupDialogBox{
 	public Dialog createDialogBox(){
 		// Create the popup dialog box
 		dialog = new Dialog();
-		dialog.setHeadingText("Save as new group model");
-		dialog.setWidget(new HTML("Are you sure this is the diagram\n you want to accept as the new group model?\n"));
+		dialog.setHeadingText("Create new group");
 		dialog.setPixelSize(300, 100);
 		dialog.setHideOnButtonClick(true);
 		dialog.setPredefinedButtons(PredefinedButton.YES, PredefinedButton.CANCEL);
@@ -58,7 +57,7 @@ public class GroupDialogBox{
 
 		nameBox = new TextField();
 		nameBox.setAllowBlank(false);
-		nameBox.setEmptyText("Enter the group name...");
+		nameBox.setEmptyText("Enter group name");
 
 	    verticalLayoutContainer.add(new FieldLabel(nameBox, "Group Name"), new VerticalLayoutData(1, -1));
 		

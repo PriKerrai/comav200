@@ -55,6 +55,8 @@ public class HandleGroupInvitesCellList {
 
 	public CellList<String> loadModelPanel()
 	{		
+	
+		
 		// Create a CellList.
 		CellList<String> cellList = new CellList<String>(new TextCell());
 

@@ -41,17 +41,16 @@ public class NewModelDialogBox {
 		// Create the popup dialog box
 		dialog = new Dialog();
 		dialog.setHeadingText("Create new model");
-		dialog.setWidget(new HTML("Create a new model?\n"));
 		dialog.setPixelSize(300, 100);
 		dialog.setHideOnButtonClick(true);
-		dialog.setPredefinedButtons(PredefinedButton.YES, PredefinedButton.CANCEL);
+		dialog.setPredefinedButtons(PredefinedButton.OK, PredefinedButton.CANCEL);
 
 		VerticalLayoutContainer verticalLayoutContainer = new VerticalLayoutContainer();
 		verticalLayoutContainer.addStyleName("dialogVPanel");
 
 		modelNameBox = new TextField();
 		modelNameBox.setAllowBlank(false);
-		modelNameBox.setEmptyText("Enter the group name...");
+		modelNameBox.setEmptyText("Enter model name");
 
 		verticalLayoutContainer.add(new FieldLabel(modelNameBox, "Model name"), new VerticalLayoutData(1, -1));
 		
@@ -65,7 +64,7 @@ public class NewModelDialogBox {
 		dialog.setWidget(verticalLayoutContainer);
 
 		// Add a handler to create the new group
-		dialog.getButton(PredefinedButton.YES).addSelectHandler(new SelectHandler() {
+		dialog.getButton(PredefinedButton.OK).addSelectHandler(new SelectHandler() {
 
 			@Override
 			public void onSelect(SelectEvent event) {
@@ -81,7 +80,6 @@ public class NewModelDialogBox {
 		dialog.getButton(PredefinedButton.CANCEL).addSelectHandler(new SelectHandler() {
 			@Override
 			public void onSelect(SelectEvent event) {
-				System.out.println("Hejsan, CANCEL");
 				dialog.hide();
 			}
 		});

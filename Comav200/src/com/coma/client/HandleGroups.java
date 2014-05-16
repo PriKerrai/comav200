@@ -78,9 +78,9 @@ public class HandleGroups {
 						HandleGroupInvitesCellList invitesList = new HandleGroupInvitesCellList();
 						HandleGroupInvitesCellList.setInviteList(result);
 						HandleGroupInvitesDialogBox hgidb = new HandleGroupInvitesDialogBox();
-						DialogBox dialogBox = hgidb.createDialogBox(invitesList.loadModelPanel());
-						dialogBox.center();
-						dialogBox.show();
+						Dialog dialog = hgidb.createDialogBox(invitesList.loadModelPanel());
+						dialog.center();
+						dialog.show();
 						
 					}
 				});

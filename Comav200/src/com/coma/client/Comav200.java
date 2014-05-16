@@ -12,6 +12,7 @@ import com.coma.client.widgets.InviteToGroupDialogBox;
 import com.coma.client.widgets.LoadModelCellList;
 import com.coma.client.widgets.LoadModelDialogBox;
 import com.coma.client.widgets.MessageFrame;
+import com.coma.client.widgets.NameModelDialog;
 import com.coma.client.widgets.NewModelDialogBox;
 import com.coma.client.widgets.VoteCellList;
 import com.coma.client.widgets.VoteDialogBox;
@@ -36,6 +37,7 @@ import com.sencha.gxt.widget.core.client.TabPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
+import com.sencha.gxt.chart.client.chart.*;
 
 
 /**
@@ -143,6 +145,7 @@ public class Comav200 {
 	          Panel p = (Panel)panel.getWidget(tabID);
 	          
 	          if (tabID == 0 || tabID == 1) {
+	        	  System.out.println("Actvegroupnr: " + User.getInstance().getActiveGroupID());
 					p.add(oryxFrame);
 						if(tabID == 1){
 							oryxFrame.setVisible(true);
@@ -219,10 +222,9 @@ public class Comav200 {
 			@Override
 			public void onSelect(SelectEvent event) {
 				model = new ModelInfo();
-				NewModelDialogBox nmdb = new NewModelDialogBox();
-				Dialog dialogBox = nmdb.createDialogBox();
-				dialogBox.center();
-				dialogBox.show();
+				Dialog dialog = new NewModelDialogBox().createDialogBox();
+				dialog.center();
+				dialog.show();
 				
 			}
 			
@@ -231,9 +233,17 @@ public class Comav200 {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				model.setIsProposal(0);
-				new SaveModel().saveModel(oryxFrame);
-				
+				if(!model.getModelName().equals("unknown")){
+					System.out.println(model.getModelName() + " :modelname");
+					model.setIsProposal(0);
+					new SaveModel().saveModel(oryxFrame);
+				} else{
+					System.out.println(model.getModelName() + " :modelname1");
+					NameModelDialog nmd = new NameModelDialog(oryxFrame);
+					Dialog dialog = nmd.createDialogBox();
+					dialog.center();
+					dialog.show();
+				}	
 			}
 			
 		});
