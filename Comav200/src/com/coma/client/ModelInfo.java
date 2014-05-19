@@ -9,7 +9,7 @@ public class ModelInfo implements IsSerializable {
 	private int modelCreator;
 	private int modelType;
 	private String modelString;
-	private String modelName;	
+	private String modelName = "unknown";	
 	private int IsProposal;
 	private String modelCreationDate;
 	private int groupModelVersion;

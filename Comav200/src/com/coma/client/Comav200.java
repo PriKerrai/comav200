@@ -483,7 +483,6 @@ public class Comav200 {
 			public void onSuccess(List<ModelInfo> result) {
 				// TODO Auto-generated method stub
 				VoteCellList.setModelInfoList(result);
-				System.out.println(result);
 				dockPanel.add(voteCellList.votingPanel(), DockPanel.EAST);
 			}
 		});
@@ -517,7 +516,6 @@ public class Comav200 {
 				Dialog dialog = lmdb.createDialogBox(loadModelCellList.loadModelPanel());
 				dialog.center();
 				dialog.show();
-				
 			}
 
 		});
