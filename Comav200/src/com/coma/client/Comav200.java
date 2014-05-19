@@ -102,6 +102,7 @@ public class Comav200 {
 
 	LogIn logIn = new LogIn();
 	SignUp signUp = new SignUp();
+	ShowVotesOnProposalDialog showVotesOnProposalDialog = new ShowVotesOnProposalDialog();
 	VoteCellList voteCellList = new VoteCellList();
 	LoadModelCellList loadModelCellList = new LoadModelCellList();
 	EditProfileView editProfile = new EditProfileView();
@@ -369,11 +370,8 @@ public class Comav200 {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				// TODO Auto-generated method stub
-				ShowVotesOnProposalDialog svopd = new ShowVotesOnProposalDialog();
-				Dialog dialogBox = svopd.showVotesOnProposalDialog();
-				dialogBox.center();
-				dialogBox.show();
+				getVotesOnModel(User.getInstance().getActiveGroupID());
+
 			}
 			
 		});
@@ -595,23 +593,27 @@ public class Comav200 {
 		});
 	}
 	
-	/**
-	*
-	*/
-	public void getVotesOnModel(int modelID) {
-		databaseConnection.getVotes(modelID, new AsyncCallback<List<Integer>>() {
+	public void getVotesOnModel(int groupID) {
+		databaseConnection.getVotes(groupID, new AsyncCallback<List<ProposalAvgVotes>>() {
+
+			@Override
 			public void onFailure(Throwable caught) {
 			}
 
 			@Override
-			public void onSuccess(List<Integer> result) {
-				double avgVote = calculateAverageVote(result);
-		
+			public void onSuccess(List<ProposalAvgVotes> result) {
+				ProposalAvgVotes propAvgVote = new ProposalAvgVotes();
+				propAvgVote.setUpBarChart(result);
+				showVotesOnProposalDialog.setProposalAvgVotesList(result);
+
+				Dialog dialogBox = showVotesOnProposalDialog.showVotesOnProposalDialog();
+				dialogBox.center();
+				dialogBox.show();
 			}
-			
+
 		});
 	}
-	
+
 	private double calculateAverageVote(List<Integer> votes){
 		if(votes.size() < 3){
 			return -1;
@@ -684,7 +686,6 @@ public class Comav200 {
 
 			@Override
 			public void onSuccess(Void result) {
-			
 			}
 
 		});

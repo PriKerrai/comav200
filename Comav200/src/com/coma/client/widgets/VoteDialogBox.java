@@ -70,7 +70,7 @@ public class VoteDialogBox{
 			@Override
 			public void onSelect(SelectEvent event) {
 				// TODO Auto-generated method stub
-				int index = listBox.getSelectedIndex();
+				int index = slider.getValue();
 				int userID = User.getInstance().getUserId();
 				addVoteToModel(userID, getModelID(), index);
 				dialog.hide();

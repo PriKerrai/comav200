@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 
 import com.coma.client.DatabaseConnection;
 import com.coma.client.ModelInfo;
+import com.coma.client.ProposalAvgVotes;
 import com.coma.client.WorkGroupInfo;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -666,9 +667,9 @@ DatabaseConnection {
 	}
 
 	@Override
-	public List<Integer> getVotes(int modelID) {
+	public List<ProposalAvgVotes> getVotes(int modelID) {
 		Connection dbCon = null;
-		List<Integer> votes = new ArrayList<Integer>();
+		List<ProposalAvgVotes> proposalAvgVotesList = new ArrayList<ProposalAvgVotes>();
 
 		String query = "SELECT * FROM votesonmodel WHERE modelID = ?";
 		try{
@@ -677,9 +678,12 @@ DatabaseConnection {
 			preparedStatement.setInt(1, modelID);
 			ResultSet rs = preparedStatement.executeQuery();
 			while (rs.next()) {
-				votes.add(rs.getInt("grade"));
+				ProposalAvgVotes propAvgVotes = new ProposalAvgVotes();
+				propAvgVotes.setName(rs.getInt("modelID") + "");
+				propAvgVotes.setData1(rs.getInt("grade"));
+				proposalAvgVotesList.add(propAvgVotes);
 			}
-			return votes;
+			return proposalAvgVotesList;
 
 		} catch (SQLException ex) {
 			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);

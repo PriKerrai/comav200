@@ -1,10 +1,11 @@
 package com.coma.client.widgets;
 
-import com.coma.client.Data;
+import java.util.List;
+
+import com.coma.client.ModelInfo;
+import com.coma.client.ProposalAvgVotes;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor.Path;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HTML;
 import com.sencha.gxt.chart.client.chart.Chart;
 import com.sencha.gxt.chart.client.chart.Chart.Position;
@@ -27,7 +28,6 @@ import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
 import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.Resizable;
 import com.sencha.gxt.widget.core.client.Resizable.Dir;
-import com.sencha.gxt.widget.core.client.button.ToggleButton;
 import com.sencha.gxt.widget.core.client.container.MarginData;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
@@ -36,17 +36,27 @@ import com.sencha.gxt.widget.core.client.event.CollapseEvent.CollapseHandler;
 import com.sencha.gxt.widget.core.client.event.ExpandEvent;
 import com.sencha.gxt.widget.core.client.event.ExpandEvent.ExpandHandler;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
-import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
 
 public class ShowVotesOnProposalDialog {
+	
+	private static List<ProposalAvgVotes> proposalAvarageVoteList;
 
-	public interface DataPropertyAccess extends PropertyAccess<Data> {
-		ValueProvider<Data, Double> data1();
+	public static List<ProposalAvgVotes> getProposalAvgVotesList() {
+		return proposalAvarageVoteList;
+	}
 
-		ValueProvider<Data, String> name();
+	public static void setProposalAvgVotesList(List<ProposalAvgVotes> proposalAvgVotesList) {
+		
+		ShowVotesOnProposalDialog.proposalAvarageVoteList = proposalAvgVotesList;
+	}
+
+	public interface DataPropertyAccess extends PropertyAccess<ProposalAvgVotes> {
+		ValueProvider<ProposalAvgVotes, Double> data1();
+
+		ValueProvider<ProposalAvgVotes, String> name();
 
 		@Path("id")
-		ModelKeyProvider<Data> nameKey();
+		ModelKeyProvider<ProposalAvgVotes> nameKey();
 	}
 
 	private static final DataPropertyAccess dataAccess = GWT.create(DataPropertyAccess.class);
@@ -58,56 +68,70 @@ public class ShowVotesOnProposalDialog {
 		dialog = new Dialog();
 		dialog.setHeadingText("Save as new group model");
 		dialog.setWidget(new HTML("Are you sure this is the diagram\n you want to accept as the new group model?\n"));
-		dialog.setPixelSize(300, 100);
+		dialog.setPixelSize(700, 600);
 		dialog.setHideOnButtonClick(true);
 		dialog.setPredefinedButtons(PredefinedButton.YES, PredefinedButton.CANCEL);
 
 		VerticalLayoutContainer verticalLayoutContainer = new VerticalLayoutContainer();
 		verticalLayoutContainer.addStyleName("dialogVPanel");
 
-		final ListStore<Data> store = new ListStore<Data>(dataAccess.nameKey());
-		store.addAll(Data.getData(12, 20, 100));
+		final ListStore<ProposalAvgVotes> store = new ListStore<ProposalAvgVotes>(dataAccess.nameKey());
+		store.addAll(ProposalAvgVotes.getData(proposalAvarageVoteList.size(), 0, 10));
 
-		final Chart<Data> chart = new Chart<Data>();
+		final Chart<ProposalAvgVotes> chart = new Chart<ProposalAvgVotes>();
 		chart.setStore(store);
 		chart.setShadowChart(false);
 
-		NumericAxis<Data> axis = new NumericAxis<Data>();
+		NumericAxis<ProposalAvgVotes> axis = new NumericAxis<ProposalAvgVotes>();
 		axis.setPosition(Position.BOTTOM);
 		axis.addField(dataAccess.data1());
-		TextSprite title = new TextSprite("Number of Hits");
+		TextSprite title = new TextSprite("Avarage Votes");
 		title.setFontSize(18);
 		axis.setTitleConfig(title);
 		axis.setDisplayGrid(true);
 		axis.setMinimum(0);
-		axis.setMaximum(100);
+		axis.setMaximum(10);
 		chart.addAxis(axis);
 
-		CategoryAxis<Data, String> catAxis = new CategoryAxis<Data, String>();
+		CategoryAxis<ProposalAvgVotes, String> catAxis = new CategoryAxis<ProposalAvgVotes, String>();
 		catAxis.setPosition(Position.LEFT);
 		catAxis.setField(dataAccess.name());
-		title = new TextSprite("Month of the Year");
+		title = new TextSprite("Model Creator");
 		title.setFontSize(18);
 		catAxis.setTitleConfig(title);
 		chart.addAxis(catAxis);
 
-		final BarSeries<Data> bar = new BarSeries<Data>();
+		final BarSeries<ProposalAvgVotes> bar = new BarSeries<ProposalAvgVotes>();
 		bar.setYAxisPosition(Position.BOTTOM);
 		bar.addYField(dataAccess.data1());
 		bar.addColor(RGB.GREEN);
-		SeriesLabelConfig<Data> config = new SeriesLabelConfig<Data>();
+		SeriesLabelConfig<ProposalAvgVotes> config = new SeriesLabelConfig<ProposalAvgVotes>();
 		config.setLabelPosition(LabelPosition.OUTSIDE);
 		bar.setLabelConfig(config);
 		chart.addSeries(bar);
 
 		final RGB[] colors = {
-				new RGB(213, 70, 121), new RGB(44, 153, 201), new RGB(146, 6, 157), new RGB(49, 149, 0), new RGB(249, 153, 0)};
+				new RGB(255, 0, 0), new RGB(255, 128, 0), new RGB(255, 255, 0), new RGB(128, 255, 0), new RGB(0, 255, 0)};
 
-		bar.setRenderer(new SeriesRenderer<Data>() {
+		bar.setRenderer(new SeriesRenderer<ProposalAvgVotes>() {
 			@Override
-			public void spriteRenderer(Sprite sprite, int index, ListStore<Data> store) {
+			public void spriteRenderer(Sprite sprite, int index, ListStore<ProposalAvgVotes> store) {
 				double value = dataAccess.data1().getValue(store.get(index));
-				sprite.setFill(colors[(int) Math.round(value) % 5]);
+				if(value < 3) {
+					sprite.setFill(colors[(int) 0]);
+				}
+				else if(value < 5) {
+					sprite.setFill(colors[(int) 1]);
+				}
+				else if(value < 7) {
+					sprite.setFill(colors[(int) 2]);
+				}
+				else if(value < 9) {
+					sprite.setFill(colors[(int) 3]);
+				}
+				else if(value < 11) {
+					sprite.setFill(colors[(int) 4]);
+				}
 				sprite.redraw();
 			}
 		});
