@@ -9,12 +9,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.coma.client.DatabaseConnection;
 import com.coma.client.ModelInfo;
+import com.coma.client.ModelVote;
 import com.coma.client.ProposalAvgVotes;
 import com.coma.client.WorkGroupInfo;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -62,7 +64,6 @@ DatabaseConnection {
 			PreparedStatement preparedStmt = dbCon.prepareStatement(insertUserQuery);
 			preparedStmt.setString(1, email);
 			preparedStmt.setString(2, password);
-
 
 			preparedStmt.executeUpdate();
 
@@ -666,24 +667,57 @@ DatabaseConnection {
 		return null;
 	}
 
-	@Override
-	public List<ProposalAvgVotes> getVotes(int modelID) {
-		Connection dbCon = null;
-		List<ProposalAvgVotes> proposalAvgVotesList = new ArrayList<ProposalAvgVotes>();
 
-		String query = "SELECT * FROM votesonmodel WHERE modelID = ?";
+	@Override
+	public List<ProposalAvgVotes> getVotes(List<Integer> modelIDs) {
+		Connection dbCon = null;
+		ProposalAvgVotes proposalAvgVote;
+		List<ProposalAvgVotes> votes = new ArrayList<ProposalAvgVotes>();
+
+		String query = "SELECT AVG(v.grade) as average, u.firstName FROM model as m Left JOIN userprofile as u ON m.modelCreator = u.userID LEFT JOIN voteonmodel as v ON v.modelID = m.modelID WHERE m.modelID = ?";
+
+		for (Iterator<Integer> i = modelIDs.iterator(); i.hasNext();) {
+
+			if(i.hasNext()){
+
+				proposalAvgVote = new ProposalAvgVotes();
+
+				try{		
+					int modelID = i.next();
+					dbCon = initializeDBConnection(); 
+					PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+					preparedStatement.setInt(1, modelID);					
+					ResultSet rs = preparedStatement.executeQuery();
+					while (rs.next()) {
+						proposalAvgVote.setName(rs.getString("firstName"));
+						proposalAvgVote.setAvgVotes(rs.getFloat("average"));
+					}
+					votes.add(proposalAvgVote);
+
+				} catch (SQLException ex) {
+					Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+				}      
+			}
+		}
+		return votes;
+	}
+
+
+	@Override
+	public String getModelCreatorName(int modelID) {
+		Connection dbCon = null;
+		String modelCreator = "";
+
+		String query = "SELECT * FROM userprofile as u LEFT JOIN model as m ON u.userID =  m.modelCreator WHERE m.modelID = ? ";
 		try{
 			dbCon = initializeDBConnection(); 
 			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
 			preparedStatement.setInt(1, modelID);
 			ResultSet rs = preparedStatement.executeQuery();
 			while (rs.next()) {
-				ProposalAvgVotes propAvgVotes = new ProposalAvgVotes();
-				propAvgVotes.setName(rs.getInt("modelID") + "");
-				propAvgVotes.setData1(rs.getInt("grade"));
-				proposalAvgVotesList.add(propAvgVotes);
+				modelCreator = rs.getString("firstName");
 			}
-			return proposalAvgVotesList;
+			return modelCreator;
 
 		} catch (SQLException ex) {
 			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
@@ -691,6 +725,28 @@ DatabaseConnection {
 		return null;
 	}
 
+	@Override
+	public List<Integer> getModelIDs(int groupID) {
+		Connection dbCon = null;
+		List<Integer> modelIDs = new ArrayList<Integer>();
+
+		String query = "SELECT * FROM model  WHERE groupID = ? AND isProposal = ? ";
+		try{
+			dbCon = initializeDBConnection(); 
+			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+			preparedStatement.setInt(1, groupID);
+			preparedStatement.setInt(2, 1);
+			ResultSet rs = preparedStatement.executeQuery();
+			while (rs.next()) {
+				modelIDs.add(rs.getInt("modelID"));
+			}
+			return modelIDs;
+
+		} catch (SQLException ex) {
+			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+		}      
+		return null;
+	}
 
 }
 

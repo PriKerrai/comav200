@@ -370,8 +370,8 @@ public class Comav200 {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				getVotesOnModel(User.getInstance().getActiveGroupID());
-
+				getProposalAvgVotes(User.getInstance().getActiveGroupID());
+				//FEL - fast inte längre
 			}
 			
 		});
@@ -593,15 +593,36 @@ public class Comav200 {
 		});
 	}
 	
-	public void getVotesOnModel(int groupID) {
-		databaseConnection.getVotes(groupID, new AsyncCallback<List<ProposalAvgVotes>>() {
+	public void getProposalAvgVotes(int groupID){
+		databaseConnection.getModelIDs(groupID, new AsyncCallback<List<Integer>>(){
 
 			@Override
 			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				
 			}
 
 			@Override
+			public void onSuccess(List<Integer> result) {
+				getVotesOnModel(result);
+				
+			}
+			
+		});
+	}
+	
+	public void getVotesOnModel(List<Integer> modelIDs) {
+		
+		databaseConnection.getVotes(modelIDs, new AsyncCallback<List<ProposalAvgVotes>>() {
+
+			@Override
 			public void onSuccess(List<ProposalAvgVotes> result) {
+				// TODO Auto-generated method stub
+				for(ProposalAvgVotes hej: result){
+					System.out.println(hej.getName() + " : namn");
+					System.out.println(hej.getAvgVotes() + " : vote");
+				}
+				/*
 				ProposalAvgVotes propAvgVote = new ProposalAvgVotes();
 				propAvgVote.setUpBarChart(result);
 				showVotesOnProposalDialog.setProposalAvgVotesList(result);
@@ -609,22 +630,18 @@ public class Comav200 {
 				Dialog dialogBox = showVotesOnProposalDialog.showVotesOnProposalDialog();
 				dialogBox.center();
 				dialogBox.show();
+				*/
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				
 			}
 
 		});
 	}
 
-	private double calculateAverageVote(List<Integer> votes){
-		if(votes.size() < 3){
-			return -1;
-		}else{
-			int sum = 0;
-			for(Integer vote: votes){
-				sum += vote;
-			}
-			return sum/votes.size();
-		}
-	}
 	
 	public void loadModelFromCellList(int modelID) {
 		new LoadModel().getModelFromDatabase(modelID, oryxFrame);

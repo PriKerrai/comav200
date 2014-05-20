@@ -16,9 +16,11 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class ProposalAvgVotes  implements IsSerializable{
 
 	private String name;
-	private int avgVotes;
+	private double avgVotes;
+	
+	
 	private static List<String> modelCreatorName;
-	private List<Integer> modelAvgVotes;
+	private List<Double> modelAvgVotes;
 	private int listSize;
 
 	public int getListSize() {
@@ -34,19 +36,11 @@ public class ProposalAvgVotes  implements IsSerializable{
 	public ProposalAvgVotes(String name, int data1) {
 		super();
 		this.name = name;
-		this.avgVotes = data1;
-	}
-
-	public int getData1() {
-		return avgVotes;
+		this.setAvgVotes(data1);
 	}
 
 	public String getName() {
 		return name;
-	}
-
-	public void setData1(int data1) {
-		this.avgVotes = data1;
 	}
 
 	public void setName(String name) {
@@ -66,8 +60,16 @@ public class ProposalAvgVotes  implements IsSerializable{
 	public void setUpBarChart(List<ProposalAvgVotes> result) {
 		for(ProposalAvgVotes avgVotes: result) {
 			modelCreatorName.add(avgVotes.getName());
-			modelAvgVotes.add(avgVotes.getData1());
+			modelAvgVotes.add(avgVotes.getAvgVotes());
 			
 		}
+	}
+
+	public double getAvgVotes() {
+		return avgVotes;
+	}
+
+	public void setAvgVotes(double avgVotes) {
+		this.avgVotes = avgVotes;
 	}
 }

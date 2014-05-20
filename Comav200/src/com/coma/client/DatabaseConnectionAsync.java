@@ -41,7 +41,9 @@ public interface DatabaseConnectionAsync {
 			AsyncCallback<Void> callback);
 	void getAllGroupMembers(int activeGroupID,
 			AsyncCallback<List<String>> asyncCallback);
-	void getVotes(int modelID,
-			AsyncCallback<List<ProposalAvgVotes>> asyncCallback);
+	void getModelCreatorName(int modelID, AsyncCallback<String> callback);
+	void getModelIDs(int groupID, AsyncCallback<List<Integer>> asyncCallback);
+	void getVotes(List<Integer> modelIDs,
+			AsyncCallback<List<ProposalAvgVotes>> callback);
 	
 }
