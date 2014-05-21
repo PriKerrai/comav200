@@ -51,7 +51,6 @@ public class SwitchGroupDialogBox {
     				User.getInstance().setActiveGroupID(groupList.get(groupBox.getSelectedIndex()).getWorkGroupID());
     				Info.display("Group changed", "Active group: " + groupBox.getValue(groupBox.getSelectedIndex()));
                     dialog.hide();
-
     			}
     		});
     		//Add a handler to close the dialog

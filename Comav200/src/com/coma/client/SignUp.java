@@ -38,19 +38,23 @@ public class SignUp {
 
 		holder.add(new Label("First name"));
 		nameTextField.setName("nameTxtBox");
+		nameTextField.setAllowBlank(false);
 		holder.add(nameTextField);
 		
 		
 		holder.add(new Label("User Email"));
 		emailTextField.setName("emailTextBox");
+		emailTextField.setAllowBlank(false);
 		holder.add(emailTextField);
 
 		holder.add(new Label("Password"));
 		passwordTextField.setName("password");
+		passwordTextField.setAllowBlank(false);
 		holder.add(passwordTextField);
 
 		holder.add(new Label("Repeat password"));
 		passwordRepeatedTextField.setName("passwordRepeated");
+		passwordRepeatedTextField.setAllowBlank(false);
 		holder.add(passwordRepeatedTextField);
 
 		signUpButton.addSelectHandler(new SelectHandler(){
