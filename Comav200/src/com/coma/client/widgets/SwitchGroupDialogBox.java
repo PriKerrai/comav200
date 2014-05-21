@@ -15,6 +15,7 @@ import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.Verti
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
+import com.sencha.gxt.widget.core.client.info.Info;
 
 public class SwitchGroupDialogBox {
 	private ListBox groupBox;
@@ -48,6 +49,7 @@ public class SwitchGroupDialogBox {
     			public void onSelect(SelectEvent event) {
     				// TODO Auto-generated method stub
     				User.getInstance().setActiveGroupID(groupList.get(groupBox.getSelectedIndex()).getWorkGroupID());
+    				Info.display("Group changed", "Active group: " + groupBox.getValue(groupBox.getSelectedIndex()));
                     dialog.hide();
 
     			}

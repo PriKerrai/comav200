@@ -4,12 +4,9 @@ import java.util.List;
 
 import com.coma.client.widgets.HandleGroupInvitesCellList;
 import com.coma.client.widgets.HandleGroupInvitesDialogBox;
-import com.coma.client.widgets.LoadModelCellList;
-import com.coma.client.widgets.LoadModelDialogBox;
 import com.coma.client.widgets.SwitchGroupDialogBox;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.DialogBox;
 import com.sencha.gxt.widget.core.client.Dialog;
 
 public class HandleGroups {

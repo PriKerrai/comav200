@@ -576,24 +576,7 @@ public class Comav200 {
 		RootPanel.get("mainDiv").add(signUp.screen());
 	}
 	
-	/**
-	*Gets active users ID from database and sets the ID in the User class
-	*/
-	public void getAndSetUserIDFromDatabase(String email) {
-		databaseConnection.getUserID(email, new AsyncCallback<Integer>() {
-			public void onFailure(Throwable caught) {
-			}
 
-			@Override
-			public void onSuccess(Integer result) {
-				// TODO Auto-generated method stub
-				User.getInstance().setUserId(result);
-				initMainProgram();		
-			}
-
-		});
-	}
-	
 	public void getProposalAvgVotes(int groupID){
 		databaseConnection.getModelIDs(groupID, new AsyncCallback<List<Integer>>(){
 

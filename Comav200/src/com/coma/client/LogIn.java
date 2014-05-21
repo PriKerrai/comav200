@@ -9,8 +9,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PasswordTextBox;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
@@ -29,93 +27,112 @@ public class LogIn {
 
 	private final DatabaseConnectionAsync databaseConnection = GWT
 			.create(DatabaseConnection.class);
+
+	public FormPanel screen() {
+		final FormPanel form = new FormPanel();
+		form.setEncoding(FormPanel.ENCODING_MULTIPART);
+		form.setMethod(FormPanel.METHOD_POST);
+		form.addStyleName("table-center");
+		form.addStyleName("demo-FormPanel");
+
+		VerticalPanel holder = new VerticalPanel();
+		HorizontalPanel hPanel = new HorizontalPanel();
+		holder.add(new Label("Email"));
+		emailTextField.setName("email");
+		holder.add(emailTextField);
+
+		holder.add(new Label("Password"));
+		passwordField.setName("password");
+		holder.add(passwordField);
+
+		signUpButton.addSelectHandler(new SelectHandler() {
+
+			@Override
+			public void onSelect(SelectEvent event) {
+				Comav200.GetInstance().initializeSignUp();
+			}
+		});
+
+		logInButton.addSelectHandler(new SelectHandler() {
+
+			@Override
+			public void onSelect(SelectEvent event) {
+				getPasswordFromDatabase(emailTextField.getText());
+			}
+		});
+
+		hPanel.add(logInButton);
+		hPanel.add(signUpButton);
+		holder.add(hPanel);
+
+		form.add(holder);
+		return form;
+	}
+
+	private String encryptPassword(String password) {
+
+		MessageDigest m = null;
+		try {
+			m = MessageDigest.getInstance("MD5");
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		m.reset();
+		m.update(password.getBytes());
+		byte[] digest = m.digest();
+		BigInteger bigInt = new BigInteger(1, digest);
+		String hashtext = bigInt.toString(16);
+		// Now we need to zero pad it if you actually want the full 32 chars.
+		while (hashtext.length() < 32) {
+			hashtext = "0" + hashtext;
+		}
+		return hashtext;
+	}
+
+	private void checkAuthantication(String email, String password) {
+		String encryptedPassword = encryptPassword(passwordField.getValue());
+		if (encryptedPassword.equals(password)) {
+			getAndSetUserIDFromDatabase(emailTextField.getText());
+			User.getInstance().setUserEmail(emailTextField.getText());
+
+		} else {
+			AlertMessageBox alert = new AlertMessageBox("Login failed",
+					"Please check your credentials and try again.");
+			alert.show();
+		}
+	}
+
+	/**
+	*Gets active users ID from database and sets the ID in the User class
+	*/
+	public void getAndSetUserIDFromDatabase(String email) {
+		databaseConnection.getUserID(email, new AsyncCallback<Integer>() {
+			public void onFailure(Throwable caught) {
+			}
+
+			@Override
+			public void onSuccess(Integer result) {
+				// TODO Auto-generated method stub
+				User.getInstance().setUserId(result);
+				Comav200.GetInstance().initMainProgram();		
+			}
+
+		});
+	}
 	
-        public FormPanel screen(){
-        	final FormPanel form = new FormPanel();
-        	form.setEncoding(FormPanel.ENCODING_MULTIPART);
-        	form.setMethod(FormPanel.METHOD_POST);
-        	form.addStyleName("table-center");
-        	form.addStyleName("demo-FormPanel");      	
-        	
-        	VerticalPanel holder = new VerticalPanel();
-        	HorizontalPanel hPanel = new HorizontalPanel();
-        	holder.add(new Label("Email"));
-        	emailTextField.setName("email");
-        	holder.add(emailTextField);
-        	
-        	holder.add(new Label("Password"));
-        	passwordField.setName("password");
-        	holder.add(passwordField);
+	
+	public void getPasswordFromDatabase(String emailString) {
 
-            signUpButton.addSelectHandler(new SelectHandler() {
-				
-				@Override
-				public void onSelect(SelectEvent event) {
-					Comav200.GetInstance().initializeSignUp();			
-				}
-			});
-            
-            logInButton.addSelectHandler(new SelectHandler(){
+		final String email = emailString;
+		databaseConnection.getPasswordForAuthorization(email,
+				new AsyncCallback<String>() {
+					public void onFailure(Throwable caught) {
+					}
 
-				@Override
-				public void onSelect(SelectEvent event) {
-					getPasswordFromDatabase(emailTextField.getText());	
-				}            	
-            });
-        	
-            hPanel.add(logInButton);
-            hPanel.add(signUpButton);
-        	holder.add(hPanel);
-
-            form.add(holder);  
-            return form;
-        }
-        
-    	private String encryptPassword(String password){
-    		
-    		MessageDigest m = null;
-    		try {
-    			m = MessageDigest.getInstance("MD5");
-    		} catch (NoSuchAlgorithmException e) {
-    			// TODO Auto-generated catch block
-    			e.printStackTrace();
-    		}
-    		m.reset();
-    		m.update(password.getBytes());
-    		byte[] digest = m.digest();
-    		BigInteger bigInt = new BigInteger(1,digest);
-    		String hashtext = bigInt.toString(16);
-    		// Now we need to zero pad it if you actually want the full 32 chars.
-    		while(hashtext.length() < 32 ){
-    		  hashtext = "0"+hashtext;
-    		}
-    		return hashtext;
-    	}
-
-         	
-        private void checkAuthantication(String email, String password){
-        	String encryptedPassword = encryptPassword(passwordField.getValue());
-        	if(encryptedPassword.equals(password)){        		
-        		Comav200.GetInstance().getAndSetUserIDFromDatabase(emailTextField.getText());
-        		User.getInstance().setUserEmail(emailTextField.getText());
-        		
-        	}
-        	else{
-        		AlertMessageBox alert = new AlertMessageBox("Login failed", "Please check your credentials and try again.");
-        		alert.show();
-        	}
-        }
-        
-    	public void getPasswordFromDatabase(String emailString) {
-
-    		final String email = emailString;
-    		databaseConnection.getPasswordForAuthorization(email, new AsyncCallback<String>() {
-    			public void onFailure(Throwable caught) {
-    			}
-
-    			public void onSuccess(String result) {
-    				checkAuthantication(email, result);
-    			}
-    		});
-    	}
+					public void onSuccess(String result) {
+						checkAuthantication(email, result);
+					}
+				});
+	}
 }

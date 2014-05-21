@@ -5,8 +5,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -22,6 +20,7 @@ public class SignUp {
 
 	TextButton signUpButton = new TextButton("Sign Up");
 	TextField emailTextField = new TextField();
+	TextField nameTextField = new TextField();
 	PasswordField passwordTextField = new PasswordField();
 	PasswordField passwordRepeatedTextField = new PasswordField();
 
@@ -37,6 +36,11 @@ public class SignUp {
 
 		VerticalPanel holder = new VerticalPanel();
 
+		holder.add(new Label("First name"));
+		nameTextField.setName("nameTxtBox");
+		holder.add(nameTextField);
+		
+		
 		holder.add(new Label("User Email"));
 		emailTextField.setName("emailTextBox");
 		holder.add(emailTextField);
@@ -54,19 +58,26 @@ public class SignUp {
 			@Override
 			public void onSelect(SelectEvent event) {
 				
+				String name = nameTextField.getText();
+				String email = emailTextField.getText();
 				String password = passwordTextField.getValue();
 				String passwordRepeated = passwordRepeatedTextField.getValue();
 
 				if (event.getSource().equals(signUpButton)) {
 
-					if (password.length() < 10) {
+					if(name.length() <1){
+						AlertMessageBox alert = new AlertMessageBox("No name?", "First name is required");
+						alert.show();
+						return;
+					}
+					if (password.length() < 1) {
 						AlertMessageBox alert = new AlertMessageBox("Too short!", "Password need to be between X and X");
 						alert.show();
 						return;
 					}
 					if (password.equals(passwordRepeated)) {
 						addUserToDatabase(
-						emailTextField.getText(), encryptPassword(passwordTextField.getValue()));					
+						email, encryptPassword(password), name);					
 					} else{
 						AlertMessageBox alert = new AlertMessageBox("Incorrect", "Passwords doesn't match");
 						alert.show();
@@ -111,7 +122,8 @@ public class SignUp {
 		return hashtext;
 	}
 
-	public void addUserToDatabase(String emailString, String password) {
+	public void addUserToDatabase(String emailString, String password, String name) {
+		final String fName = name;
 		final String email = emailString;
 		databaseConnection.createNewUser(email, password,
 				new AsyncCallback<Void>() {
@@ -120,10 +132,27 @@ public class SignUp {
 			}
 
 			public void onSuccess(Void result) {
-				Comav200.GetInstance().getAndSetUserIDFromDatabase(email);
+				getAndSetUserIDFromDatabase(email, fName);
 				
 			}
 		});
 
+	}
+	
+	public void getAndSetUserIDFromDatabase(String email, String name) {
+		final String fName = name;
+		databaseConnection.getUserID(email, new AsyncCallback<Integer>() {
+			public void onFailure(Throwable caught) {
+			}
+
+			@Override
+			public void onSuccess(Integer result) {
+				// TODO Auto-generated method stub
+				User.getInstance().setUserId(result);
+				Comav200.GetInstance().addUserProfileToUser(fName, "", "", "");
+				Comav200.GetInstance().initMainProgram();		
+			}
+
+		});
 	}
 }

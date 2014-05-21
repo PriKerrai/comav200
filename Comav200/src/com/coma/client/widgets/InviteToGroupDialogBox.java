@@ -12,6 +12,7 @@ import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.TextField;
+import com.sencha.gxt.widget.core.client.info.Info;
 
 public class InviteToGroupDialogBox {
     
@@ -48,6 +49,7 @@ public class InviteToGroupDialogBox {
     				@Override
     				public void onSelect(SelectEvent event) {
     					// TODO Auto-generated method stub
+    					Info.display("Invite", "Invite sent");
     					System.out.println("Send email in the future");
     					dialog.hide();
     					
