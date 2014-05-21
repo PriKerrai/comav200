@@ -3,7 +3,8 @@ package com.coma.client.widgets;
 import java.util.List;
 
 import com.coma.client.ModelInfo;
-import com.coma.client.ProposalAvgVotes;
+import com.coma.client.ProposalAvgVote;
+import com.coma.client.ProposalAvgVotesData;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor.Path;
 import com.google.gwt.user.client.ui.HTML;
@@ -39,24 +40,24 @@ import com.sencha.gxt.widget.core.client.form.FieldLabel;
 
 public class ShowVotesOnProposalDialog {
 	
-	private static List<ProposalAvgVotes> proposalAvarageVoteList;
+	private static List<ProposalAvgVote> proposalAvarageVoteList;
 
-	public static List<ProposalAvgVotes> getProposalAvgVotesList() {
+	public static List<ProposalAvgVote> getProposalAvgVotesList() {
 		return proposalAvarageVoteList;
 	}
 
-	public static void setProposalAvgVotesList(List<ProposalAvgVotes> proposalAvgVotesList) {
+	public static void setProposalAvgVotesList(List<ProposalAvgVote> proposalAvgVotesList) {
 		
 		ShowVotesOnProposalDialog.proposalAvarageVoteList = proposalAvgVotesList;
 	}
 
-	public interface DataPropertyAccess extends PropertyAccess<ProposalAvgVotes> {
-		ValueProvider<ProposalAvgVotes, Double> data1();
+	public interface DataPropertyAccess extends PropertyAccess<ProposalAvgVote> {
+		ValueProvider<ProposalAvgVote, Double> avgVote();
 
-		ValueProvider<ProposalAvgVotes, String> name();
+		ValueProvider<ProposalAvgVote, String> name();
 
 		@Path("id")
-		ModelKeyProvider<ProposalAvgVotes> nameKey();
+		ModelKeyProvider<ProposalAvgVote> nameKey();
 	}
 
 	private static final DataPropertyAccess dataAccess = GWT.create(DataPropertyAccess.class);
@@ -75,16 +76,16 @@ public class ShowVotesOnProposalDialog {
 		VerticalLayoutContainer verticalLayoutContainer = new VerticalLayoutContainer();
 		verticalLayoutContainer.addStyleName("dialogVPanel");
 
-		final ListStore<ProposalAvgVotes> store = new ListStore<ProposalAvgVotes>(dataAccess.nameKey());
-		store.addAll(ProposalAvgVotes.getData(proposalAvarageVoteList.size(), 0, 10));
+		final ListStore<ProposalAvgVote> store = new ListStore<ProposalAvgVote>(dataAccess.nameKey());
+		store.addAll(ProposalAvgVotesData.getData());
 
-		final Chart<ProposalAvgVotes> chart = new Chart<ProposalAvgVotes>();
+		final Chart<ProposalAvgVote> chart = new Chart<ProposalAvgVote>();
 		chart.setStore(store);
 		chart.setShadowChart(false);
 
-		NumericAxis<ProposalAvgVotes> axis = new NumericAxis<ProposalAvgVotes>();
+		NumericAxis<ProposalAvgVote> axis = new NumericAxis<ProposalAvgVote>();
 		axis.setPosition(Position.BOTTOM);
-		axis.addField(dataAccess.data1());
+		axis.addField(dataAccess.avgVote());
 		TextSprite title = new TextSprite("Avarage Votes");
 		title.setFontSize(18);
 		axis.setTitleConfig(title);
@@ -93,7 +94,7 @@ public class ShowVotesOnProposalDialog {
 		axis.setMaximum(10);
 		chart.addAxis(axis);
 
-		CategoryAxis<ProposalAvgVotes, String> catAxis = new CategoryAxis<ProposalAvgVotes, String>();
+		CategoryAxis<ProposalAvgVote, String> catAxis = new CategoryAxis<ProposalAvgVote, String>();
 		catAxis.setPosition(Position.LEFT);
 		catAxis.setField(dataAccess.name());
 		title = new TextSprite("Model Creator");
@@ -101,11 +102,11 @@ public class ShowVotesOnProposalDialog {
 		catAxis.setTitleConfig(title);
 		chart.addAxis(catAxis);
 
-		final BarSeries<ProposalAvgVotes> bar = new BarSeries<ProposalAvgVotes>();
+		final BarSeries<ProposalAvgVote> bar = new BarSeries<ProposalAvgVote>();
 		bar.setYAxisPosition(Position.BOTTOM);
-		bar.addYField(dataAccess.data1());
+		bar.addYField(dataAccess.avgVote());
 		bar.addColor(RGB.GREEN);
-		SeriesLabelConfig<ProposalAvgVotes> config = new SeriesLabelConfig<ProposalAvgVotes>();
+		SeriesLabelConfig<ProposalAvgVote> config = new SeriesLabelConfig<ProposalAvgVote>();
 		config.setLabelPosition(LabelPosition.OUTSIDE);
 		bar.setLabelConfig(config);
 		chart.addSeries(bar);
@@ -113,10 +114,10 @@ public class ShowVotesOnProposalDialog {
 		final RGB[] colors = {
 				new RGB(255, 0, 0), new RGB(255, 128, 0), new RGB(255, 255, 0), new RGB(128, 255, 0), new RGB(0, 255, 0)};
 
-		bar.setRenderer(new SeriesRenderer<ProposalAvgVotes>() {
+		bar.setRenderer(new SeriesRenderer<ProposalAvgVote>() {
 			@Override
-			public void spriteRenderer(Sprite sprite, int index, ListStore<ProposalAvgVotes> store) {
-				double value = dataAccess.data1().getValue(store.get(index));
+			public void spriteRenderer(Sprite sprite, int index, ListStore<ProposalAvgVote> store) {
+				double value = dataAccess.avgVote().getValue(store.get(index));
 				if(value < 3) {
 					sprite.setFill(colors[(int) 0]);
 				}

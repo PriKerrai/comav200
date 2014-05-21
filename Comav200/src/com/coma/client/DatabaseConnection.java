@@ -36,5 +36,5 @@ public interface DatabaseConnection extends RemoteService {
 	List<String> getAllGroupMembers(int activeGroupID);
 	String getModelCreatorName(int modelID);
 	List<Integer> getModelIDs(int groupID);
-	List<ProposalAvgVotes> getVotes(List<Integer> modelIDs);
+	List<ProposalAvgVote> getVotes(List<Integer> modelIDs);
 }

@@ -16,8 +16,7 @@ import java.util.logging.Logger;
 
 import com.coma.client.DatabaseConnection;
 import com.coma.client.ModelInfo;
-import com.coma.client.ModelVote;
-import com.coma.client.ProposalAvgVotes;
+import com.coma.client.ProposalAvgVote;
 import com.coma.client.WorkGroupInfo;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -669,10 +668,10 @@ DatabaseConnection {
 
 
 	@Override
-	public List<ProposalAvgVotes> getVotes(List<Integer> modelIDs) {
+	public List<ProposalAvgVote> getVotes(List<Integer> modelIDs) {
 		Connection dbCon = null;
-		ProposalAvgVotes proposalAvgVote;
-		List<ProposalAvgVotes> votes = new ArrayList<ProposalAvgVotes>();
+		ProposalAvgVote proposalAvgVote;
+		List<ProposalAvgVote> votes = new ArrayList<ProposalAvgVote>();
 
 		String query = "SELECT AVG(v.grade) as average, u.firstName FROM model as m Left JOIN userprofile as u ON m.modelCreator = u.userID LEFT JOIN voteonmodel as v ON v.modelID = m.modelID WHERE m.modelID = ?";
 
@@ -680,7 +679,7 @@ DatabaseConnection {
 
 			if(i.hasNext()){
 
-				proposalAvgVote = new ProposalAvgVotes();
+				proposalAvgVote = new ProposalAvgVote();
 
 				try{		
 					int modelID = i.next();
@@ -690,7 +689,7 @@ DatabaseConnection {
 					ResultSet rs = preparedStatement.executeQuery();
 					while (rs.next()) {
 						proposalAvgVote.setName(rs.getString("firstName"));
-						proposalAvgVote.setAvgVotes(rs.getFloat("average"));
+						proposalAvgVote.setAvgVote(rs.getFloat("average"));
 					}
 					votes.add(proposalAvgVote);
 
