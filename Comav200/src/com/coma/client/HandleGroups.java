@@ -72,6 +72,7 @@ public class HandleGroups {
 
 					@Override
 					public void onSuccess(List<WorkGroupInfo> result) {
+						
 						HandleGroupInvitesCellList invitesList = new HandleGroupInvitesCellList();
 						HandleGroupInvitesCellList.setInviteList(result);
 						HandleGroupInvitesDialogBox hgidb = new HandleGroupInvitesDialogBox();

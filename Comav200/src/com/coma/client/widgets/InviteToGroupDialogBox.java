@@ -2,6 +2,7 @@ package com.coma.client.widgets;
 
 import com.coma.client.DatabaseConnection;
 import com.coma.client.DatabaseConnectionAsync;
+import com.coma.client.HandleGroups;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.HTML;
 import com.sencha.gxt.widget.core.client.Dialog;
@@ -49,7 +50,8 @@ public class InviteToGroupDialogBox {
     				@Override
     				public void onSelect(SelectEvent event) {
     					// TODO Auto-generated method stub
-    					Info.display("Invite", "Invite sent");
+    					new HandleGroups().sendGroupInvite(emailTextBox.getText());
+    					Info.display("Group invite", "Group invite sent");
     					System.out.println("Send email in the future");
     					dialog.hide();
     					
