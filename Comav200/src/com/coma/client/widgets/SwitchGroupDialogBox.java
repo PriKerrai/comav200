@@ -2,21 +2,12 @@ package com.coma.client.widgets;
 
 import java.util.List;
 
-import com.coma.client.Comav200;
 import com.coma.client.DatabaseConnection;
 import com.coma.client.DatabaseConnectionAsync;
-import com.coma.client.ModelInfo;
 import com.coma.client.User;
 import com.coma.client.WorkGroupInfo;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
@@ -37,7 +28,7 @@ public class SwitchGroupDialogBox {
     			dialog.setHeadingText("Switch active group");
     			dialog.setPixelSize(300, 100);
     			dialog.setHideOnButtonClick(true);
-    			dialog.setPredefinedButtons(PredefinedButton.YES, PredefinedButton.CANCEL);
+    			dialog.setPredefinedButtons(PredefinedButton.OK, PredefinedButton.CANCEL);
 
     			VerticalLayoutContainer verticalLayoutContainer = new VerticalLayoutContainer();
     			verticalLayoutContainer.addStyleName("dialogVPanel");
@@ -52,7 +43,7 @@ public class SwitchGroupDialogBox {
             dialog.setWidget(verticalLayoutContainer);
 
             
-        	dialog.getButton(PredefinedButton.YES).addSelectHandler(new SelectHandler() {
+        	dialog.getButton(PredefinedButton.OK).addSelectHandler(new SelectHandler() {
     			@Override
     			public void onSelect(SelectEvent event) {
     				// TODO Auto-generated method stub

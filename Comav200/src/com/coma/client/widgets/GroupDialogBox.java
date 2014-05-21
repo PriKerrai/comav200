@@ -7,16 +7,7 @@ import com.coma.client.DatabaseConnectionAsync;
 import com.coma.client.HandleGroups;
 import com.coma.client.User;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.layout.client.Layout.Alignment;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
@@ -25,7 +16,6 @@ import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.TextField;
-import com.sencha.gxt.widget.core.client.info.Info;
 
 /**
  * Creates the dialog for creating a new group
@@ -50,7 +40,7 @@ public class GroupDialogBox{
 		dialog.setHeadingText("Create new group");
 		dialog.setPixelSize(300, 100);
 		dialog.setHideOnButtonClick(true);
-		dialog.setPredefinedButtons(PredefinedButton.YES, PredefinedButton.CANCEL);
+		dialog.setPredefinedButtons(PredefinedButton.OK, PredefinedButton.CANCEL);
 
 		VerticalLayoutContainer verticalLayoutContainer = new VerticalLayoutContainer();
 		verticalLayoutContainer.addStyleName("dialogVPanel");
@@ -64,14 +54,13 @@ public class GroupDialogBox{
 		dialog.setWidget(verticalLayoutContainer);
 
 		// Add a handler to create the new group
-		dialog.getButton(PredefinedButton.YES).addSelectHandler(new SelectHandler() {
+		dialog.getButton(PredefinedButton.OK).addSelectHandler(new SelectHandler() {
 			
 			@Override
 			public void onSelect(SelectEvent event) {
 				// TODO Auto-generated method stub
 				String groupName = nameBox.getValue();
 				int userID = User.getInstance().getUserId();
-				java.util.Date date = new Date();
 
 				createNewGroup(userID, groupName);
 
