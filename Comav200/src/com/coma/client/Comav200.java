@@ -52,7 +52,8 @@ public class Comav200 {
 	public static String problemLocation;
 	private ModelInfo model;
 	private List<String> userProfile;
-	private boolean isFirstTime = true;
+	private boolean isFirstTime = true;	
+	private Panel proposalButtonsPanel;
 	
 	public List<String> getUserProfile() {
 		return userProfile;
@@ -93,7 +94,7 @@ public class Comav200 {
 	public TextButton createGroupButton = new TextButton("Create group");
 	public TextButton inviteGroupButton = new TextButton("Invite to group");
 	public TextButton switchGroupButton = new TextButton("Switch group");
-	public TextButton voteButtonButton = new TextButton("Leave vote");
+	public TextButton leaveVoteButton = new TextButton("Leave vote");
 	public TextButton writeCommentButton = new TextButton("Write comment");
 	public TextButton readCommentButton = new TextButton("Read comments");
 	public TextButton acceptProposalButton = new TextButton("Accept proposal");
@@ -158,7 +159,7 @@ public class Comav200 {
 					
 					if (tabID == 2) {
 						p.clear();
-						p.add(initProposalView());
+						p.add(proposalButtonsPanel);
 						DockPanel dockPanel = new DockPanel();
 						dockPanel.setWidth("100%");
 						dockPanel.add(oryxFrame, DockPanel.CENTER);
@@ -172,8 +173,7 @@ public class Comav200 {
 						}
 					}
 			}};
-	          
-	      
+	          	      
 	      panel.addSelectionHandler(handler);
 		
 		/*
@@ -319,7 +319,7 @@ public class Comav200 {
 
 		writeCommentButton.getElement().setClassName("utilityButton");
 		readCommentButton.getElement().setClassName("utilityButton");
-		voteButtonButton.getElement().setClassName("utilityButton");
+		leaveVoteButton.getElement().setClassName("utilityButton");
 		acceptProposalButton.getElement().setClassName("utilityButton");
 		votesButton.getElement().setClassName("utilityButton");
 
@@ -341,7 +341,7 @@ public class Comav200 {
 			}
 			
 		});
-		voteButtonButton.addSelectHandler(new SelectHandler(){
+		leaveVoteButton.addSelectHandler(new SelectHandler(){
 
 			@Override
 			public void onSelect(SelectEvent event) {
@@ -370,15 +370,15 @@ public class Comav200 {
 
 			@Override
 			public void onSelect(SelectEvent event) {
+				System.out.println("Pressed!");
 				getProposalAvgVotes(User.getInstance().getActiveGroupID());
-				//FEL - fast inte längre
 			}
 			
 		});
 
 		panel.add(writeCommentButton);
 		panel.add(readCommentButton);
-		panel.add(voteButtonButton);
+		panel.add(leaveVoteButton);
 		panel.add(acceptProposalButton);
 		panel.add(votesButton);
 
@@ -545,7 +545,8 @@ public class Comav200 {
 	*/
 	private Panel initProposalView(){
 		VerticalPanel panel = new VerticalPanel();
-		panel.add(topMenuButtonsProposalView());
+		proposalButtonsPanel = topMenuButtonsProposalView();
+		panel.add(proposalButtonsPanel);	
 		return panel;
 	}
 	
@@ -613,24 +614,25 @@ public class Comav200 {
 	
 	public void getVotesOnModel(List<Integer> modelIDs) {
 		
-		databaseConnection.getVotes(modelIDs, new AsyncCallback<List<ProposalAvgVotes>>() {
+		databaseConnection.getVotes(modelIDs, new AsyncCallback<List<ProposalAvgVote>>() {
 
 			@Override
-			public void onSuccess(List<ProposalAvgVotes> result) {
+			public void onSuccess(List<ProposalAvgVote> result) {
 				// TODO Auto-generated method stub
-				for(ProposalAvgVotes hej: result){
+				for(ProposalAvgVote hej: result){
 					System.out.println(hej.getName() + " : namn");
-					System.out.println(hej.getAvgVotes() + " : vote");
+					System.out.println(hej.getAvgVote() + " : vote");
 				}
-				/*
-				ProposalAvgVotes propAvgVote = new ProposalAvgVotes();
-				propAvgVote.setUpBarChart(result);
-				showVotesOnProposalDialog.setProposalAvgVotesList(result);
+				
+				System.out.println(result.size() + " : size onsuccess");
+				ProposalAvgVotesData propAvgVote = new ProposalAvgVotesData(result);
+				//propAvgVote.setUpBarChart(result);
+				ShowVotesOnProposalDialog.setProposalAvgVotesList(result);
 
 				Dialog dialogBox = showVotesOnProposalDialog.showVotesOnProposalDialog();
 				dialogBox.center();
 				dialogBox.show();
-				*/
+				
 			}
 
 			@Override
