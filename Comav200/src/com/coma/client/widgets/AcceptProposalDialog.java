@@ -3,11 +3,13 @@ package com.coma.client.widgets;
 import com.coma.client.DatabaseConnection;
 import com.coma.client.DatabaseConnectionAsync;
 import com.coma.client.User;
+import com.coma.client.WorkGroupInfo;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
+import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
 import com.sencha.gxt.widget.core.client.button.ButtonBar;
 import com.sencha.gxt.widget.core.client.event.DialogHideEvent.HasDialogHideHandlers;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
@@ -62,7 +64,8 @@ public class AcceptProposalDialog {
                  int modelID = getModelID();
                  String version = "420";
                  
-                 updateActiveGroupModel(activeGroupID, modelID, version);
+                 checkGroupFacilitator(activeGroupID, modelID, version);
+                 
                  dialog.hide();
 
 			}
@@ -79,6 +82,27 @@ public class AcceptProposalDialog {
 
 	}
 
+	private void checkGroupFacilitator(final int activeGroupID, final int modelID, final String version){
+		databaseConnection.getGroupInfo(activeGroupID, new AsyncCallback<WorkGroupInfo>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				
+			}
+			@Override
+			public void onSuccess(WorkGroupInfo result) {
+				if(result.getWorkGroupFacilitator() == User.getInstance().getUserId()){
+					updateActiveGroupModel(activeGroupID, modelID, version);
+				}else{
+					AlertMessageBox alert = new AlertMessageBox("Forbidden", "Only group facilitator can accept proposals");
+					alert.show();
+				}
+				
+			}
+		});
+	}
+	
 	/**
 	 * 
 	 * @param activeGroupID The activeGroupID that the current user has selected

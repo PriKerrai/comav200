@@ -88,12 +88,14 @@ public class Comav200 {
 	public TextButton loadModelButton = new TextButton("Load Model");
 	public TextButton importModelButton = new TextButton("Import");
 	public TextButton exportModelButton = new TextButton("Export");
+
 	public TextButton editProfileButton = new TextButton("Edit profile");
 	public TextButton invitesButton = new TextButton("My group invites");
 	public TextButton proposeButton = new TextButton("Propose as group model");
 	public TextButton createGroupButton = new TextButton("Create group");
 	public TextButton inviteGroupButton = new TextButton("Invite to group");
-	public TextButton switchGroupButton = new TextButton("Switch group");
+	public TextButton switchGroupPreferencesTabButton = new TextButton("Switch group");
+	public TextButton switchGroupGroupTabButton = new TextButton("Switch group");
 	public TextButton leaveVoteButton = new TextButton("Leave vote");
 	public TextButton writeCommentButton = new TextButton("Write comment");
 	public TextButton readCommentButton = new TextButton("Read comments");
@@ -287,7 +289,9 @@ public class Comav200 {
 		
 		importModelButton.getElement().setClassName("utilityButton");
 		exportModelButton.getElement().setClassName("utilityButton");
+		switchGroupGroupTabButton.getElement().setClassName("utilityButton");
 
+		
 		importModelButton.addSelectHandler(new SelectHandler(){
 
 			@Override
@@ -306,9 +310,20 @@ public class Comav200 {
 			}
 			
 		});
+		
+		switchGroupGroupTabButton.addSelectHandler(new SelectHandler(){
+
+			@Override
+			public void onSelect(SelectEvent event) {
+				new HandleGroups().getUsersGroups();
+				
+			}
+			
+		});
 
 		panel.add(importModelButton);
 		panel.add(exportModelButton);
+		panel.add(switchGroupGroupTabButton);
 
 		return panel;  
 	}
@@ -391,7 +406,7 @@ public class Comav200 {
 
 		createGroupButton.getElement().setClassName("utilityButton");
 		inviteGroupButton.getElement().setClassName("utilityButton");
-		switchGroupButton.getElement().setClassName("utilityButton");
+		switchGroupPreferencesTabButton.getElement().setClassName("utilityButton");
 		editProfileButton.getElement().setClassName("utilityButton");
 		invitesButton.getElement().setClassName("utilityButton");
 
@@ -419,7 +434,7 @@ public class Comav200 {
 			}
 			
 		});
-		switchGroupButton.addSelectHandler(new SelectHandler(){
+		switchGroupPreferencesTabButton.addSelectHandler(new SelectHandler(){
 
 			@Override
 			public void onSelect(SelectEvent event) {
@@ -449,7 +464,7 @@ public class Comav200 {
 
 		panel.add(createGroupButton);
 		panel.add(inviteGroupButton);
-		panel.add(switchGroupButton);
+		panel.add(switchGroupPreferencesTabButton);
 		panel.add(editProfileButton);
 		panel.add(invitesButton);
 

@@ -362,12 +362,11 @@ DatabaseConnection {
 	public ModelInfo loadGroupModel(int groupID) {
 		Connection dbCon = null;
 		ModelInfo modelInfo = new ModelInfo();
-
-		String query = "SELECT * FROM activegroupmodel as a INNER JOIN model as m ON a.modelID = m.modelID WHERE a.groupID = ? ORDER BY a.groupModelID DESC LIMIT 1 ";
+		String query = "SELECT * FROM activegroupmodel as a LEFT JOIN model as m ON a.modelID = m.modelID WHERE a.groupID = ? ORDER BY a.groupModelID DESC LIMIT 1 ";
 		try{
 			dbCon = initializeDBConnection(); 
 			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
-			preparedStatement.setInt(1, modelInfo.getModelID());
+			preparedStatement.setInt(1, groupID);
 			ResultSet rs = preparedStatement.executeQuery();
 			while (rs.next()) {
 				modelInfo.setModelID(rs.getInt("modelID"));
@@ -746,6 +745,31 @@ DatabaseConnection {
 		}      
 		return null;
 	}
+	
+	
+	/*
+	@Override
+	public String getUserName(String email) {
+		Connection dbCon = null;
+		String name = "";
+		String query = "SELECT * FROM user as u LEFT JOIN userprofile as p ON u.userID = p.userID WHERE userEmail = ?";
+		try{
+			dbCon = initializeDBConnection(); 
+			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+			preparedStatement.setString(1, email);
+			ResultSet rs = preparedStatement.executeQuery();
+			while (rs.next()) {
+				name = rs.getString("firstName");
+			}
+			return name;
+
+		} catch (SQLException ex) {
+			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+		}      
+		return null;
+	}
+	*/
+	
 
 }
 
