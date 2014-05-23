@@ -71,7 +71,7 @@ public class Comav200 {
 		this.model = model;
 	}
 
-	private MessageFrame oryxFrame = null;
+	public MessageFrame oryxFrame = null;
 
 	public static Comav200 GetInstance(){
 		if(instance == null){
@@ -145,6 +145,7 @@ public class Comav200 {
 		SelectionHandler<Widget> handler = new SelectionHandler<Widget>() {
 	        @Override
 	        public void onSelection(SelectionEvent<Widget> event) {
+	          model = new ModelInfo();
 	          TabPanel panel = (TabPanel) event.getSource();
 	          Widget w = event.getSelectedItem();
 	          int tabID = panel.getWidgetIndex(w);
@@ -238,7 +239,7 @@ public class Comav200 {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				if(!model.getModelName().equals("unknown")){
+				if(model.getModelName() != null){
 					System.out.println(model.getModelName() + " :modelname");
 					model.setIsProposal(0);
 					new SaveModel().saveModel(oryxFrame);
@@ -538,6 +539,7 @@ public class Comav200 {
 	*Initialize My Model view
 	*/
 	private Panel initMyModelView(){
+		model = new ModelInfo();
 		VerticalPanel panel = new VerticalPanel();
 		initializeOryxFrame();
 		panel.add(topMenuButtonsMyModelView());

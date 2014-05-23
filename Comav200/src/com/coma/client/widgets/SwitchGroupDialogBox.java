@@ -2,8 +2,10 @@ package com.coma.client.widgets;
 
 import java.util.List;
 
+import com.coma.client.Comav200;
 import com.coma.client.DatabaseConnection;
 import com.coma.client.DatabaseConnectionAsync;
+import com.coma.client.LoadModel;
 import com.coma.client.User;
 import com.coma.client.WorkGroupInfo;
 import com.google.gwt.core.client.GWT;
@@ -49,6 +51,7 @@ public class SwitchGroupDialogBox {
     			public void onSelect(SelectEvent event) {
     				// TODO Auto-generated method stub
     				User.getInstance().setActiveGroupID(groupList.get(groupBox.getSelectedIndex()).getWorkGroupID());
+    				new LoadModel().getActiveGroupModelFromDatabase(Comav200.GetInstance().oryxFrame);
     				Info.display("Group changed", "Active group: " + groupBox.getValue(groupBox.getSelectedIndex()));
                     dialog.hide();
     			}
