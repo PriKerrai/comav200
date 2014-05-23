@@ -71,7 +71,15 @@ public class Comav200 {
 		this.model = model;
 	}
 
-	public MessageFrame oryxFrame = null;
+	private MessageFrame oryxFrame = null;
+	public MessageFrame getOryxFrame() {
+		return oryxFrame;
+	}
+
+	public void setOryxFrame(MessageFrame oryxFrame) {
+		this.oryxFrame = oryxFrame;
+	}
+
 	public TabPanel tabPanel;
 
 	public static Comav200 GetInstance(){
@@ -300,7 +308,7 @@ public class Comav200 {
 			@Override
 			public void onSelect(SelectEvent event) {
 				tabPanel.setActiveWidget(tabPanel.getWidget(0));
-				new LoadModel().getActiveGroupModelFromDatabase(oryxFrame);
+				new LoadModel().getActiveGroupModelFromDatabase(getOryxFrame());
 			}
 			
 		});
@@ -582,7 +590,7 @@ public class Comav200 {
 	*Creates the frame which Oryx is loaded into
 	*/
 	public void initializeOryxFrame() {
-		oryxFrame = new MessageFrame("oryxFrame");
+		setOryxFrame(new MessageFrame("oryxFrame"));
 		oryxFrame.init();
 		oryxFrame.setUrl("http://localhost/oryx/oryx.xhtml");
 		oryxFrame.setHeight("600px");

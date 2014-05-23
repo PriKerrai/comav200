@@ -51,7 +51,7 @@ public class SwitchGroupDialogBox {
     			public void onSelect(SelectEvent event) {
     				// TODO Auto-generated method stub
     				User.getInstance().setActiveGroupID(groupList.get(groupBox.getSelectedIndex()).getWorkGroupID());
-    				new LoadModel().getActiveGroupModelFromDatabase(Comav200.GetInstance().oryxFrame);
+    				new LoadModel().getActiveGroupModelFromDatabase(Comav200.GetInstance().getOryxFrame());
     				Info.display("Group changed", "Active group: " + groupBox.getValue(groupBox.getSelectedIndex()));
                     dialog.hide();
     			}
