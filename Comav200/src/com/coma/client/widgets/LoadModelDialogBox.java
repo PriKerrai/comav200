@@ -23,7 +23,7 @@ public class LoadModelDialogBox {
 		// Create the popup dialog box
 		
 		dialog.setHeadingText("Select model");
-		dialog.setPixelSize(400, 300);
+		dialog.setPixelSize(400, 320);
 		dialog.setHideOnButtonClick(true);
 		dialog.setPredefinedButtons(PredefinedButton.CLOSE);
 

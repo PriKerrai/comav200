@@ -19,10 +19,7 @@ import com.sencha.gxt.widget.core.client.form.TextField;
 public class NameModelDialog {
 	
 	private TextField modelNameBox;
-	private ListBox modelTypeBox;
 	private MessageFrame oryxFrame;
-	private final DatabaseConnectionAsync databaseConnection = GWT
-			.create(DatabaseConnection.class);
 	private Dialog dialog;
 
 	public NameModelDialog(MessageFrame oryxFrame){

@@ -72,6 +72,7 @@ public class Comav200 {
 	}
 
 	public MessageFrame oryxFrame = null;
+	public TabPanel tabPanel;
 
 	public static Comav200 GetInstance(){
 		if(instance == null){
@@ -134,13 +135,13 @@ public class Comav200 {
 
 	public TabPanel initTabPanel(){
 		getUserProfile(User.getInstance().getUserId());
-		final TabPanel panel = new TabPanel();
+		tabPanel = new TabPanel();
 		
-		panel.add(initMyModelView(), "My Model");
-		panel.add(initGroupModelView(), "Group Model");
-		panel.add(initProposalView(), "Proposals");	
-		panel.add(initPreferencesView(), "Preferences");	
-		panel.setSize("100%", "100%");	
+		tabPanel.add(initMyModelView(), "My Model");
+		tabPanel.add(initGroupModelView(), "Group Model");
+		tabPanel.add(initProposalView(), "Proposals");	
+		tabPanel.add(initPreferencesView(), "Preferences");	
+		tabPanel.setSize("100%", "100%");	
 		
 		SelectionHandler<Widget> handler = new SelectionHandler<Widget>() {
 	        @Override
@@ -177,7 +178,7 @@ public class Comav200 {
 					}
 			}};
 	          	      
-	      panel.addSelectionHandler(handler);
+	      tabPanel.addSelectionHandler(handler);
 		
 		/*
 		panel.addSelectionHandler(new SelectionHandler<Integer>(){
@@ -211,7 +212,7 @@ public class Comav200 {
 				}
 		}});
 		*/
-		return panel;
+		return tabPanel;
 	}
 
 	private Panel topMenuButtonsMyModelView()
@@ -288,7 +289,8 @@ public class Comav200 {
 	{ 	
 		HorizontalPanel panel = new HorizontalPanel();
 		
-		importModelButton.getElement().setClassName("utilityButton");
+		importModelButton.setStyleName("testStyle");
+		//importModelButton.getElement().setClassName("utilityButton");
 		exportModelButton.getElement().setClassName("utilityButton");
 		switchGroupGroupTabButton.getElement().setClassName("utilityButton");
 
@@ -297,8 +299,8 @@ public class Comav200 {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				// TODO Auto-generated method stub
-				
+				tabPanel.setActiveWidget(tabPanel.getWidget(0));
+				new LoadModel().getActiveGroupModelFromDatabase(oryxFrame);
 			}
 			
 		});
