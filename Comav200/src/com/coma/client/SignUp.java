@@ -40,8 +40,8 @@ public class SignUp {
 		nameTextField.setName("nameTxtBox");
 		nameTextField.setAllowBlank(false);
 		holder.add(nameTextField);
-		
-		
+
+
 		holder.add(new Label("User Email"));
 		emailTextField.setName("emailTextBox");
 		emailTextField.setAllowBlank(false);
@@ -61,7 +61,7 @@ public class SignUp {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				
+
 				String name = nameTextField.getText();
 				String email = emailTextField.getText();
 				String password = passwordTextField.getValue();
@@ -81,7 +81,7 @@ public class SignUp {
 					}
 					if (password.equals(passwordRepeated)) {
 						addUserToDatabase(
-						email, encryptPassword(password), name);					
+								email, encryptPassword(password), name);					
 					} else{
 						AlertMessageBox alert = new AlertMessageBox("Incorrect", "Passwords doesn't match");
 						alert.show();
@@ -89,7 +89,7 @@ public class SignUp {
 					}
 				}
 			}
-			
+
 		});
 
 		holder.add(signUpButton);
@@ -106,7 +106,7 @@ public class SignUp {
 	 * @return Encrypted password
 	 */
 	private String encryptPassword(String password){
-		
+
 		MessageDigest m = null;
 		try {
 			m = MessageDigest.getInstance("MD5");
@@ -121,28 +121,44 @@ public class SignUp {
 		String hashtext = bigInt.toString(16);
 		// Now we need to zero pad it if you actually want the full 32 chars.
 		while(hashtext.length() < 32 ){
-		  hashtext = "0"+hashtext;
+			hashtext = "0"+hashtext;
 		}
 		return hashtext;
 	}
 
-	public void addUserToDatabase(String emailString, String password, String name) {
-		final String fName = name;
-		final String email = emailString;
-		databaseConnection.createNewUser(email, password,
-				new AsyncCallback<Void>() {
+
+	public void addUserToDatabase(final String email, final String password,final String name) {
+		//getUserID is called to see if email exists
+		databaseConnection.getUserID(email, new AsyncCallback<Integer>() {
 			public void onFailure(Throwable caught) {
 
 			}
 
-			public void onSuccess(Void result) {
-				getAndSetUserIDFromDatabase(email, fName);
-				
-			}
+			public void onSuccess(Integer result) {
+				System.out.println("REsult: " + result);
+				if(result == 0){
+					databaseConnection.createNewUser(email, password,
+							new AsyncCallback<Void>() {
+						public void onFailure(Throwable caught) {
+
+						}
+
+						public void onSuccess(Void result) {
+							getAndSetUserIDFromDatabase(email, name);
+
+						}
+					});
+				}else{
+					AlertMessageBox alert = new AlertMessageBox("Email already exists", "An account with this email has already been registered");
+					alert.show();
+					return;
+				}
+			}	
 		});
 
+
 	}
-	
+
 	public void getAndSetUserIDFromDatabase(String email, String name) {
 		final String fName = name;
 		databaseConnection.getUserID(email, new AsyncCallback<Integer>() {

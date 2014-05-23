@@ -63,6 +63,16 @@ public class LoadModel {
 					}
 				});
 		}
+	public void getModelFromDatabase(String modelCreatorName, String modelName, String modelCreationDate, final MessageFrame oryxFrame) {
+		databaseConnection.loadModel(modelCreatorName, modelName, modelCreationDate, new AsyncCallback<ModelInfo>() {
+					public void onFailure(Throwable caught) {
+					}
+					public void onSuccess(ModelInfo result) {
+						Comav200.GetInstance().setModel(result);
+						loadModel(result, oryxFrame);
+					}
+				});
+		}
 	
 	public void getModelsFromDatabase(int modelID, MessageFrame orFrame) {
 

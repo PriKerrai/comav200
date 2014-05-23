@@ -45,5 +45,7 @@ public interface DatabaseConnectionAsync {
 	void getModelIDs(int groupID, AsyncCallback<List<Integer>> asyncCallback);
 	void getVotes(List<Integer> modelIDs,
 			AsyncCallback<List<ProposalAvgVote>> callback);
+	void loadModel(String modelCreatorName, String modelName,
+			String modelCreationDate, AsyncCallback<ModelInfo> asyncCallback);
 	
 }

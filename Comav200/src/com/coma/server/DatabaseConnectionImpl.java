@@ -253,6 +253,38 @@ DatabaseConnection {
 		return null;
 	}
 
+	public ModelInfo loadModel(String modelCreatorName, String modelName,
+			String modelCreationDate) {
+		
+		Connection dbCon = null;
+		ModelInfo modelInfo = new ModelInfo();
+
+		String query = "SELECT * FROM model as m LEFT JOIN userprofile as u ON m.modelCreator = u.userID  WHERE u.firstName = ? AND m.modelName = ? AND m.creationDate= ?";
+		try{
+			dbCon = initializeDBConnection(); 
+			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+			preparedStatement.setString(1, modelCreatorName);
+			preparedStatement.setString(2, modelName);
+			preparedStatement.setString(3, modelCreationDate);
+			ResultSet rs = preparedStatement.executeQuery();
+			while (rs.next()) {
+				modelInfo.setModelID(rs.getInt("modelID"));
+				modelInfo.setModelGroupID(rs.getInt("groupID"));
+				modelInfo.setModelCreator(rs.getInt("modelCreator"));
+				modelInfo.setModelType(rs.getInt("modelType"));
+				modelInfo.setModelString(rs.getString("modelString"));
+				modelInfo.setModelName(rs.getString("modelName"));
+				modelInfo.setIsProposal(rs.getInt("isProposal"));
+				modelInfo.setModelCreationDate(rs.getString("creationDate"));
+			}
+			return modelInfo;
+
+		} catch (SQLException ex) {
+			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+		}      
+		return null;
+	}
+	
 	@Override
 	public void addCommentToModel(int userID, int modelID, String comment) {
 
@@ -745,6 +777,8 @@ DatabaseConnection {
 		}      
 		return null;
 	}
+
+
 	
 	
 	/*

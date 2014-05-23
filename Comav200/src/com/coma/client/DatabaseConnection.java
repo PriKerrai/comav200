@@ -37,4 +37,6 @@ public interface DatabaseConnection extends RemoteService {
 	String getModelCreatorName(int modelID);
 	List<Integer> getModelIDs(int groupID);
 	List<ProposalAvgVote> getVotes(List<Integer> modelIDs);
+	ModelInfo loadModel(String modelCreatorName, String modelName,
+			String modelCreationDate);
 }
