@@ -32,6 +32,7 @@ public class VoteCellList {
 	private static ContentPanel gridContentPanel;
 
 	private static List<ModelInfo> modelInfoList;
+	static ListStore<ModelInfo> store;
 
 	public static ContentPanel createVoteCellGrid() {
 
@@ -45,14 +46,14 @@ public class VoteCellList {
 		l.add(creationDateColumn);
 		ColumnModel<ModelInfo> cm = new ColumnModel<ModelInfo>(l);
 
-		final ListStore<ModelInfo> store = new ListStore<ModelInfo>(props.key());
+		store = new ListStore<ModelInfo>(props.key());
 		store.addAll(modelInfoList);
 
 		gridContentPanel = new ContentPanel();
-		gridContentPanel.addStyleName("margin-10");
 		gridContentPanel.setHeight(600);
 		gridContentPanel.setBodyBorder(false);
 		gridContentPanel.setBorders(false);
+		gridContentPanel.setHeaderVisible(false);
 
 		final Grid<ModelInfo> grid = new Grid<ModelInfo>(store, cm);
 		grid.getView().setAutoExpandColumn(creatorColumn);
@@ -61,7 +62,6 @@ public class VoteCellList {
 		grid.setBorders(false);
 
 		grid.setColumnReordering(false);
-		grid.setStateful(true);
 
 		grid.addRowClickHandler(new RowClickHandler() {
 

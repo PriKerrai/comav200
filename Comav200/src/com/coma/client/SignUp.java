@@ -5,29 +5,41 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FormPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
+import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.PasswordField;
 import com.sencha.gxt.widget.core.client.form.TextField;
+import com.coma.client.Comav200;
 
 public class SignUp {
 
 	TextButton signUpButton = new TextButton("Sign Up");
+	TextButton backToLoginButton = new TextButton("Back to login");
 	TextField emailTextField = new TextField();
 	TextField nameTextField = new TextField();
-	PasswordField passwordTextField = new PasswordField();
-	PasswordField passwordRepeatedTextField = new PasswordField();
+	PasswordField passwordField = new PasswordField();
+	PasswordField passwordFieldRepeated = new PasswordField();
 
 	private final DatabaseConnectionAsync databaseConnection = GWT
 			.create(DatabaseConnection.class);
+	
+	private int PANEL_WIDTH = 270;
+	private int PANEL_HEIGHT = 300;
 
-	public FormPanel screen() {
+	public VerticalLayoutContainer screen() {
+		VerticalLayoutContainer vlc = new VerticalLayoutContainer();
+		vlc.setWidth(PANEL_WIDTH);
 		final FormPanel form = new FormPanel();
 		form.setEncoding(FormPanel.ENCODING_MULTIPART);
 		form.setMethod(FormPanel.METHOD_POST);
@@ -35,28 +47,15 @@ public class SignUp {
 		form.addStyleName("demo-FormPanel");
 
 		VerticalPanel holder = new VerticalPanel();
-
-		holder.add(new Label("First name"));
-		nameTextField.setName("nameTxtBox");
+		HorizontalPanel hPanel = new HorizontalPanel();
+		
 		nameTextField.setAllowBlank(false);
-		holder.add(nameTextField);
-
-
-		holder.add(new Label("User Email"));
-		emailTextField.setName("emailTextBox");
+		holder.add(new FieldLabel(nameTextField, "First name"));
+		 
 		emailTextField.setAllowBlank(false);
-		holder.add(emailTextField);
-
-		holder.add(new Label("Password"));
-		passwordTextField.setName("password");
-		passwordTextField.setAllowBlank(false);
-		holder.add(passwordTextField);
-
-		holder.add(new Label("Repeat password"));
-		passwordRepeatedTextField.setName("passwordRepeated");
-		passwordRepeatedTextField.setAllowBlank(false);
-		holder.add(passwordRepeatedTextField);
-
+        holder.add(new FieldLabel(emailTextField, "Email"));
+        holder.add(new FieldLabel(passwordField, "Password"));
+        holder.add(new FieldLabel(passwordFieldRepeated, "Repeat password"));
 		signUpButton.addSelectHandler(new SelectHandler(){
 
 			@Override
@@ -64,8 +63,8 @@ public class SignUp {
 
 				String name = nameTextField.getText();
 				String email = emailTextField.getText();
-				String password = passwordTextField.getValue();
-				String passwordRepeated = passwordRepeatedTextField.getValue();
+				String password = passwordField.getValue();
+				String passwordRepeated = passwordFieldRepeated.getValue();
 
 				if (event.getSource().equals(signUpButton)) {
 
@@ -91,11 +90,25 @@ public class SignUp {
 			}
 
 		});
+		
+		backToLoginButton.addSelectHandler(new SelectHandler(){
 
-		holder.add(signUpButton);
+			@Override
+			public void onSelect(SelectEvent event) {
+				Comav200.GetInstance().initialize();
+			}
+		});
 
+		hPanel.add(signUpButton);
+		hPanel.add(backToLoginButton);
+		holder.add(hPanel);
 		form.add(holder);
-		return form;
+		
+		int windowHeight = Window.getClientHeight();
+        int windowWidth = Window.getClientWidth();
+        vlc.add(form);
+        vlc.setPosition((windowWidth-PANEL_WIDTH )/2, (windowHeight-PANEL_HEIGHT)/2);
+		return vlc;
 	}
 
 	/**

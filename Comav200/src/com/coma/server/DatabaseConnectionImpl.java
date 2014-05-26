@@ -707,6 +707,7 @@ DatabaseConnection {
 					while (rs.next()) {
 						proposalAvgVote.setName(rs.getString("firstName"));
 						proposalAvgVote.setAvgVote(rs.getFloat("average"));
+						proposalAvgVote.setModelID(modelID);
 					}
 					votes.add(proposalAvgVote);
 

@@ -12,6 +12,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class ProposalAvgVote  implements IsSerializable{
 
+	private int modelID;
 	private String name;
 	private double avgVote;
 	
@@ -26,6 +27,12 @@ public class ProposalAvgVote  implements IsSerializable{
 	}
 	public void setAvgVote(double avgVote) {
 		this.avgVote = avgVote;
+	}	
+	public int getModelID() {
+		return modelID;
+	}
+	public void setModelID(int modelID) {
+		this.modelID = modelID;
 	}
 	
 	

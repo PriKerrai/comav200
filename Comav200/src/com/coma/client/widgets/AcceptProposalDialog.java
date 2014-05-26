@@ -25,6 +25,7 @@ import com.sencha.gxt.widget.core.client.info.Info;
 public class AcceptProposalDialog {
 
 	Dialog dialog = new Dialog();
+	
 
 	private int activeModelID;
 

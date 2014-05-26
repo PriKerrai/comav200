@@ -47,7 +47,7 @@ public class ShowVotesOnProposalDialog {
 
 		ValueProvider<ProposalAvgVote, String> name();
 
-		@Path("id")
+		@Path("modelID")
 		ModelKeyProvider<ProposalAvgVote> nameKey();
 	}
 
@@ -127,8 +127,6 @@ public class ShowVotesOnProposalDialog {
 		});
 
 		panel = new FramedPanel();
-		panel.setLayoutData(new MarginData(10));
-		panel.setCollapsible(true);
 		panel.setHeadingText("Bar Renderer Chart");
 		panel.setPixelSize(620, 500);
 		panel.setBodyBorder(true);

@@ -150,6 +150,7 @@ public class Comav200 {
 
 				if (tabID == 0 || tabID == 1) {
 					p.add(oryxFrame);
+					oryxFrame.setWidth("100%");
 					if(tabID == 1){
 						oryxFrame.setVisible(true);
 						new LoadModel().getActiveGroupModelFromDatabase(oryxFrame);
@@ -176,6 +177,7 @@ public class Comav200 {
 				}
 					if (tabID == 3) {
 						if(isFirstTime){
+							p.setWidth("100%");
 							p.add(editProfile.screen(userProfile));
 							isFirstTime = false;
 						}

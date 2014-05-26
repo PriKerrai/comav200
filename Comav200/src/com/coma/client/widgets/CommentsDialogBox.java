@@ -71,7 +71,6 @@ public class CommentsDialogBox{
 		writeCommentTextArea.setPixelSize(DIALOG_WIDTH-5, (DIALOG_HEIGHT/2)-5);
 
 		final TextArea readCommentTextArea = new TextArea();
-		readCommentTextArea.setEmptyText("Comments on the model will be shown here...");
 		readCommentTextArea.setPixelSize(DIALOG_WIDTH-5, (DIALOG_HEIGHT/2)-5);
 		
 		StringBuilder comments = new StringBuilder();
@@ -80,7 +79,9 @@ public class CommentsDialogBox{
 		}
 
 		readCommentTextArea.setText(comments.toString());
+		readCommentTextArea.setEmptyText("Comments on the model will be shown here...");
 		readCommentTextArea.setAllowTextSelection(false);
+		readCommentTextArea.setEnabled(false);
 
 		// Add a handler to create the new group
 		dialog.getButton(PredefinedButton.YES).addSelectHandler(new SelectHandler() {
@@ -123,9 +124,6 @@ public class CommentsDialogBox{
 		VerticalLayoutContainer layout = new VerticalLayoutContainer();
 		panel.add(layout);
 
-//		writeCommentTextArea.setLayoutData(new VerticalLayoutData(1, 1));
-//		readCommentTextArea.setLayoutData(new VerticalLayoutData(1, 1));
-		
 		layout.add(writeCommentTextArea);
 		layout.add(readCommentTextArea);
 		
