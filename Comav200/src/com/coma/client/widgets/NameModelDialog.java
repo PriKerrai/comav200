@@ -1,12 +1,8 @@
 package com.coma.client.widgets;
 
 import com.coma.client.Comav200;
-import com.coma.client.DatabaseConnection;
-import com.coma.client.DatabaseConnectionAsync;
 import com.coma.client.ModelInfo;
 import com.coma.client.SaveModel;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.ui.ListBox;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;

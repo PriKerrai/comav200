@@ -6,7 +6,7 @@ public class ModelInfo implements IsSerializable {
 
 	private int modelID;
 	private int modelGroupID;
-	private int modelCreator;
+	private int modelCreatorID;
 	private String modelCreatorName;
 	private int modelType;
 	private String modelString;
@@ -14,15 +14,7 @@ public class ModelInfo implements IsSerializable {
 	private int IsProposal;
 	private String modelCreationDate;
 	private int groupModelVersion;
-	
-	public String getModelCreatorName() {
-		return modelCreatorName;
-	}
 
-	public void setModelCreatorName(String modelCreatorName) {
-		this.modelCreatorName = modelCreatorName;
-	}
-	
 	public int getGroupModelVersion() {
 		return groupModelVersion;
 	}
@@ -33,20 +25,20 @@ public class ModelInfo implements IsSerializable {
 
 	public ModelInfo() {}
 
-    public ModelInfo(int modelID, int modelGroupID, int modelCreator, 
-    		String modelCreatorName,
-    		int modelType, String modelString, String modelName, 
-    		int IsProposal, String modelCreationDate) {
-    	this.modelID = modelID;
-    	this.modelGroupID = modelGroupID;
-    	this.modelCreator = modelCreator;
-    	this.modelCreatorName = modelCreatorName;
-    	this.modelType = modelType;
-    	this.modelString = modelString;
-    	this.modelName = modelName;
-    	this.IsProposal = IsProposal;
-    	this.modelCreationDate = modelCreationDate;	
-    }
+	public ModelInfo(int modelID, int modelGroupID, int modelCreatorID, String modelCreatorName, 
+			int modelType, String modelString, String modelName, int IsProposal, String modelCreationDate) {
+		this();
+		this.modelID = modelID;
+		this.modelGroupID = modelGroupID;
+		this.modelCreatorID = modelCreatorID;
+		this.modelCreatorName = modelCreatorName;
+		this.modelCreatorName = modelCreatorName;
+		this.modelType = modelType;
+		this.modelString = modelString;
+		this.modelName = modelName;
+		this.IsProposal = IsProposal;
+		this.modelCreationDate = modelCreationDate;	
+	}
 
 	public int getModelID() {
 		return modelID;
@@ -65,11 +57,11 @@ public class ModelInfo implements IsSerializable {
 	}
 
 	public int getModelCreator() {
-		return modelCreator;
+		return modelCreatorID;
 	}
 
 	public void setModelCreator(int modelCreator) {
-		this.modelCreator = modelCreator;
+		this.modelCreatorID = modelCreator;
 	}
 
 	public int getModelType() {
@@ -111,5 +103,14 @@ public class ModelInfo implements IsSerializable {
 	public void setModelCreationDate(String modelCreationDate) {
 		this.modelCreationDate = modelCreationDate;
 	}
+
+
+	public String getModelCreatorName() {
+		return modelCreatorName;
+	}
+
+	public void setModelCreatorName(String modelCreatorName) {
+		this.modelCreatorName = modelCreatorName;
+	}
 }
-	
+

@@ -6,6 +6,7 @@ public class User {
 	private int userId;
 	private int activeGroupID;
 	private String userEmail;
+	private String userName;
 
 	public String getUserEmail() {
 		return userEmail;
@@ -17,6 +18,14 @@ public class User {
 
 	public int getActiveGroupID() {
 		return activeGroupID;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public void setActiveGroupID(int activeGroupID) {

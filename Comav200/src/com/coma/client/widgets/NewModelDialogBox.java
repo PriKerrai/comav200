@@ -1,23 +1,7 @@
 package com.coma.client.widgets;
 
-import java.util.Date;
-
 import com.coma.client.Comav200;
-import com.coma.client.DatabaseConnection;
-import com.coma.client.DatabaseConnectionAsync;
 import com.coma.client.ModelInfo;
-import com.coma.client.User;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
@@ -31,10 +15,7 @@ public class NewModelDialogBox {
 
 
 	private TextField modelNameBox;
-	private ListBox modelTypeBox;
 
-	private final DatabaseConnectionAsync databaseConnection = GWT
-			.create(DatabaseConnection.class);
 	private Dialog dialog;
 
 	public Dialog createDialogBox(){

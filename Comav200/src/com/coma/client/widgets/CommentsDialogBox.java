@@ -1,40 +1,36 @@
 package com.coma.client.widgets;
 
-import java.util.Date;
 import java.util.List;
 
-import com.coma.client.Comav200;
 import com.coma.client.DatabaseConnection;
 import com.coma.client.DatabaseConnectionAsync;
-import com.coma.client.ModelInfo;
 import com.coma.client.User;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
+import com.sencha.gxt.widget.core.client.FramedPanel;
+import com.sencha.gxt.widget.core.client.container.MarginData;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
-import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
-import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.TextArea;
 
 
-public class WriteCommentDialogBox{
+public class CommentsDialogBox{
 
 	private final DatabaseConnectionAsync databaseConnection = GWT
 			.create(DatabaseConnection.class);
 
+	private final static int DIALOG_WIDTH = 500;
+	private final static int DIALOG_HEIGHT = 400;
+	
 	private int activeModelID;
 	private List<String> commentList;
 
-	private Dialog dialog; 
+	private Dialog dialog;
+
+	private FramedPanel panel; 
 
 	public List<String> getCommentList() {
 		return commentList;
@@ -52,31 +48,31 @@ public class WriteCommentDialogBox{
 		this.activeModelID = modelID;
 	}
 
-	public WriteCommentDialogBox() {
+	public CommentsDialogBox() {
 	}
 
-	public WriteCommentDialogBox(int modelID) {
+	public CommentsDialogBox(int modelID) {
 		setModelID(modelID);
 		getCommentsOnModel(activeModelID);
 	}
 
 	public Dialog createDialogBox(){
+
 		// Create the popup dialog box
 		dialog = new Dialog();
-		dialog.setHeadingText("Leave and read comments on the model");
+		//dialog.setHeadingText("Leave a comment on the model");
 		dialog.setHideOnButtonClick(true);
+		dialog.setWidth(DIALOG_WIDTH);
+		dialog.setHeight(DIALOG_HEIGHT);
 		dialog.setPredefinedButtons(PredefinedButton.YES, PredefinedButton.CANCEL);
-
-		VerticalLayoutContainer verticalLayoutContainer = new VerticalLayoutContainer();
-		verticalLayoutContainer.addStyleName("dialogVPanel");
 
 		final TextArea writeCommentTextArea = new TextArea();
 		writeCommentTextArea.setEmptyText("Write a comment...");
-		writeCommentTextArea.setPixelSize(500, 200);
+		writeCommentTextArea.setPixelSize(DIALOG_WIDTH-5, (DIALOG_HEIGHT/2)-5);
 
 		final TextArea readCommentTextArea = new TextArea();
 		readCommentTextArea.setEmptyText("Comments on the model will be shown here...");
-		readCommentTextArea.setPixelSize(500, 200);
+		readCommentTextArea.setPixelSize(DIALOG_WIDTH-5, (DIALOG_HEIGHT/2)-5);
 		
 		StringBuilder comments = new StringBuilder();
 		for (int i = 0; i < commentList.size(); i++) {
@@ -84,25 +80,28 @@ public class WriteCommentDialogBox{
 		}
 
 		readCommentTextArea.setText(comments.toString());
-		readCommentTextArea.isEnabled();
-
-		verticalLayoutContainer.add(new FieldLabel(writeCommentTextArea), new VerticalLayoutData(-1, -1));
-		verticalLayoutContainer.add(new FieldLabel(readCommentTextArea), new VerticalLayoutData(-1, -1));
-
-		dialog.setWidget(verticalLayoutContainer);
+		readCommentTextArea.setAllowTextSelection(false);
 
 		// Add a handler to create the new group
 		dialog.getButton(PredefinedButton.YES).addSelectHandler(new SelectHandler() {
 
 			@Override
 			public void onSelect(SelectEvent event) {
+				
 				// TODO Auto-generated method stub
 				String comment = writeCommentTextArea.getText();
+				if(comment.equals("")) {
+					System.out.println("Tomt var det här");
+					dialog.hide();
+				}
+				else {
+				comment = comment + "  //" + User.getInstance().getUserName();
 				int userID = User.getInstance().getUserId();
-
+				
+								
 				addComment(userID, getModelID(), comment);
 				dialog.hide();
-
+				}
 			}
 		});
 		//Add a handler to close the dialog
@@ -113,6 +112,25 @@ public class WriteCommentDialogBox{
 				dialog.hide();
 			}
 		});
+		
+		panel = new FramedPanel();
+		panel.setLayoutData(new MarginData(1));
+		panel.setCollapsible(true);
+		panel.setHeadingText("Comments on model");
+		panel.setPixelSize(620, 500);
+		panel.setBodyBorder(true);
+
+		VerticalLayoutContainer layout = new VerticalLayoutContainer();
+		panel.add(layout);
+
+//		writeCommentTextArea.setLayoutData(new VerticalLayoutData(1, 1));
+//		readCommentTextArea.setLayoutData(new VerticalLayoutData(1, 1));
+		
+		layout.add(writeCommentTextArea);
+		layout.add(readCommentTextArea);
+		
+		panel.add(layout);
+		dialog.setWidget(layout);
 		return dialog;
 	}
 

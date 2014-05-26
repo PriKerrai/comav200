@@ -2,7 +2,6 @@ package com.coma.client.widgets;
 
 import java.util.List;
 
-import com.coma.client.ModelInfo;
 import com.coma.client.ProposalAvgVote;
 import com.coma.client.ProposalAvgVotesData;
 import com.google.gwt.core.client.GWT;
@@ -23,23 +22,15 @@ import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.data.shared.PropertyAccess;
-import com.sencha.gxt.fx.client.Draggable;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
 import com.sencha.gxt.widget.core.client.FramedPanel;
-import com.sencha.gxt.widget.core.client.Resizable;
-import com.sencha.gxt.widget.core.client.Resizable.Dir;
 import com.sencha.gxt.widget.core.client.container.MarginData;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
-import com.sencha.gxt.widget.core.client.event.CollapseEvent;
-import com.sencha.gxt.widget.core.client.event.CollapseEvent.CollapseHandler;
-import com.sencha.gxt.widget.core.client.event.ExpandEvent;
-import com.sencha.gxt.widget.core.client.event.ExpandEvent.ExpandHandler;
-import com.sencha.gxt.widget.core.client.form.FieldLabel;
 
 public class ShowVotesOnProposalDialog {
-	
+
 	private static List<ProposalAvgVote> proposalAvarageVoteList;
 
 	public static List<ProposalAvgVote> getProposalAvgVotesList() {
@@ -47,7 +38,7 @@ public class ShowVotesOnProposalDialog {
 	}
 
 	public static void setProposalAvgVotesList(List<ProposalAvgVote> proposalAvgVotesList) {
-		
+
 		ShowVotesOnProposalDialog.proposalAvarageVoteList = proposalAvgVotesList;
 	}
 
@@ -69,12 +60,10 @@ public class ShowVotesOnProposalDialog {
 		dialog = new Dialog();
 		dialog.setHeadingText("Save as new group model");
 		dialog.setWidget(new HTML("Are you sure this is the diagram\n you want to accept as the new group model?\n"));
-		dialog.setPixelSize(700, 600);
+		dialog.setWidth(700);
+		dialog.setHeight(600);
 		dialog.setHideOnButtonClick(true);
 		dialog.setPredefinedButtons(PredefinedButton.YES, PredefinedButton.CANCEL);
-
-		VerticalLayoutContainer verticalLayoutContainer = new VerticalLayoutContainer();
-		verticalLayoutContainer.addStyleName("dialogVPanel");
 
 		final ListStore<ProposalAvgVote> store = new ListStore<ProposalAvgVote>(dataAccess.nameKey());
 		store.addAll(ProposalAvgVotesData.getData());
@@ -144,34 +133,12 @@ public class ShowVotesOnProposalDialog {
 		panel.setPixelSize(620, 500);
 		panel.setBodyBorder(true);
 
-		final Resizable resize = new Resizable(panel, Dir.E, Dir.SE, Dir.S);
-		resize.setMinHeight(400);
-		resize.setMinWidth(400);
-
-		panel.addExpandHandler(new ExpandHandler() {
-			@Override
-			public void onExpand(ExpandEvent event) {
-				resize.setEnabled(true);
-			}
-		});
-		panel.addCollapseHandler(new CollapseHandler() {
-			@Override
-			public void onCollapse(CollapseEvent event) {
-				resize.setEnabled(false);
-			}
-		});
-
-		new Draggable(panel, panel.getHeader()).setUseProxy(false);
-
 		VerticalLayoutContainer layout = new VerticalLayoutContainer();
 		panel.add(layout);
 
 		chart.setLayoutData(new VerticalLayoutData(1, 1));
 		layout.add(chart);
-
-
-		verticalLayoutContainer.add(new FieldLabel(panel), new VerticalLayoutData(1, -1));
-		dialog.setWidget(verticalLayoutContainer);
+		dialog.setWidget(layout);
 		return dialog;
 	}
 

@@ -3,12 +3,9 @@ package com.coma.client.widgets;
 import java.util.List;
 
 import com.coma.client.Comav200;
-import com.coma.client.DatabaseConnection;
-import com.coma.client.DatabaseConnectionAsync;
 import com.coma.client.LoadModel;
 import com.coma.client.User;
 import com.coma.client.WorkGroupInfo;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.ListBox;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
@@ -21,9 +18,7 @@ import com.sencha.gxt.widget.core.client.info.Info;
 
 public class SwitchGroupDialogBox {
 	private ListBox groupBox;
-    private final DatabaseConnectionAsync databaseConnection = GWT
-                    .create(DatabaseConnection.class);
-	private Dialog dialog;
+    private Dialog dialog;
    
     public Dialog createDialogBox(List<WorkGroupInfo> groups){
     		// Create the popup dialog box

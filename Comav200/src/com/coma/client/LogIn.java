@@ -92,10 +92,11 @@ public class LogIn {
 
 	private void checkAuthantication(String email, String password) {
 		String encryptedPassword = encryptPassword(passwordField.getValue());
+		String emailText = emailTextField.getText();
 		if (encryptedPassword.equals(password)) {
-			getAndSetUserIDFromDatabase(emailTextField.getText());
+			getAndSetUserName(emailText);
+			getAndSetUserID(emailText);	
 			User.getInstance().setUserEmail(emailTextField.getText());
-
 		} else {
 			AlertMessageBox alert = new AlertMessageBox("Login failed",
 					"Please check your credentials and try again.");
@@ -106,7 +107,7 @@ public class LogIn {
 	/**
 	*Gets active users ID from database and sets the ID in the User class
 	*/
-	public void getAndSetUserIDFromDatabase(String email) {
+	public void getAndSetUserID(String email) {
 		databaseConnection.getUserID(email, new AsyncCallback<Integer>() {
 			public void onFailure(Throwable caught) {
 			}
@@ -117,7 +118,20 @@ public class LogIn {
 				User.getInstance().setUserId(result);
 				Comav200.GetInstance().initMainProgram();		
 			}
+		});
+	}
+	
+	public void getAndSetUserName(String email) {
+		databaseConnection.getUserName(email, new AsyncCallback<String>() {
+			public void onFailure(Throwable caught) {
+			}
 
+			@Override
+			public void onSuccess(String result) {
+				// TODO Auto-generated method stub
+				System.out.println(result);
+				User.getInstance().setUserName(result);
+			}
 		});
 	}
 	

@@ -1,3 +1,11 @@
+
+/**
+ * Sencha GXT 3.1.0 - Sencha for GWT
+ * Copyright(c) 2007-2014, Sencha, Inc.
+ * licensing@sencha.com
+ *
+ * http://www.sencha.com/products/gxt/license/
+ */
 package com.coma.client.widgets;
 
 import java.util.ArrayList;
@@ -5,81 +13,75 @@ import java.util.List;
 
 import com.coma.client.Comav200;
 import com.coma.client.ModelInfo;
-import com.google.gwt.cell.client.TextCell;
-import com.google.gwt.user.cellview.client.CellList;
-import com.google.gwt.user.cellview.client.SimplePager;
-import com.google.gwt.view.client.AsyncDataProvider;
-import com.google.gwt.view.client.HasData;
-import com.google.gwt.view.client.Range;
-import com.google.gwt.view.client.SelectionChangeEvent;
-import com.google.gwt.view.client.SingleSelectionModel;
+import com.coma.client.ModelInfoProperties;
+import com.google.gwt.core.client.GWT;
+import com.sencha.gxt.data.shared.ListStore;
+import com.sencha.gxt.widget.core.client.ContentPanel;
+import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
+import com.sencha.gxt.widget.core.client.event.RowClickEvent;
+import com.sencha.gxt.widget.core.client.event.RowClickEvent.RowClickHandler;
+import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
+import com.sencha.gxt.widget.core.client.grid.ColumnModel;
+import com.sencha.gxt.widget.core.client.grid.Grid;
 
 public class VoteCellList {
 
-	private static class MyDataProvider extends AsyncDataProvider<String> {
+	private static final ModelInfoProperties props = GWT.create(ModelInfoProperties.class);
 
-		@Override
-		protected void onRangeChanged(HasData<String> display) {
-			// Get the new range.
-			final Range range = display.getVisibleRange();
+	private static ContentPanel gridContentPanel;
 
-			/*
-			 * Query the data asynchronously. If you are using a database, you can
-			 * make an RPC call here. We'll use a Timer to simulate a delay.
-			 */
-			int start = range.getStart();
-			List<String> newData = new ArrayList<String>();
+	private static List<ModelInfo> modelInfoList;
 
-			for (ModelInfo modelInfo : getModelInfoList())
-			{
-				int modelID = modelInfo.getModelID();
-				int modelCreator = modelInfo.getModelCreator();
-				String modelName = modelInfo.getModelName();
-				String modelCreationDate = modelInfo.getModelCreationDate();
-				newData.add(modelID + "/" + "Creator: " + modelCreator + " Diagram name: " + modelName + " Diagram creation date " + modelCreationDate);
+	public static ContentPanel createVoteCellGrid() {
+
+		ColumnConfig<ModelInfo, String> creatorColumn = new ColumnConfig<ModelInfo, String>(props.modelCreatorName(), 75, ("Creator"));
+		ColumnConfig<ModelInfo, String> modelNameColumn = new ColumnConfig<ModelInfo, String>(props.modelName(), 100, "Model name");
+		ColumnConfig<ModelInfo, String> creationDateColumn = new ColumnConfig<ModelInfo, String>(props.modelCreationDate(), 150, "Creation date");
+
+		List<ColumnConfig<ModelInfo, ?>> l = new ArrayList<ColumnConfig<ModelInfo, ?>>();
+		l.add(creatorColumn);
+		l.add(modelNameColumn);
+		l.add(creationDateColumn);
+		ColumnModel<ModelInfo> cm = new ColumnModel<ModelInfo>(l);
+
+		final ListStore<ModelInfo> store = new ListStore<ModelInfo>(props.key());
+		store.addAll(modelInfoList);
+
+		gridContentPanel = new ContentPanel();
+		gridContentPanel.addStyleName("margin-10");
+		gridContentPanel.setHeight(600);
+		gridContentPanel.setBodyBorder(false);
+		gridContentPanel.setBorders(false);
+
+		final Grid<ModelInfo> grid = new Grid<ModelInfo>(store, cm);
+		grid.getView().setAutoExpandColumn(creatorColumn);
+		grid.getView().setStripeRows(true);
+		grid.getView().setColumnLines(true);
+		grid.setBorders(false);
+
+		grid.setColumnReordering(false);
+		grid.setStateful(true);
+
+		grid.addRowClickHandler(new RowClickHandler() {
+
+			@Override
+			public void onRowClick(RowClickEvent event) {
+				int modelID = event.getRowIndex();
+				ModelInfo modelOnSelectedRow = store.get(modelID);
+
+				Comav200.GetInstance().loadModelFromCellList(modelOnSelectedRow.getModelID());
+				Comav200.GetInstance().setActiveModelID(modelOnSelectedRow.getModelID());
 			}
+		});
 
-			// Push the data to the displays. AsyncDataProvider will only update
-			// displays that are within range of the data.
-			updateRowData(start, newData);
-		}
-	}
+		VerticalLayoutContainer verticalContainer = new VerticalLayoutContainer();
+		gridContentPanel.add(verticalContainer);
 
-	public static List<ModelInfo> modelInfoList;
+		verticalContainer.add(grid, new VerticalLayoutData(1, 1));
 
-	public CellList<String> votingPanel()
-	{
-		// Create a CellList.
-		CellList<String> cellList = new CellList<String>(new TextCell());
+		return gridContentPanel;
 
-		// Create a data provider.
-		MyDataProvider dataProvider = new MyDataProvider();
-
-        // Add the cellList to the dataProvider.
-        dataProvider.addDataDisplay(cellList);
-
-        // Create paging controls.
-        SimplePager pager = new SimplePager();
-        pager.setDisplay(cellList);
-
-     // Add a selection model to handle user selection.
-        final SingleSelectionModel<String> selectionModel = new SingleSelectionModel<String>();
-        cellList.setSelectionModel(selectionModel);
-
-        selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
-          public void onSelectionChange(SelectionChangeEvent event) {
-            String selected = selectionModel.getSelectedObject();
-            if (selected != null) {
-              String[] modelID = selected.split("/");
-              //Window.alert("You selected: " + modelID[1] + "ModelID: " + modelID[0]); 
-              Comav200.GetInstance().loadModelFromCellList(Integer.parseInt(modelID[0]));
-              Comav200.GetInstance().setActiveModelID((Integer.parseInt(modelID[0])));
-              }
-          }
-        });
-        cellList.setWidth("100%");
-
-		return cellList;
 	}
 
 	public static List<ModelInfo> getModelInfoList() {
@@ -87,9 +89,6 @@ public class VoteCellList {
 	}
 
 	public static void setModelInfoList(List<ModelInfo> modelInfoList) {
-		
 		VoteCellList.modelInfoList = modelInfoList;
 	}
 }
-
-

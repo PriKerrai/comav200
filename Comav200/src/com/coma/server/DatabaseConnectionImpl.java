@@ -26,29 +26,12 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 @SuppressWarnings("serial")
 public class DatabaseConnectionImpl extends RemoteServiceServlet implements
 DatabaseConnection {
-	/**
-	 * Escape an html string. Escaping data received from the client helps to
-	 * prevent cross-site script vulnerabilities.
-	 * 
-	 * @param html the html string to escape
-	 * @return the escaped string
-	 */
-	private String escapeHtml(String html) {
-		if (html == null) {
-			return null;
-		}
-		return html.replaceAll("&", "&amp;").replaceAll("<", "&lt;")
-				.replaceAll(">", "&gt;");
-	}
-
 	private Connection initializeDBConnection() throws SQLException {
 		String dbURL = "jdbc:mysql://localhost:3306/comadatabase";
 		String username ="root";
 		String password = "";
 
-		Connection dbCon = null;
-
-		return dbCon = DriverManager.getConnection(dbURL, username, password);
+		return DriverManager.getConnection(dbURL, username, password);
 	}
 
 	@Override
@@ -123,7 +106,7 @@ DatabaseConnection {
 
 		int modelID;
 		int modelGroupID;
-		int modelCreator;
+		int modelCreatorID;
 		int modelType;
 		String modelString;
 		String modelName;	
@@ -142,7 +125,7 @@ DatabaseConnection {
 			while (rs.next()) {
 				modelID = rs.getInt("modelID");
 				modelGroupID = rs.getInt("groupID");
-				modelCreator = rs.getInt("modelCreator");
+				modelCreatorID = rs.getInt("modelCreator");
 				modelType = rs.getInt("modelType");
 				modelString = rs.getString("modelString");
 				modelName	 = rs.getString("modelName");
@@ -150,7 +133,7 @@ DatabaseConnection {
 				modelCreationDate = rs.getString("creationDate");
 				modelCreatorName = rs.getString("firstName");
 
-				ModelInfo mI = new ModelInfo(modelID, modelGroupID, modelCreator,modelCreatorName,modelType,modelString,modelName,IsProposal,modelCreationDate);
+				ModelInfo mI = new ModelInfo(modelID, modelGroupID, modelCreatorID, modelCreatorName,modelType,modelString,modelName,IsProposal,modelCreationDate);
 				modelInfoList.add(mI);
 			}
 			return  modelInfoList;
@@ -779,6 +762,27 @@ DatabaseConnection {
 		}      
 		return null;
 	}
+
+	@Override
+	 public String getUserName(String email) {
+	  Connection dbCon = null;
+	  String name = "";
+	  String query = "SELECT * FROM user as u LEFT JOIN userprofile as p ON u.userID = p.userID WHERE userEmail = ?";
+	  try{
+	   dbCon = initializeDBConnection(); 
+	   PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+	   preparedStatement.setString(1, email);
+	   ResultSet rs = preparedStatement.executeQuery();
+	   while (rs.next()) {
+	    name = rs.getString("firstName");
+	   }
+	   return name;
+
+	  } catch (SQLException ex) {
+	   Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+	  }      
+	  return null;
+	 }
 
 
 	

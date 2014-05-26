@@ -164,11 +164,12 @@ public class SignUp {
 		databaseConnection.getUserID(email, new AsyncCallback<Integer>() {
 			public void onFailure(Throwable caught) {
 			}
-
+			
 			@Override
 			public void onSuccess(Integer result) {
 				// TODO Auto-generated method stub
 				User.getInstance().setUserId(result);
+				User.getInstance().setUserName(fName);
 				Comav200.GetInstance().addUserProfileToUser(fName, "", "", "");
 				Comav200.GetInstance().initMainProgram();		
 			}

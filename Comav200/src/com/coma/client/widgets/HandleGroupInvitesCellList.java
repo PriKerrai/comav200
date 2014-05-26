@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.coma.client.ActiveInvite;
-import com.coma.client.Comav200;
-import com.coma.client.ModelInfo;
 import com.coma.client.WorkGroupInfo;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.user.cellview.client.CellList;
