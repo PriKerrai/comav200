@@ -363,6 +363,7 @@ DatabaseConnection {
 			preparedStatement.setInt(1, activeGroupID);
 			ResultSet rs = preparedStatement.executeQuery();
 			while (rs.next()) {
+				System.out.println("Group db");
 				workGroupInfo.setWorkGroupID(rs.getInt("groupID"));
 				workGroupInfo.setWorkGroupFacilitator(rs.getInt("groupFacilitator"));
 				workGroupInfo.setWorkGroupName(rs.getString("groupName"));

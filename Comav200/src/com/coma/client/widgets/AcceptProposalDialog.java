@@ -14,6 +14,7 @@ import com.sencha.gxt.widget.core.client.event.DialogHideEvent.HasDialogHideHand
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.HasSelectHandlers;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
+import com.sencha.gxt.widget.core.client.info.Info;
 
 /**
  * Creates the dialog for accepting a proposal as the new group model. 
@@ -91,8 +92,11 @@ public class AcceptProposalDialog {
 			}
 			@Override
 			public void onSuccess(WorkGroupInfo result) {
+				System.out.println(result.getWorkGroupFacilitator()+ ": DB");
+				System.out.println(User.getInstance().getUserId()+ ": user");
 				if(result.getWorkGroupFacilitator() == User.getInstance().getUserId()){
 					updateActiveGroupModel(activeGroupID, modelID, version);
+					Info.display("New group model", "Model set as group model");
 				}else{
 					AlertMessageBox alert = new AlertMessageBox("Forbidden", "Only group facilitator can accept proposals");
 					alert.show();
