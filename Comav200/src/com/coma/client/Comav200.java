@@ -36,6 +36,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.TabItemConfig;
 import com.sencha.gxt.widget.core.client.TabPanel;
+import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
@@ -276,9 +277,16 @@ public class Comav200 {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				Dialog dialog = new SendProposalDialog(oryxFrame).createDialogBox();
-				dialog.center();
-				dialog.show();
+				if(model.getModelName() != null){
+					Dialog dialog = new SendProposalDialog(oryxFrame).createDialogBox();
+					dialog.center();
+					dialog.show();
+				} else{
+					AlertMessageBox alert = new AlertMessageBox("Not saved", "Model needs to be saved before you can send it as a proposal");
+					alert.show();
+				}	
+				
+				
 						
 			}
 			

@@ -129,8 +129,9 @@ DatabaseConnection {
 		String modelName;	
 		int IsProposal;
 		String modelCreationDate;
+		String modelCreatorName;
 
-		String query = "SELECT * FROM model WHERE groupID = ? AND isProposal = ?";
+		String query = "SELECT * FROM model as m LEFT JOIN userprofile as u ON m.modelCreator = u.userID WHERE m.groupID = ? AND m.isProposal = ?";
 		try{
 			dbCon = initializeDBConnection(); 
 			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
@@ -147,8 +148,9 @@ DatabaseConnection {
 				modelName	 = rs.getString("modelName");
 				IsProposal = rs.getInt("isProposal");
 				modelCreationDate = rs.getString("creationDate");
+				modelCreatorName = rs.getString("firstName");
 
-				ModelInfo mI = new ModelInfo(modelID, modelGroupID, modelCreator,modelType,modelString,modelName,IsProposal,modelCreationDate);
+				ModelInfo mI = new ModelInfo(modelID, modelGroupID, modelCreator,modelCreatorName,modelType,modelString,modelName,IsProposal,modelCreationDate);
 				modelInfoList.add(mI);
 			}
 			return  modelInfoList;

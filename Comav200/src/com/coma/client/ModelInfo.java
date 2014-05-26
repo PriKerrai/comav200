@@ -8,6 +8,13 @@ public class ModelInfo implements IsSerializable {
 	private int modelGroupID;
 	private int modelCreator;
 	private String modelCreatorName;
+	private int modelType;
+	private String modelString;
+	private String modelName;	
+	private int IsProposal;
+	private String modelCreationDate;
+	private int groupModelVersion;
+	
 	public String getModelCreatorName() {
 		return modelCreatorName;
 	}
@@ -15,13 +22,6 @@ public class ModelInfo implements IsSerializable {
 	public void setModelCreatorName(String modelCreatorName) {
 		this.modelCreatorName = modelCreatorName;
 	}
-
-	private int modelType;
-	private String modelString;
-	private String modelName;	
-	private int IsProposal;
-	private String modelCreationDate;
-	private int groupModelVersion;
 	
 	public int getGroupModelVersion() {
 		return groupModelVersion;
@@ -34,11 +34,13 @@ public class ModelInfo implements IsSerializable {
 	public ModelInfo() {}
 
     public ModelInfo(int modelID, int modelGroupID, int modelCreator, 
+    		String modelCreatorName,
     		int modelType, String modelString, String modelName, 
     		int IsProposal, String modelCreationDate) {
     	this.modelID = modelID;
     	this.modelGroupID = modelGroupID;
     	this.modelCreator = modelCreator;
+    	this.modelCreatorName = modelCreatorName;
     	this.modelType = modelType;
     	this.modelString = modelString;
     	this.modelName = modelName;
