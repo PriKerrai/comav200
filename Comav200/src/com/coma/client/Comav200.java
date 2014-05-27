@@ -8,17 +8,18 @@ import com.coma.client.oryxhandlers.LoadingCompletehandler;
 import com.coma.client.widgets.AcceptProposalDialog;
 import com.coma.client.widgets.CallbackHandler;
 import com.coma.client.widgets.CommentsDialog;
-import com.coma.client.widgets.CreateNewGroupDialog;
-import com.coma.client.widgets.InviteToGroupDialogBox;
+import com.coma.client.widgets.CreateNewGroupPanel;
+import com.coma.client.widgets.InviteToGroupPanel;
 import com.coma.client.widgets.LoadModelCellGrid;
 import com.coma.client.widgets.LoadModelDialog;
 import com.coma.client.widgets.MessageFrame;
+import com.coma.client.widgets.ModelCellGrid;
 import com.coma.client.widgets.NameModelDialog;
 import com.coma.client.widgets.NewModelDialog;
 import com.coma.client.widgets.SendProposalDialog;
-import com.coma.client.widgets.VoteSummaryOnGroupProposalsDialog;
-import com.coma.client.widgets.ModelCellGrid;
+import com.coma.client.widgets.UserProfileFormPanel;
 import com.coma.client.widgets.VoteDialogBox;
+import com.coma.client.widgets.VoteSummaryOnGroupProposalsDialog;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
@@ -53,14 +54,6 @@ public class Comav200 {
 	private List<String> userProfile;
 	private boolean isFirstTime = true;	
 	private Panel proposalButtonsPanel;
-
-	public List<String> getUserProfile() {
-		return userProfile;
-	}
-
-	public void setUserProfile(List<String> userProfile) {
-		this.userProfile = userProfile;
-	}
 
 	public ModelInfo getModel() {
 		return model;
@@ -114,8 +107,23 @@ public class Comav200 {
 	SignUp signUp = new SignUp();
 	VoteSummaryOnGroupProposalsDialog showVotesOnProposalDialog = new VoteSummaryOnGroupProposalsDialog();
 	ModelCellGrid voteCellList = new ModelCellGrid();
-	EditProfileView editProfile = new EditProfileView();
+	ProfileView profileView = new ProfileView();
 	HorizontalPanel dockPanel = new HorizontalPanel();
+	UserProfileFormPanel userProfilePanel = new UserProfileFormPanel();
+	CreateNewGroupPanel createNewGroupPanel = new CreateNewGroupPanel();
+	InviteToGroupPanel inviteToGroupPanel = new InviteToGroupPanel();
+
+	public UserProfileFormPanel getUserProfilePanel() {
+		return userProfilePanel;
+	}
+	
+	public CreateNewGroupPanel getCreateNewGroupPanel() {
+		return createNewGroupPanel;
+	}
+	
+	public InviteToGroupPanel getInviteToGroupPanel() {
+		return inviteToGroupPanel;
+	}
 
 	/**
 	 * Create a remote service proxy to talk to the server-side Greeting service.
@@ -123,7 +131,7 @@ public class Comav200 {
 	private final DatabaseConnectionAsync databaseConnection = GWT
 			.create(DatabaseConnection.class);
 	private int activeModelID;
-
+	
 	public void initialize(){
 		RootPanel.get("mainDiv").add(logIn.screen());
 	}
@@ -176,15 +184,14 @@ public class Comav200 {
 
 					p.add(dockPanel);	
 				}
-				if (tabID == 3) {
-					if(isFirstTime){
-						p.setWidth("100%");
-						p.add(editProfile.screen(userProfile));
-						isFirstTime = false;
+					if (tabID == 3) {
+						if(isFirstTime){
+							p.setWidth("100%");
+							p.add(profileView.profileViewContainer());
+							isFirstTime = false;
+						}
 					}
-				}
 			}};
-
 			tabPanel.addSelectionHandler(handler);
 
 			return tabPanel;
@@ -223,6 +230,7 @@ public class Comav200 {
 					dialog.show();
 				}	
 			}
+
 		});
 		loadModelButton.addSelectHandler(new SelectHandler(){
 
@@ -230,7 +238,9 @@ public class Comav200 {
 			public void onSelect(SelectEvent event) {
 				//new LoadModel().getModelsFromDatabase(2,oryxFrame);
 				getLoadModelCellListData();
+
 			}
+
 		});
 		proposeButton.addSelectHandler(new SelectHandler(){
 
@@ -244,7 +254,11 @@ public class Comav200 {
 					AlertMessageBox alert = new AlertMessageBox("Not saved", "Model needs to be saved before you can send it as a proposal");
 					alert.show();
 				}	
+				
+				
+
 			}
+
 		});
 
 		panel.add(newModelButton);
@@ -265,7 +279,7 @@ public class Comav200 {
 		exportModelButton.getElement().setClassName("utilityButton");
 		switchGroupGroupTabButton.getElement().setClassName("utilityButton");
 
-
+		
 		importModelButton.addSelectHandler(new SelectHandler(){
 
 			@Override
@@ -273,7 +287,7 @@ public class Comav200 {
 				tabPanel.setActiveWidget(tabPanel.getWidget(0));
 				new LoadModel().getActiveGroupModelFromDatabase(getOryxFrame());
 			}
-
+			
 		});
 		exportModelButton.addSelectHandler(new SelectHandler(){
 
@@ -284,7 +298,7 @@ public class Comav200 {
 			}
 
 		});
-
+		
 		switchGroupGroupTabButton.addSelectHandler(new SelectHandler(){
 
 			@Override
@@ -372,77 +386,6 @@ public class Comav200 {
 		return panel;  
 	}
 
-	private Panel topMenuButtonsPreferencesView()
-	{ 	
-		HorizontalPanel panel = new HorizontalPanel();
-
-		createGroupButton.getElement().setClassName("utilityButton");
-		inviteGroupButton.getElement().setClassName("utilityButton");
-		switchGroupPreferencesTabButton.getElement().setClassName("utilityButton");
-		editProfileButton.getElement().setClassName("utilityButton");
-		invitesButton.getElement().setClassName("utilityButton");
-
-		createGroupButton.addSelectHandler(new SelectHandler(){
-
-			@Override
-			public void onSelect(SelectEvent event) {
-				CreateNewGroupDialog gdb = new CreateNewGroupDialog();
-				Dialog dialogBox = gdb.createNewGroupDialog();
-				dialogBox.center();
-				dialogBox.show();
-
-			}
-
-		});
-		inviteGroupButton.addSelectHandler(new SelectHandler(){
-
-			@Override
-			public void onSelect(SelectEvent event) {
-				InviteToGroupDialogBox itgdb = new InviteToGroupDialogBox();
-				Dialog dialogBox = itgdb.createInviteToGroupDialog();
-				dialogBox.center();
-				dialogBox.show();
-
-			}
-
-		});
-		switchGroupPreferencesTabButton.addSelectHandler(new SelectHandler(){
-
-			@Override
-			public void onSelect(SelectEvent event) {
-				new HandleGroups().getUsersGroups();
-
-			}
-
-		});
-		editProfileButton.addSelectHandler(new SelectHandler(){
-
-			@Override
-			public void onSelect(SelectEvent event) {
-				// TODO Auto-generated method stub
-
-			}
-
-		});
-		invitesButton.addSelectHandler(new SelectHandler(){
-
-			@Override
-			public void onSelect(SelectEvent event) {
-				new HandleGroups().getGroupInvites();
-
-			}
-
-		});
-
-		panel.add(createGroupButton);
-		panel.add(inviteGroupButton);
-		panel.add(switchGroupPreferencesTabButton);
-		panel.add(editProfileButton);
-		panel.add(invitesButton);
-
-		return panel;  
-	}
-
 	public void getVoteMapData (final Panel p) {
 		databaseConnection.getAllModelsFromSpecificGroupThatIsProposed(User.getInstance().getActiveGroupID(), new AsyncCallback<List<ModelInfo>>() {
 			@Override
@@ -505,7 +448,6 @@ public class Comav200 {
 				LoadModelDialog lmdb = new LoadModelDialog();
 				LoadModelCellGrid.setModelInfoList(result);
 
-
 				Dialog dialog = lmdb.createLoadModelDialog(LoadModelCellGrid.createLoadModelCellGrid());
 				dialog.center();
 				dialog.show();
@@ -551,7 +493,6 @@ public class Comav200 {
 	 */
 	private Panel initPreferencesView(){
 		VerticalPanel panel = new VerticalPanel();
-		panel.add(topMenuButtonsPreferencesView());
 		return panel;
 	}
 
@@ -697,7 +638,7 @@ public class Comav200 {
 
 			@Override
 			public void onSuccess(List<String> result) {
-				setUserProfile(result);
+				userProfilePanel.setUserProfile(result);
 			}
 
 		});
