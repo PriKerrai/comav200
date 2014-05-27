@@ -36,7 +36,7 @@ public interface DatabaseConnectionAsync {
 			String birthday, String phoneNumber, AsyncCallback<Void> callback);
 	void getUserProfile(int userID, AsyncCallback<List<String>> callback);
 	void getUsersGroups(int userID, AsyncCallback<List<WorkGroupInfo>> callback);
-	void getAllUsersModels(int userID, AsyncCallback<List<ModelInfo>> callback);
+	void getAllUserModels(int userID, AsyncCallback<List<ModelInfo>> callback);
 	void updateActiveGroupModel(int activeGroupID, int modelID, String version,
 			AsyncCallback<Void> callback);
 	void getAllGroupMembers(int activeGroupID,

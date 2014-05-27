@@ -125,7 +125,7 @@ public class Comav200 {
 	private final DatabaseConnectionAsync databaseConnection = GWT
 			.create(DatabaseConnection.class);
 	private int activeModelID;
-	
+
 	public void initialize(){
 		RootPanel.get("mainDiv").add(logIn.screen());
 	}
@@ -159,6 +159,7 @@ public class Comav200 {
 				}
 
 				if (tabID == 2) {
+					activeModelID = -1;
 					p.clear();
 					dockPanel.clear();
 					p.add(proposalButtonsPanel);
@@ -176,18 +177,18 @@ public class Comav200 {
 
 					p.add(dockPanel);	
 				}
-					if (tabID == 3) {
-						if(isFirstTime){
-							p.setWidth("100%");
-							p.add(editProfile.screen(userProfile));
-							isFirstTime = false;
-						}
+				if (tabID == 3) {
+					if(isFirstTime){
+						p.setWidth("100%");
+						p.add(editProfile.screen(userProfile));
+						isFirstTime = false;
 					}
+				}
 			}};
- 	      
-	      tabPanel.addSelectionHandler(handler);
 
-		return tabPanel;
+			tabPanel.addSelectionHandler(handler);
+
+			return tabPanel;
 	}
 
 	private Panel topMenuButtonsMyModelView()
@@ -207,9 +208,7 @@ public class Comav200 {
 				Dialog dialog = new NewModelDialogBox().createDialogBox();
 				dialog.center();
 				dialog.show();
-
 			}
-
 		});
 		saveModelButton.addSelectHandler(new SelectHandler(){
 
@@ -225,7 +224,6 @@ public class Comav200 {
 					dialog.show();
 				}	
 			}
-
 		});
 		loadModelButton.addSelectHandler(new SelectHandler(){
 
@@ -233,9 +231,7 @@ public class Comav200 {
 			public void onSelect(SelectEvent event) {
 				//new LoadModel().getModelsFromDatabase(2,oryxFrame);
 				getLoadModelCellListData();
-
 			}
-
 		});
 		proposeButton.addSelectHandler(new SelectHandler(){
 
@@ -249,11 +245,7 @@ public class Comav200 {
 					AlertMessageBox alert = new AlertMessageBox("Not saved", "Model needs to be saved before you can send it as a proposal");
 					alert.show();
 				}	
-				
-				
-
 			}
-
 		});
 
 		panel.add(newModelButton);
@@ -274,7 +266,7 @@ public class Comav200 {
 		exportModelButton.getElement().setClassName("utilityButton");
 		switchGroupGroupTabButton.getElement().setClassName("utilityButton");
 
-		
+
 		importModelButton.addSelectHandler(new SelectHandler(){
 
 			@Override
@@ -282,7 +274,7 @@ public class Comav200 {
 				tabPanel.setActiveWidget(tabPanel.getWidget(0));
 				new LoadModel().getActiveGroupModelFromDatabase(getOryxFrame());
 			}
-			
+
 		});
 		exportModelButton.addSelectHandler(new SelectHandler(){
 
@@ -293,7 +285,7 @@ public class Comav200 {
 			}
 
 		});
-		
+
 		switchGroupGroupTabButton.addSelectHandler(new SelectHandler(){
 
 			@Override
@@ -332,10 +324,16 @@ public class Comav200 {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				VoteDialogBox vdb = new VoteDialogBox(activeModelID);
-				Dialog dialogBox = vdb.createDialogBox();
-				dialogBox.center();
-				dialogBox.show();
+				if(activeModelID > -1){
+					VoteDialogBox vdb = new VoteDialogBox(activeModelID);
+					Dialog dialogBox = vdb.createDialogBox();
+					dialogBox.center();
+					dialogBox.show();
+				}else{
+					AlertMessageBox alert = new AlertMessageBox("No model choosen", "Please choose a model to leave a vote");
+					alert.show();
+				}
+
 
 			}
 
@@ -465,19 +463,19 @@ public class Comav200 {
 				// TODO Auto-generated method stub
 				double width = Window.getClientWidth();
 				VoteCellList.setModelInfoList(result);
-				
+
 				ContentPanel cp = new ContentPanel();
 				cp.add(VoteCellList.createVoteCellGrid());
 				cp.setWidth((int) (width*0.25));
 				cp.setHeaderVisible(false);
 				dockPanel.add(cp);
-				
+
 			}
 		});
 	}
 
 	public void getLoadModelCellListData () {
-		databaseConnection.getAllUsersModels(User.getInstance().getUserId(), new AsyncCallback<List<ModelInfo>>() {
+		databaseConnection.getAllUserModels(User.getInstance().getUserId(), new AsyncCallback<List<ModelInfo>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -502,8 +500,8 @@ public class Comav200 {
 				//LoadModelCellList.setModelInfoList(result);
 				LoadModelDialogBox lmdb = new LoadModelDialogBox();
 				LoadModelCellGrid.setModelInfoList(result);
-				
-				
+
+
 				Dialog dialog = lmdb.createDialogBox(LoadModelCellGrid.createLoadModelCellGrid());
 				dialog.center();
 				dialog.show();

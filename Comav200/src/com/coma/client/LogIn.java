@@ -9,6 +9,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
@@ -35,6 +36,8 @@ public class LogIn {
 
         public VerticalLayoutContainer screen() {
         		VerticalLayoutContainer vlc = new VerticalLayoutContainer();
+        		Image image = new Image("http://i.imgur.com/EzqzSkt.jpg");
+        		vlc.add(image);
         		vlc.setWidth(PANEL_WIDTH);
         		vlc.setHeight(PANEL_HEIGHT);
                 final FormPanel form = new FormPanel();

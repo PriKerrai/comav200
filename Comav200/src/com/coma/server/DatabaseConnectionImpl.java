@@ -594,7 +594,7 @@ DatabaseConnection {
 	}
 
 	@Override
-	public List<ModelInfo> getAllUsersModels(int userID) {
+	public List<ModelInfo> getAllUserModels(int userID) {
 		Connection dbCon = null;
 		List<ModelInfo> modelList = new ArrayList<ModelInfo>();
 
@@ -684,7 +684,6 @@ DatabaseConnection {
 		return null;
 	}
 
-
 	@Override
 	public List<ProposalAvgVote> getVotes(List<Integer> modelIDs) {
 		Connection dbCon = null;
@@ -719,7 +718,6 @@ DatabaseConnection {
 		}
 		return votes;
 	}
-
 
 	@Override
 	public String getModelCreatorName(int modelID) {
