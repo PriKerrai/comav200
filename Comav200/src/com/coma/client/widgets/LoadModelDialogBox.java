@@ -3,6 +3,7 @@ package com.coma.client.widgets;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
@@ -15,7 +16,7 @@ public class LoadModelDialogBox {
 
 
 
-	public Dialog createDialogBox(CellList<String> cellList){
+	public Dialog createDialogBox(ContentPanel panel){
 		// Create the popup dialog box
 
 		dialog.setHeadingText("Select model");
@@ -27,7 +28,7 @@ public class LoadModelDialogBox {
 		dialogVPanel.addStyleName("dialogVPanel");
 		dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
 
-		ScrollPanel scrollPanel = new ScrollPanel(cellList);
+		ScrollPanel scrollPanel = new ScrollPanel(panel);
 		scrollPanel.setHeight("300px");
 		dialogVPanel.add(scrollPanel);
 		dialog.setWidget(dialogVPanel);

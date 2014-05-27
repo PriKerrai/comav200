@@ -16,6 +16,8 @@ public interface ModelInfoProperties extends PropertyAccess<ModelInfo> {
 	  ValueProvider<ModelInfo, Integer> modelID();
 	   
 	  ValueProvider<ModelInfo, Integer> modelGroupID();
+	  
+	  ValueProvider<ModelInfo, String> modelGroupName();
 	   
 	  ValueProvider<ModelInfo, Integer> modelCreatorID();
 	  
@@ -28,6 +30,8 @@ public interface ModelInfoProperties extends PropertyAccess<ModelInfo> {
 	  ValueProvider<ModelInfo, String> modelName();
 	   
 	  ValueProvider<ModelInfo, String> modelCreationDate();
+	  
+	  ValueProvider<ModelInfo, Integer> isProposal();
 
 	}
 

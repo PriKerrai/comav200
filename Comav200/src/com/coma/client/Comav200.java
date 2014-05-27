@@ -10,6 +10,7 @@ import com.coma.client.widgets.CallbackHandler;
 import com.coma.client.widgets.CommentsDialogBox;
 import com.coma.client.widgets.GroupDialogBox;
 import com.coma.client.widgets.InviteToGroupDialogBox;
+import com.coma.client.widgets.LoadModelCellGrid;
 import com.coma.client.widgets.LoadModelCellList;
 import com.coma.client.widgets.LoadModelDialogBox;
 import com.coma.client.widgets.MessageFrame;
@@ -185,38 +186,6 @@ public class Comav200 {
 			}};
  	      
 	      tabPanel.addSelectionHandler(handler);
-/*
-		panel.addSelectionHandler(new SelectionHandler<Integer>(){
-			@Override
-			public void onSelection(SelectionEvent<Integer> event) {
-				int tabId = event.getSelectedItem();
-				Panel p = (Panel)panel.getWidget(tabId);
-
-				if (tabId == 0 || tabId == 1) {
-				p.add(oryxFrame);
-					if(tabId == 1){
-						oryxFrame.setVisible(true);
-						new LoadModel().getActiveGroupModelFromDatabase(oryxFrame);
-					}
-				}
-
-				if (tabId == 2) {
-					p.clear();
-					p.add(initProposalView());
-					DockPanel dockPanel = new DockPanel();
-					dockPanel.setWidth("100%");
-					dockPanel.add(oryxFrame, DockPanel.CENTER);
-					getVoteMapData(dockPanel);
-					p.add(dockPanel);
-				}
-				if (tabId == 3) {
-					if(isFirstTime){
-						p.add(editProfile.screen(userProfile));
-						isFirstTime = false;
-					}
-				}
-		}});
-			 */
 
 		return tabPanel;
 	}
@@ -530,9 +499,12 @@ public class Comav200 {
 			@Override
 			public void onSuccess(List<ModelInfo> result) {
 				// TODO Auto-generated method stub
-				LoadModelCellList.setModelInfoList(result);
+				//LoadModelCellList.setModelInfoList(result);
 				LoadModelDialogBox lmdb = new LoadModelDialogBox();
-				Dialog dialog = lmdb.createDialogBox(loadModelCellList.loadModelPanel());
+				LoadModelCellGrid.setModelInfoList(result);
+				
+				
+				Dialog dialog = lmdb.createDialogBox(LoadModelCellGrid.createLoadModelCellGrid());
 				dialog.center();
 				dialog.show();
 			}

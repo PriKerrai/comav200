@@ -7,6 +7,7 @@ public class ModelInfo implements IsSerializable {
 	private int modelID;
 	private int modelGroupID;
 	private int modelCreatorID;
+	private String modelGroupName;
 	private String modelCreatorName;
 	private int modelType;
 	private String modelString;
@@ -55,7 +56,13 @@ public class ModelInfo implements IsSerializable {
 	public void setModelGroupID(int modelGroupID) {
 		this.modelGroupID = modelGroupID;
 	}
+	public String getModelGroupName() {
+		return modelGroupName;
+	}
 
+	public void setModelGroupName(String modelGroupName) {
+		this.modelGroupName = modelGroupName;
+	}
 	public int getModelCreator() {
 		return modelCreatorID;
 	}

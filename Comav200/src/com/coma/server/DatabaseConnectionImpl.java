@@ -598,7 +598,7 @@ DatabaseConnection {
 		Connection dbCon = null;
 		List<ModelInfo> modelList = new ArrayList<ModelInfo>();
 
-		String query = "SELECT * FROM model WHERE modelCreator = ?";
+		String query = "SELECT * FROM model as m LEFT JOIN workgroup as w ON m.groupID = w.groupID WHERE modelCreator = ?";
 		try{
 			dbCon = initializeDBConnection(); 
 			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
@@ -608,6 +608,7 @@ DatabaseConnection {
 				ModelInfo modelInfo = new ModelInfo();
 				modelInfo.setModelID(rs.getInt("modelID"));
 				modelInfo.setModelGroupID(rs.getInt("groupID"));
+				modelInfo.setModelGroupName(rs.getString("groupName"));
 				modelInfo.setModelCreator(rs.getInt("modelCreator"));
 				modelInfo.setModelType(rs.getInt("modelType"));
 				modelInfo.setModelString(rs.getString("modelString"));
@@ -786,31 +787,6 @@ DatabaseConnection {
 	  return null;
 	 }
 
-
-	
-	
-	/*
-	@Override
-	public String getUserName(String email) {
-		Connection dbCon = null;
-		String name = "";
-		String query = "SELECT * FROM user as u LEFT JOIN userprofile as p ON u.userID = p.userID WHERE userEmail = ?";
-		try{
-			dbCon = initializeDBConnection(); 
-			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
-			preparedStatement.setString(1, email);
-			ResultSet rs = preparedStatement.executeQuery();
-			while (rs.next()) {
-				name = rs.getString("firstName");
-			}
-			return name;
-
-		} catch (SQLException ex) {
-			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
-		}      
-		return null;
-	}
-	*/
 	
 
 }
