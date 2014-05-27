@@ -8,6 +8,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
+import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
@@ -20,7 +21,7 @@ import com.sencha.gxt.widget.core.client.form.TextField;
  * @author Martin Nilsson and Johan Magnusson
  *
  */
-public class GroupDialogBox{
+public class CreateNewGroupDialog{
 	private TextField nameBox;
 
 	private final DatabaseConnectionAsync databaseConnection = GWT
@@ -32,16 +33,37 @@ public class GroupDialogBox{
 	 * 
 	 * @return the created dialog for creating a group
 	 */
-	public Dialog createDialogBox(){
+	public Dialog createNewGroupDialog(){
 		// Create the popup dialog box
 		dialog = new Dialog();
 		dialog.setHeadingText("Create new group");
 		dialog.setPixelSize(300, 100);
 		dialog.setHideOnButtonClick(true);
-		dialog.setPredefinedButtons(PredefinedButton.OK, PredefinedButton.CANCEL);
+		dialog.setPredefinedButtons();
+		
+		dialog.addButton(new TextButton("Create", new SelectHandler(){
+
+			@Override
+			public void onSelect(SelectEvent event) {
+				String groupName = nameBox.getValue();
+				int userID = User.getInstance().getUserId();
+
+				createNewGroup(userID, groupName);
+
+				dialog.hide();				
+			}
+			
+		}));
+		
+		dialog.addButton(new TextButton("Cancel", new SelectHandler(){
+
+			@Override
+			public void onSelect(SelectEvent event) {
+				dialog.hide();				
+			}			
+		}));
 
 		VerticalLayoutContainer verticalLayoutContainer = new VerticalLayoutContainer();
-		verticalLayoutContainer.addStyleName("dialogVPanel");
 
 		nameBox = new TextField();
 		nameBox.setAllowBlank(false);
@@ -50,30 +72,6 @@ public class GroupDialogBox{
 	    verticalLayoutContainer.add(new FieldLabel(nameBox, "Group Name"), new VerticalLayoutData(1, -1));
 		
 		dialog.setWidget(verticalLayoutContainer);
-
-		// Add a handler to create the new group
-		dialog.getButton(PredefinedButton.OK).addSelectHandler(new SelectHandler() {
-			
-			@Override
-			public void onSelect(SelectEvent event) {
-				// TODO Auto-generated method stub
-				String groupName = nameBox.getValue();
-				int userID = User.getInstance().getUserId();
-
-				createNewGroup(userID, groupName);
-
-				dialog.hide();
-				
-			}
-		});
-		//Add a handler to close the dialog
-		dialog.getButton(PredefinedButton.CANCEL).addSelectHandler(new SelectHandler() {
-			@Override
-			public void onSelect(SelectEvent event) {
-				System.out.println("Hejsan, CANCEL");
-				dialog.hide();
-			}
-		});
 
 		dialog.show();
 		return dialog;

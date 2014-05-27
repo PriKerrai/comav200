@@ -25,7 +25,7 @@ import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
 
-public class VoteCellList {
+public class ModelCellGrid {
 
 	private static final ModelInfoProperties props = GWT.create(ModelInfoProperties.class);
 
@@ -34,7 +34,7 @@ public class VoteCellList {
 	private static List<ModelInfo> modelInfoList;
 	static ListStore<ModelInfo> store;
 
-	public static ContentPanel createVoteCellGrid() {
+	public static ContentPanel createModelCellGrid() {
 
 		ColumnConfig<ModelInfo, String> creatorColumn = new ColumnConfig<ModelInfo, String>(props.modelCreatorName(), 75, ("Creator"));
 		ColumnConfig<ModelInfo, String> modelNameColumn = new ColumnConfig<ModelInfo, String>(props.modelName(), 100, "Model name");
@@ -89,6 +89,6 @@ public class VoteCellList {
 	}
 
 	public static void setModelInfoList(List<ModelInfo> modelInfoList) {
-		VoteCellList.modelInfoList = modelInfoList;
+		ModelCellGrid.modelInfoList = modelInfoList;
 	}
 }

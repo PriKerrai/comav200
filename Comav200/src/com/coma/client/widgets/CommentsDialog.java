@@ -2,14 +2,17 @@ package com.coma.client.widgets;
 
 import java.util.List;
 
+import com.coma.client.ActiveInvite;
 import com.coma.client.DatabaseConnection;
 import com.coma.client.DatabaseConnectionAsync;
+import com.coma.client.HandleGroups;
 import com.coma.client.User;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
 import com.sencha.gxt.widget.core.client.FramedPanel;
+import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.MarginData;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
@@ -17,13 +20,13 @@ import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
 import com.sencha.gxt.widget.core.client.form.TextArea;
 
 
-public class CommentsDialogBox{
+public class CommentsDialog{
 
 	private final DatabaseConnectionAsync databaseConnection = GWT
 			.create(DatabaseConnection.class);
 
-	private final static int DIALOG_WIDTH = 500;
-	private final static int DIALOG_HEIGHT = 400;
+	private final int DIALOG_WIDTH = 500;
+	private final int DIALOG_HEIGHT = 400;
 	
 	private int activeModelID;
 	private List<String> commentList;
@@ -48,10 +51,10 @@ public class CommentsDialogBox{
 		this.activeModelID = modelID;
 	}
 
-	public CommentsDialogBox() {
+	public CommentsDialog() {
 	}
 
-	public CommentsDialogBox(int modelID) {
+	public CommentsDialog(int modelID) {
 		setModelID(modelID);
 		getCommentsOnModel(activeModelID);
 	}
@@ -60,39 +63,25 @@ public class CommentsDialogBox{
 
 		// Create the popup dialog box
 		dialog = new Dialog();
-		//dialog.setHeadingText("Leave a comment on the model");
+		dialog.setHeadingText("Comments");
 		dialog.setHideOnButtonClick(true);
 		dialog.setWidth(DIALOG_WIDTH);
 		dialog.setHeight(DIALOG_HEIGHT);
-		dialog.setPredefinedButtons(PredefinedButton.YES, PredefinedButton.CANCEL);
-
+		dialog.setPredefinedButtons();
 		final TextArea writeCommentTextArea = new TextArea();
 		writeCommentTextArea.setEmptyText("Write a comment...");
-		writeCommentTextArea.setPixelSize(DIALOG_WIDTH-5, (DIALOG_HEIGHT/2)-5);
+		writeCommentTextArea.setPixelSize(DIALOG_WIDTH-15, (DIALOG_HEIGHT/2)-33);
 
 		final TextArea readCommentTextArea = new TextArea();
-		readCommentTextArea.setPixelSize(DIALOG_WIDTH-5, (DIALOG_HEIGHT/2)-5);
+		readCommentTextArea.setPixelSize(DIALOG_WIDTH-15, (DIALOG_HEIGHT/2)-33);
 		
-		StringBuilder comments = new StringBuilder();
-		for (int i = 0; i < commentList.size(); i++) {
-			comments.append(commentList.get(i) + "\n");
-		}
-
-		readCommentTextArea.setText(comments.toString());
-		readCommentTextArea.setEmptyText("Comments on the model will be shown here...");
-		readCommentTextArea.setAllowTextSelection(false);
-		readCommentTextArea.setEnabled(false);
-
-		// Add a handler to create the new group
-		dialog.getButton(PredefinedButton.YES).addSelectHandler(new SelectHandler() {
+		dialog.addButton(new TextButton("Send", new SelectHandler(){
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				
 				// TODO Auto-generated method stub
 				String comment = writeCommentTextArea.getText();
 				if(comment.equals("")) {
-					System.out.println("Tomt var det här");
 					dialog.hide();
 				}
 				else {
@@ -103,16 +92,30 @@ public class CommentsDialogBox{
 				addComment(userID, getModelID(), comment);
 				dialog.hide();
 				}
+				
 			}
-		});
-		//Add a handler to close the dialog
-		dialog.getButton(PredefinedButton.CANCEL).addSelectHandler(new SelectHandler() {
+			
+		}));
+		
+		dialog.addButton(new TextButton("Cancel", new SelectHandler(){
+
 			@Override
 			public void onSelect(SelectEvent event) {
-				System.out.println("Hejsan, CANCEL");
 				dialog.hide();
+				
 			}
-		});
+			
+		}));	
+		
+		StringBuilder comments = new StringBuilder();
+		for (int i = 0; i < commentList.size(); i++) {
+			comments.append(commentList.get(i) + "\n");
+		}
+
+		readCommentTextArea.setText(comments.toString());
+		readCommentTextArea.setEmptyText("Comments on the model will be shown here...");
+		readCommentTextArea.setAllowTextSelection(false);
+		readCommentTextArea.setEnabled(false);
 		
 		panel = new FramedPanel();
 		panel.setLayoutData(new MarginData(1));

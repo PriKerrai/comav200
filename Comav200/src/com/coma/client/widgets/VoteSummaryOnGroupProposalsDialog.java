@@ -29,7 +29,7 @@ import com.sencha.gxt.widget.core.client.container.MarginData;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
 
-public class ShowVotesOnProposalDialog {
+public class VoteSummaryOnGroupProposalsDialog {
 
 	private static List<ProposalAvgVote> proposalAvarageVoteList;
 
@@ -39,7 +39,7 @@ public class ShowVotesOnProposalDialog {
 
 	public static void setProposalAvgVotesList(List<ProposalAvgVote> proposalAvgVotesList) {
 
-		ShowVotesOnProposalDialog.proposalAvarageVoteList = proposalAvgVotesList;
+		VoteSummaryOnGroupProposalsDialog.proposalAvarageVoteList = proposalAvgVotesList;
 	}
 
 	public interface DataPropertyAccess extends PropertyAccess<ProposalAvgVote> {
@@ -55,15 +55,14 @@ public class ShowVotesOnProposalDialog {
 	private FramedPanel panel;
 	private Dialog dialog;
 
-	public Dialog showVotesOnProposalDialog() {
+	public Dialog createVoteSummaryOnGoupProposalsDialog() {
 
 		dialog = new Dialog();
-		dialog.setHeadingText("Save as new group model");
-		dialog.setWidget(new HTML("Are you sure this is the diagram\n you want to accept as the new group model?\n"));
+		dialog.setHeadingText("Vote summary");
 		dialog.setWidth(700);
 		dialog.setHeight(600);
 		dialog.setHideOnButtonClick(true);
-		dialog.setPredefinedButtons(PredefinedButton.YES, PredefinedButton.CANCEL);
+		dialog.setPredefinedButtons(PredefinedButton.CLOSE);
 
 		final ListStore<ProposalAvgVote> store = new ListStore<ProposalAvgVote>(dataAccess.nameKey());
 		store.addAll(ProposalAvgVotesData.getData());

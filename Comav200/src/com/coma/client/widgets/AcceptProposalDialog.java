@@ -52,8 +52,8 @@ public class AcceptProposalDialog {
 	public Dialog acceptProposalDialog() {
 
 		dialog = new Dialog();
-		dialog.setHeadingText("Save as new group model");
-		dialog.setWidget(new HTML("Are you sure this is the diagram\n you want to accept as the new group model?\n"));
+		dialog.setHeadingText("Accept proposal");
+		dialog.setWidget(new HTML("Are you sure this is the model\n you want to accept as the new group model?\n"));
 		dialog.setPixelSize(300, 100);
 		dialog.setHideOnButtonClick(true);
 		dialog.setPredefinedButtons(PredefinedButton.YES, PredefinedButton.CANCEL);
@@ -99,10 +99,9 @@ public class AcceptProposalDialog {
 					updateActiveGroupModel(activeGroupID, modelID, version);
 					Info.display("New group model", "Model set as group model");
 				}else{
-					AlertMessageBox alert = new AlertMessageBox("Forbidden", "Only group facilitator can accept proposals");
+					AlertMessageBox alert = new AlertMessageBox("Forbidden", "Only the group facilitator can accept proposals");
 					alert.show();
-				}
-				
+				}	
 			}
 		});
 	}

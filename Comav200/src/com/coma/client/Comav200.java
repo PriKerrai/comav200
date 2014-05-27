@@ -7,18 +7,17 @@ import com.coma.client.oryxhandlers.LoadingCompleteEventListener;
 import com.coma.client.oryxhandlers.LoadingCompletehandler;
 import com.coma.client.widgets.AcceptProposalDialog;
 import com.coma.client.widgets.CallbackHandler;
-import com.coma.client.widgets.CommentsDialogBox;
-import com.coma.client.widgets.GroupDialogBox;
+import com.coma.client.widgets.CommentsDialog;
+import com.coma.client.widgets.CreateNewGroupDialog;
 import com.coma.client.widgets.InviteToGroupDialogBox;
 import com.coma.client.widgets.LoadModelCellGrid;
-import com.coma.client.widgets.LoadModelCellList;
-import com.coma.client.widgets.LoadModelDialogBox;
+import com.coma.client.widgets.LoadModelDialog;
 import com.coma.client.widgets.MessageFrame;
 import com.coma.client.widgets.NameModelDialog;
-import com.coma.client.widgets.NewModelDialogBox;
+import com.coma.client.widgets.NewModelDialog;
 import com.coma.client.widgets.SendProposalDialog;
-import com.coma.client.widgets.ShowVotesOnProposalDialog;
-import com.coma.client.widgets.VoteCellList;
+import com.coma.client.widgets.VoteSummaryOnGroupProposalsDialog;
+import com.coma.client.widgets.ModelCellGrid;
 import com.coma.client.widgets.VoteDialogBox;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.SelectionEvent;
@@ -113,9 +112,8 @@ public class Comav200 {
 
 	LogIn logIn = new LogIn();
 	SignUp signUp = new SignUp();
-	ShowVotesOnProposalDialog showVotesOnProposalDialog = new ShowVotesOnProposalDialog();
-	VoteCellList voteCellList = new VoteCellList();
-	LoadModelCellList loadModelCellList = new LoadModelCellList();
+	VoteSummaryOnGroupProposalsDialog showVotesOnProposalDialog = new VoteSummaryOnGroupProposalsDialog();
+	ModelCellGrid voteCellList = new ModelCellGrid();
 	EditProfileView editProfile = new EditProfileView();
 	HorizontalPanel dockPanel = new HorizontalPanel();
 
@@ -159,6 +157,7 @@ public class Comav200 {
 				}
 
 				if (tabID == 2) {
+					model = new ModelInfo();
 					activeModelID = -1;
 					p.clear();
 					dockPanel.clear();
@@ -205,7 +204,7 @@ public class Comav200 {
 			@Override
 			public void onSelect(SelectEvent event) {
 				model = new ModelInfo();
-				Dialog dialog = new NewModelDialogBox().createDialogBox();
+				Dialog dialog = new NewModelDialog().createNewModelDialog();
 				dialog.center();
 				dialog.show();
 			}
@@ -219,7 +218,7 @@ public class Comav200 {
 					new SaveModel().saveModel(oryxFrame);
 				} else{
 					NameModelDialog nmd = new NameModelDialog(oryxFrame);
-					Dialog dialog = nmd.createDialogBox();
+					Dialog dialog = nmd.createNameModelDialog();
 					dialog.center();
 					dialog.show();
 				}	
@@ -238,7 +237,7 @@ public class Comav200 {
 			@Override
 			public void onSelect(SelectEvent event) {
 				if(model.getModelName() != null){
-					Dialog dialog = new SendProposalDialog(oryxFrame).createDialogBox();
+					Dialog dialog = new SendProposalDialog(oryxFrame).createSendProposalDialog();
 					dialog.center();
 					dialog.show();
 				} else{
@@ -316,7 +315,7 @@ public class Comav200 {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				new CommentsDialogBox(activeModelID);
+				new CommentsDialog(activeModelID);
 			}
 
 		});
@@ -382,8 +381,8 @@ public class Comav200 {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				GroupDialogBox gdb = new GroupDialogBox();
-				Dialog dialogBox = gdb.createDialogBox();
+				CreateNewGroupDialog gdb = new CreateNewGroupDialog();
+				Dialog dialogBox = gdb.createNewGroupDialog();
 				dialogBox.center();
 				dialogBox.show();
 
@@ -462,10 +461,10 @@ public class Comav200 {
 			public void onSuccess(List<ModelInfo> result) {
 				// TODO Auto-generated method stub
 				double width = Window.getClientWidth();
-				VoteCellList.setModelInfoList(result);
+				ModelCellGrid.setModelInfoList(result);
 
 				ContentPanel cp = new ContentPanel();
-				cp.add(VoteCellList.createVoteCellGrid());
+				cp.add(ModelCellGrid.createModelCellGrid());
 				cp.setWidth((int) (width*0.25));
 				cp.setHeaderVisible(false);
 				dockPanel.add(cp);
@@ -498,11 +497,11 @@ public class Comav200 {
 			public void onSuccess(List<ModelInfo> result) {
 				// TODO Auto-generated method stub
 				//LoadModelCellList.setModelInfoList(result);
-				LoadModelDialogBox lmdb = new LoadModelDialogBox();
+				LoadModelDialog lmdb = new LoadModelDialog();
 				LoadModelCellGrid.setModelInfoList(result);
 
 
-				Dialog dialog = lmdb.createDialogBox(LoadModelCellGrid.createLoadModelCellGrid());
+				Dialog dialog = lmdb.createLoadModelDialog(LoadModelCellGrid.createLoadModelCellGrid());
 				dialog.center();
 				dialog.show();
 			}
@@ -595,9 +594,9 @@ public class Comav200 {
 			public void onSuccess(List<ProposalAvgVote> result) {
 				new ProposalAvgVotesData(result);
 				//propAvgVote.setUpBarChart(result);
-				ShowVotesOnProposalDialog.setProposalAvgVotesList(result);
+				VoteSummaryOnGroupProposalsDialog.setProposalAvgVotesList(result);
 
-				Dialog dialogBox = showVotesOnProposalDialog.showVotesOnProposalDialog();
+				Dialog dialogBox = showVotesOnProposalDialog.createVoteSummaryOnGoupProposalsDialog();
 				dialogBox.center();
 				dialogBox.show();
 

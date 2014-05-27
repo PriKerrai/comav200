@@ -16,7 +16,7 @@ import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.info.Info;
 
-public class SwitchGroupDialogBox {
+public class SwitchGroupDialog {
 	private ListBox groupBox;
     private Dialog dialog;
    
@@ -30,7 +30,6 @@ public class SwitchGroupDialogBox {
 
     			VerticalLayoutContainer verticalLayoutContainer = new VerticalLayoutContainer();
     			verticalLayoutContainer.addStyleName("dialogVPanel");
-    	
     	
     		final List<WorkGroupInfo> groupList = groups;
             groupBox = new ListBox();

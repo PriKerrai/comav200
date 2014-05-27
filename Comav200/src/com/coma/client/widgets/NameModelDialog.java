@@ -3,8 +3,12 @@ package com.coma.client.widgets;
 import com.coma.client.Comav200;
 import com.coma.client.ModelInfo;
 import com.coma.client.SaveModel;
+import com.coma.client.User;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Label;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
+import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
@@ -22,14 +26,13 @@ public class NameModelDialog {
 		this.oryxFrame = oryxFrame;
 	}
 
-
-	public Dialog createDialogBox(){
+	public Dialog createNameModelDialog(){
 		// Create the popup dialog box
 		dialog = new Dialog();
-		dialog.setHeadingText("Model name");
-		dialog.setPixelSize(300, 100);
+		dialog.setHeadingText("Save model");
+		dialog.setPixelSize(300, 110);
 		dialog.setHideOnButtonClick(true);
-		dialog.setPredefinedButtons(PredefinedButton.OK, PredefinedButton.CANCEL);
+		dialog.setPredefinedButtons();
 
 		VerticalLayoutContainer verticalLayoutContainer = new VerticalLayoutContainer();
 		verticalLayoutContainer.addStyleName("dialogVPanel");
@@ -38,32 +41,34 @@ public class NameModelDialog {
 		modelNameBox.setAllowBlank(false);
 		modelNameBox.setEmptyText("Enter model name");
 
+		verticalLayoutContainer.add(new Label("Please name your model before saving"));
 		verticalLayoutContainer.add(new FieldLabel(modelNameBox, "Model name"), new VerticalLayoutData(1, -1));
 
-
 		dialog.setWidget(verticalLayoutContainer);
-
-		// Add a handler to create the new group
-		dialog.getButton(PredefinedButton.OK).addSelectHandler(new SelectHandler() {
+		
+		
+		dialog.addButton(new TextButton("Save", new SelectHandler(){
 
 			@Override
 			public void onSelect(SelectEvent event) {
+				// TODO Auto-generated method stub
 				ModelInfo model = Comav200.GetInstance().getModel();
 				model.setModelName(modelNameBox.getValue());
 				model.setIsProposal(0);
 				new SaveModel().saveModel(oryxFrame);
-				dialog.hide();
-
+				dialog.hide();	
 			}
-		});
-		//Add a handler to close the dialog
-		dialog.getButton(PredefinedButton.CANCEL).addSelectHandler(new SelectHandler() {
+			
+		}));
+		
+		dialog.addButton(new TextButton("Cancel", new SelectHandler(){
+
 			@Override
 			public void onSelect(SelectEvent event) {
-				dialog.hide();
-			}
-		});
-
+				dialog.hide();				
+			}			
+		}));	
+		
 		dialog.show();
 		return dialog;
 

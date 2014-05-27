@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.coma.client.widgets.HandleGroupInvitesCellList;
 import com.coma.client.widgets.HandleGroupInvitesDialogBox;
-import com.coma.client.widgets.SwitchGroupDialogBox;
+import com.coma.client.widgets.SwitchGroupDialog;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.sencha.gxt.widget.core.client.Dialog;
@@ -122,7 +122,7 @@ public class HandleGroups {
 
 					@Override
 					public void onSuccess(List<WorkGroupInfo> result) {
-						SwitchGroupDialogBox sgdb = new SwitchGroupDialogBox();
+						SwitchGroupDialog sgdb = new SwitchGroupDialog();
 						
 						Dialog dialogBox = sgdb.createDialogBox(result);
 						dialogBox.center();
