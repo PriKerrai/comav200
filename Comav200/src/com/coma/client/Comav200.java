@@ -315,7 +315,12 @@ public class Comav200 {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				new CommentsDialog(activeModelID);
+				if(activeModelID != -1){
+					new CommentsDialog(activeModelID);
+				}else{
+					AlertMessageBox alert = new AlertMessageBox("No model choosen", "Please choose a model to read or leave a comment");
+					alert.show();
+				}
 			}
 
 		});
@@ -323,7 +328,7 @@ public class Comav200 {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				if(activeModelID > -1){
+				if(activeModelID != -1){
 					VoteDialogBox vdb = new VoteDialogBox(activeModelID);
 					Dialog dialogBox = vdb.createDialogBox();
 					dialogBox.center();

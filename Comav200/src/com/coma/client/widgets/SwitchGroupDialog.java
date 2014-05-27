@@ -31,6 +31,7 @@ public class SwitchGroupDialog {
     			VerticalLayoutContainer verticalLayoutContainer = new VerticalLayoutContainer();
     			verticalLayoutContainer.addStyleName("dialogVPanel");
     	
+    	
     		final List<WorkGroupInfo> groupList = groups;
             groupBox = new ListBox();
             for(WorkGroupInfo wgi: groupList){

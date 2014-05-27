@@ -36,8 +36,6 @@ public class LogIn {
 
         public VerticalLayoutContainer screen() {
         		VerticalLayoutContainer vlc = new VerticalLayoutContainer();
-        		Image image = new Image("http://i.imgur.com/EzqzSkt.jpg");
-        		vlc.add(image);
         		vlc.setWidth(PANEL_WIDTH);
         		vlc.setHeight(PANEL_HEIGHT);
                 final FormPanel form = new FormPanel();
