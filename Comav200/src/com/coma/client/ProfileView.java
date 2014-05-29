@@ -45,15 +45,15 @@ public class ProfileView {
 		vp3.setWidth((int) (windowWidth*0.3));
 		vp3.setHeight(windowHeight);
 		
-		VerticalLayoutContainer vp4 = Comav200.GetInstance().getCreateNewGroupPanel().createNewGroupPanel();
-		vp4.setHeight("50%");
-		VerticalLayoutContainer vp5 = Comav200.GetInstance().getInviteToGroupPanel().createInviteToGroupDialog();
-		vp5.setHeight("50%");
+		ContentPanel vp4 = Comav200.GetInstance().getCreateNewGroupPanel().createNewGroupPanel();
+		vp4.setHeight(300);
+		ContentPanel vp5 = Comav200.GetInstance().getInviteToGroupPanel().inviteToGroupPanel();
+		vp5.setHeight(300);
 		
-		ContentPanel vp6 = new ContentPanel();
-		vp6.setHeight("50%");
-		ContentPanel vp7 = new ContentPanel();
-		vp7.setHeight("50%");
+		ContentPanel vp6 = Comav200.GetInstance().getSwitchGroupCellPanel().createSwitchGroupCellGrid();
+		vp6.setHeight(300);
+		ContentPanel vp7 = Comav200.GetInstance().getHandleGroupInvitesPanel().handleGroupInvitesCellGrid();
+		vp7.setHeight(300);
 		
 		vp.add(Comav200.GetInstance().getUserProfilePanel().createUserProfilePanel());
 		
@@ -66,9 +66,8 @@ public class ProfileView {
 		vlc.add(vp);
 		vlc.add(vp2);
 		vlc.add(vp3);
-
-		vp6.setHeadingText("switch group");
-		vp7.setHeadingText("group invites");
+		
+		vp4.setBorders(true);
 		return vlc;
 		
 	}

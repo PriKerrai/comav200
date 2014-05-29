@@ -5,6 +5,7 @@ import java.util.List;
 import com.coma.client.Comav200;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
@@ -35,7 +36,8 @@ public class UserProfileFormPanel {
 		this.userProfile = userProfile;
 	}
 
-	public VerticalLayoutContainer createUserProfilePanel(){
+	public ContentPanel createUserProfilePanel(){
+		ContentPanel contentPanel = new ContentPanel();
 		VerticalLayoutContainer vlc = new VerticalLayoutContainer();
 		final FormPanel form = new FormPanel();
 
@@ -129,7 +131,9 @@ public class UserProfileFormPanel {
 		form.setTitle("User Profile");
 		form.add(holder);
 		vlc.add(form);
-		return vlc;
+		contentPanel.add(vlc);
+		contentPanel.setHeadingHtml("User profile");
+		return contentPanel;
 	}
 
 }

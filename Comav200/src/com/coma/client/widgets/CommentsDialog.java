@@ -2,7 +2,6 @@ package com.coma.client.widgets;
 
 import java.util.List;
 
-import com.coma.client.ActiveInvite;
 import com.coma.client.DatabaseConnection;
 import com.coma.client.DatabaseConnectionAsync;
 import com.coma.client.HandleGroups;

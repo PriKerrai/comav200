@@ -9,6 +9,7 @@ import com.coma.client.widgets.AcceptProposalDialog;
 import com.coma.client.widgets.CallbackHandler;
 import com.coma.client.widgets.CommentsDialog;
 import com.coma.client.widgets.CreateNewGroupPanel;
+import com.coma.client.widgets.HandleGroupInvitesCellGrid;
 import com.coma.client.widgets.InviteToGroupPanel;
 import com.coma.client.widgets.LoadModelCellGrid;
 import com.coma.client.widgets.LoadModelDialog;
@@ -17,8 +18,9 @@ import com.coma.client.widgets.ModelCellGrid;
 import com.coma.client.widgets.NameModelDialog;
 import com.coma.client.widgets.NewModelDialog;
 import com.coma.client.widgets.SendProposalDialog;
+import com.coma.client.widgets.SwitchGroupCellGrid;
 import com.coma.client.widgets.UserProfileFormPanel;
-import com.coma.client.widgets.VoteDialogBox;
+import com.coma.client.widgets.LeaveVoteDialogBox;
 import com.coma.client.widgets.VoteSummaryOnGroupProposalsDialog;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.SelectionEvent;
@@ -112,17 +114,28 @@ public class Comav200 {
 	UserProfileFormPanel userProfilePanel = new UserProfileFormPanel();
 	CreateNewGroupPanel createNewGroupPanel = new CreateNewGroupPanel();
 	InviteToGroupPanel inviteToGroupPanel = new InviteToGroupPanel();
+	HandleGroupInvitesCellGrid handleGroupInvitesPanel = new HandleGroupInvitesCellGrid();
+	SwitchGroupCellGrid switchGroupCellPanel = new SwitchGroupCellGrid();
+	HandleGroups handleGroups = new HandleGroups();
 
 	public UserProfileFormPanel getUserProfilePanel() {
 		return userProfilePanel;
 	}
-	
+
 	public CreateNewGroupPanel getCreateNewGroupPanel() {
 		return createNewGroupPanel;
 	}
-	
+
 	public InviteToGroupPanel getInviteToGroupPanel() {
 		return inviteToGroupPanel;
+	}
+
+	public HandleGroupInvitesCellGrid getHandleGroupInvitesPanel() {
+		return handleGroupInvitesPanel;
+	}
+	
+	public SwitchGroupCellGrid getSwitchGroupCellPanel() {
+		return switchGroupCellPanel;
 	}
 
 	/**
@@ -131,13 +144,16 @@ public class Comav200 {
 	private final DatabaseConnectionAsync databaseConnection = GWT
 			.create(DatabaseConnection.class);
 	private int activeModelID;
-	
+
 	public void initialize(){
 		RootPanel.get("mainDiv").add(logIn.screen());
 	}
 
 	public TabPanel initTabPanel(){
 		getUserProfile(User.getInstance().getUserId());
+		handleGroups.getGroupInvites();
+		handleGroups.getUsersGroups();
+		
 		tabPanel = new TabPanel();
 
 		tabPanel.add(initMyModelView(), "My Model");
@@ -184,13 +200,13 @@ public class Comav200 {
 
 					p.add(dockPanel);	
 				}
-					if (tabID == 3) {
-						if(isFirstTime){
-							p.setWidth("100%");
-							p.add(profileView.profileViewContainer());
-							isFirstTime = false;
-						}
+				if (tabID == 3) {
+					if(isFirstTime){
+						p.setWidth("100%");
+						p.add(profileView.profileViewContainer());
+						isFirstTime = false;
 					}
+				}
 			}};
 			tabPanel.addSelectionHandler(handler);
 
@@ -254,8 +270,8 @@ public class Comav200 {
 					AlertMessageBox alert = new AlertMessageBox("Not saved", "Model needs to be saved before you can send it as a proposal");
 					alert.show();
 				}	
-				
-				
+
+
 
 			}
 
@@ -279,7 +295,7 @@ public class Comav200 {
 		exportModelButton.getElement().setClassName("utilityButton");
 		switchGroupGroupTabButton.getElement().setClassName("utilityButton");
 
-		
+
 		importModelButton.addSelectHandler(new SelectHandler(){
 
 			@Override
@@ -287,7 +303,7 @@ public class Comav200 {
 				tabPanel.setActiveWidget(tabPanel.getWidget(0));
 				new LoadModel().getActiveGroupModelFromDatabase(getOryxFrame());
 			}
-			
+
 		});
 		exportModelButton.addSelectHandler(new SelectHandler(){
 
@@ -298,7 +314,7 @@ public class Comav200 {
 			}
 
 		});
-		
+
 		switchGroupGroupTabButton.addSelectHandler(new SelectHandler(){
 
 			@Override
@@ -343,8 +359,8 @@ public class Comav200 {
 			@Override
 			public void onSelect(SelectEvent event) {
 				if(activeModelID != -1){
-					VoteDialogBox vdb = new VoteDialogBox(activeModelID);
-					Dialog dialogBox = vdb.createDialogBox();
+					LeaveVoteDialogBox vdb = new LeaveVoteDialogBox(activeModelID);
+					Dialog dialogBox = vdb.leaveVoteDialog();
 					dialogBox.center();
 					dialogBox.show();
 				}else{

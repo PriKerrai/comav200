@@ -2,8 +2,7 @@ package com.coma.client;
 
 import java.util.List;
 
-import com.coma.client.widgets.HandleGroupInvitesCellList;
-import com.coma.client.widgets.HandleGroupInvitesDialogBox;
+import com.coma.client.widgets.HandleGroupInvitesCellGrid;
 import com.coma.client.widgets.SwitchGroupDialog;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -73,12 +72,13 @@ public class HandleGroups {
 					@Override
 					public void onSuccess(List<WorkGroupInfo> result) {
 						
-						HandleGroupInvitesCellList invitesList = new HandleGroupInvitesCellList();
-						HandleGroupInvitesCellList.setInviteList(result);
-						HandleGroupInvitesDialogBox hgidb = new HandleGroupInvitesDialogBox();
-						Dialog dialog = hgidb.createDialogBox(invitesList.loadModelPanel());
-						dialog.center();
-						dialog.show();
+						System.out.println(result.size());
+						Comav200.GetInstance().getHandleGroupInvitesPanel().setInviteList(result);
+						System.out.println("efter set list");
+//						HandleGroupInvitesDialogBox hgidb = new HandleGroupInvitesDialogBox();
+//						Dialog dialog = hgidb.createDialogBox(invitesList.loadModelPanel());
+//						dialog.center();
+//						dialog.show();
 						
 					}
 				});
@@ -122,11 +122,12 @@ public class HandleGroups {
 
 					@Override
 					public void onSuccess(List<WorkGroupInfo> result) {
-						SwitchGroupDialog sgdb = new SwitchGroupDialog();
-						
-						Dialog dialogBox = sgdb.createDialogBox(result);
-						dialogBox.center();
-						dialogBox.show();
+						Comav200.GetInstance().getSwitchGroupCellPanel().setworkGroupInfoList(result);
+//						SwitchGroupDialog sgdb = new SwitchGroupDialog();
+//						
+//						Dialog dialogBox = sgdb.createDialogBox(result);
+//						dialogBox.center();
+//						dialogBox.show();
 						
 					}
 				});

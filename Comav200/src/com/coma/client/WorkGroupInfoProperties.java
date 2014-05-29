@@ -8,15 +8,18 @@ import com.sencha.gxt.data.shared.PropertyAccess;
 
 public interface WorkGroupInfoProperties extends PropertyAccess<WorkGroupInfo> {
 	@Path("workGroupID")
-	  ModelKeyProvider<WorkGroupInfo> key();
-	   
-	  @Path("workGroupName")
-	  LabelProvider<WorkGroupInfo> nameLabel();
-	 
-	  ValueProvider<WorkGroupInfo, Integer> workGroupInviteID();
-	  ValueProvider<WorkGroupInfo, Integer> workGroupID();
-	  ValueProvider<WorkGroupInfo, String> workGroupName();
-	  ValueProvider<WorkGroupInfo, Integer> workGroupFacilitator();
-	  ValueProvider<WorkGroupInfo, String> facilitatorName();
-	  
+	ModelKeyProvider<WorkGroupInfo> key();
+	
+	@Path("workGroupInviteID")
+	ModelKeyProvider<WorkGroupInfo> inviteKey();
+
+	@Path("workGroupName")
+	LabelProvider<WorkGroupInfo> nameLabel();
+
+	ValueProvider<WorkGroupInfo, Integer> workGroupInviteID();
+	ValueProvider<WorkGroupInfo, Integer> workGroupID();
+	ValueProvider<WorkGroupInfo, String> workGroupName();
+	ValueProvider<WorkGroupInfo, Integer> workGroupFacilitator();
+	ValueProvider<WorkGroupInfo, String> facilitatorName();
+
 }

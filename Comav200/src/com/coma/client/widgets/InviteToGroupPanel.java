@@ -5,8 +5,10 @@ import com.coma.client.User;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
+import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.button.CellButtonBase;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
@@ -25,17 +27,17 @@ public class InviteToGroupPanel {
 	private TextButton sendGroupInviteButton = new TextButton("Send invite");
 	private TextButton cancelButton = new TextButton("Cancel");
    
-    public VerticalLayoutContainer createInviteToGroupDialog(){
+    public ContentPanel inviteToGroupPanel(){
     	
+    	ContentPanel contentPanel = new ContentPanel();
     	VerticalLayoutContainer vlc = new VerticalLayoutContainer();
-
+    	
     	emailTextBox = new TextField();
 		emailTextBox.setAllowBlank(false);
 		emailTextBox.setEmptyText("Enter email to invite...");
 		vlc.add(new FieldLabel(emailTextBox, "Email: "), new VerticalLayoutData(1, -1));
 		
 		HorizontalPanel hPanel = new HorizontalPanel();
-		hPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 
 		cancelButton.addSelectHandler(new SelectHandler() {
 			
@@ -50,7 +52,7 @@ public class InviteToGroupPanel {
 			@Override
 			public void onSelect(SelectEvent event) {
 				new HandleGroups().sendGroupInvite(emailTextBox.getText());
-				Info.display("Group invite", "Group invite sent");
+				Info.display("Group invite", "Group invite sent" + " to " + emailTextBox.getText());
 				System.out.println("Send email in the future");
 				emailTextBox.clear();
 			}
@@ -59,9 +61,11 @@ public class InviteToGroupPanel {
 		
 		hPanel.add(sendGroupInviteButton);
 		hPanel.add(cancelButton);
+		
 		vlc.add(hPanel);
-
-		return vlc;
+		contentPanel.setHeadingHtml("Invite to group");
+		contentPanel.add(vlc);
+		return contentPanel;
     	
     }
 

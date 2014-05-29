@@ -5,7 +5,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class WorkGroupInfo implements IsSerializable {
 
 	//This field is only used for invites. 
-		//to create a new class for invites would make a lot of redundant code
+	//to create a new class for invites would make a lot of redundant code
 	private int workGroupInviteID; 
 	
 	private int workGroupID;

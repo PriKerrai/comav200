@@ -18,7 +18,7 @@ import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.TextField;
 
-public class VoteDialogBox{
+public class LeaveVoteDialogBox{
 	final ListBox listBox = new ListBox(); 
 	final String[] Items = { "0", "1", "2","3", "4", "5", "6", "7", "8", "9", "10" };
 	TextField firstName = new TextField();
@@ -36,14 +36,14 @@ public class VoteDialogBox{
 		this.activeModelID = modelID;
 	}
 
-	public VoteDialogBox() {
+	public LeaveVoteDialogBox() {
 	}
 
-	public VoteDialogBox(int modelID) {
+	public LeaveVoteDialogBox(int modelID) {
 		setModelID(modelID);
 	}
 
-	public Dialog createDialogBox(){
+	public Dialog leaveVoteDialog(){
 		// Create the popup dialog box
 		dialog = new Dialog();
 		dialog.setHeadingText("Leave a vote");

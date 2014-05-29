@@ -8,6 +8,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
@@ -35,24 +36,25 @@ public class CreateNewGroupPanel{
 	 * 
 	 * @return the created dialog for creating a group
 	 */
-	public VerticalLayoutContainer createNewGroupPanel(){
+	public ContentPanel createNewGroupPanel(){
+		ContentPanel contentPanel = new ContentPanel();
 		VerticalLayoutContainer vlc = new VerticalLayoutContainer();
 
 		nameBox = new TextField();
 		nameBox.setAllowBlank(false);
 		nameBox.setEmptyText("Enter group name");
-		
+
 		HorizontalPanel hPanel = new HorizontalPanel();
 		hPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 
-	    vlc.add(new FieldLabel(nameBox, "Group Name"), new VerticalLayoutData(1, -1));
+		vlc.add(new FieldLabel(nameBox, "Group Name"), new VerticalLayoutData(1, -1));
 
 		cancelButton.addSelectHandler(new SelectHandler() {
-			
+
 			@Override
 			public void onSelect(SelectEvent event) {
 				nameBox.clear();
-				
+
 			}
 		});
 
@@ -61,19 +63,20 @@ public class CreateNewGroupPanel{
 			@Override
 			public void onSelect(SelectEvent event) {
 				String groupName = nameBox.getText();
-				 int userID = User.getInstance().getUserId();
+				int userID = User.getInstance().getUserId();
 
-				 createNewGroup(userID, groupName);
+				createNewGroup(userID, groupName);
 				nameBox.clear();
 			}
-			
+
 		});
-		
+
 		hPanel.add(createNewGroupButton);
 		hPanel.add(cancelButton);
 		vlc.add(hPanel);
-
-		return vlc;
+		contentPanel.setHeadingHtml("Create new group");
+		contentPanel.add(vlc);
+		return contentPanel;
 
 	}
 
@@ -91,7 +94,7 @@ public class CreateNewGroupPanel{
 			@Override
 			public void onSuccess(Integer result) {
 				new HandleGroups().addUserToGroup(result);
-
+				System.out.println("Inne i create new grup??");
 			}
 		});
 	}
