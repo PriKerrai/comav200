@@ -5,6 +5,7 @@ public class User {
 	private static User instance = null;
 	private int userId;
 	private int activeGroupID;
+	private String activeGroupName;
 	private String userEmail;
 	private String userName;
 
@@ -19,7 +20,13 @@ public class User {
 	public int getActiveGroupID() {
 		return activeGroupID;
 	}
+	public String getActiveGroupName() {
+		return activeGroupName;
+	}
 
+	public void setActiveGroupName(String activeGroupName) {
+		this.activeGroupName = activeGroupName;
+	}
 	public String getUserName() {
 		return userName;
 	}
