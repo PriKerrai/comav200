@@ -410,7 +410,7 @@ DatabaseConnection {
 		Connection dbCon = null;
 		List<WorkGroupInfo> invitesList = new ArrayList<WorkGroupInfo>();
 
-		String query = "SELECT * FROM workgroupinvites WHERE userID = ? AND isActive = ?";
+		String query = "SELECT * FROM workgroupinvites as w LEFT JOIN workgroupvas g ON w.groupID = g.groupID LEFT JOIN userprofile as u ON g.groupFacilitator = u.userID WHERE w.userID = ? AND w.isActive = ?";
 		try{
 			dbCon = initializeDBConnection(); 
 			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
@@ -421,6 +421,7 @@ DatabaseConnection {
 				WorkGroupInfo workGroupInfo = new WorkGroupInfo();
 				workGroupInfo.setWorkGroupInviteID(rs.getInt("inviteID"));
 				workGroupInfo.setWorkGroupID(rs.getInt("groupID"));
+				workGroupInfo.setFacilitatorName(rs.getString("firstName"));
 				invitesList.add(workGroupInfo);
 			}
 			return getGroupInvitesInfo(invitesList);
