@@ -7,6 +7,7 @@ import com.coma.client.LoadModel;
 import com.coma.client.User;
 import com.coma.client.WorkGroupInfo;
 import com.google.gwt.user.client.ui.ListBox;
+import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
@@ -20,7 +21,7 @@ public class SwitchGroupDialog {
 	private ListBox groupBox;
     private Dialog dialog;
    
-    public Dialog createDialogBox(List<WorkGroupInfo> groups){
+    public Dialog createDialogBox(ContentPanel panel){
     		// Create the popup dialog box
     			dialog = new Dialog();
     			dialog.setHeadingText("Switch active group");
@@ -32,23 +33,17 @@ public class SwitchGroupDialog {
     			verticalLayoutContainer.addStyleName("dialogVPanel");
     	
     	
-    		final List<WorkGroupInfo> groupList = groups;
-            groupBox = new ListBox();
-            for(WorkGroupInfo wgi: groupList){
-            	groupBox.addItem(wgi.getWorkGroupName());
-            }
-            verticalLayoutContainer.add(new FieldLabel(groupBox, "Choose group"), new VerticalLayoutData(1, -1));
-            dialog.setWidget(verticalLayoutContainer);
+    		dialog.add(panel);
 
             
         	dialog.getButton(PredefinedButton.OK).addSelectHandler(new SelectHandler() {
     			@Override
     			public void onSelect(SelectEvent event) {
-    				// TODO Auto-generated method stub
-    				User.getInstance().setActiveGroupID(groupList.get(groupBox.getSelectedIndex()).getWorkGroupID());
-    				User.getInstance().setActiveGroupName(groupList.get(groupBox.getSelectedIndex()).getWorkGroupName());
+	
+    				User.getInstance().setActiveGroupID(SwitchGroupCellGridForDialog.getNewWorkGroupID());
+    				User.getInstance().setActiveGroupName(SwitchGroupCellGridForDialog.getWorkGroupName());
     				new LoadModel().getActiveGroupModelFromDatabase(Comav200.GetInstance().getOryxFrame());
-    				Info.display("Group changed", "Active group: " + groupBox.getValue(groupBox.getSelectedIndex()));
+    				Info.display("Group changed", "Active group: " + SwitchGroupCellGridForDialog.getWorkGroupName());
                     dialog.hide();
     			}
     		});

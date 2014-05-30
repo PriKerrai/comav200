@@ -319,7 +319,7 @@ public class Comav200 {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				new HandleGroups().getUsersGroups();
+				new HandleGroups().getUsersGroupsForDialog();
 
 			}
 

@@ -17,6 +17,7 @@ import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.TextField;
+import com.sencha.gxt.widget.core.client.info.Info;
 
 /**
  * Creates the dialog for creating a new group
@@ -66,7 +67,9 @@ public class CreateNewGroupPanel{
 				int userID = User.getInstance().getUserId();
 
 				createNewGroup(userID, groupName);
+				
 				nameBox.clear();
+				Info.display("Group created", "Group: " + groupName + " has been created");
 			}
 
 		});
