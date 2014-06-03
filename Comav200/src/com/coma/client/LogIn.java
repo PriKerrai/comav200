@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import com.coma.shared.FieldVerifier;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -21,6 +22,7 @@ import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.PasswordField;
 import com.sencha.gxt.widget.core.client.form.TextField;
 
+
 public class LogIn {
 
 	private TextButton logInButton = new TextButton("Log In");
@@ -33,6 +35,7 @@ public class LogIn {
 			.create(DatabaseConnection.class);
 	private final int PANEL_WIDTH = 270;
 	private final int PANEL_HEIGHT= 100;
+	private boolean validEmail;
 
 	public VerticalLayoutContainer screen() {
 		VerticalLayoutContainer vlc = new VerticalLayoutContainer();
@@ -103,8 +106,25 @@ public class LogIn {
 	}
 
 	private void checkAuthantication(String email, String password) {
+		
 		String encryptedPassword = encryptPassword(passwordField.getValue());
 		String emailText = emailTextField.getText();
+
+		boolean isValidEmail = FieldVerifier.isValidEmail(email);
+		boolean isValidPassword = FieldVerifier.isValidPassword(password);
+
+		if(!isValidEmail) {
+			AlertMessageBox alert = new AlertMessageBox("Login failed",
+					"Please check your credentials and try again.");
+			alert.show();
+			return;
+		}
+		if(!isValidPassword) {
+			AlertMessageBox alert = new AlertMessageBox("Login failed",
+					"Please check your credentials and try again.");
+			alert.show();
+			return;
+		}
 		if (encryptedPassword.equals(password)) {
 			getAndSetUserName(emailText);
 			getAndSetUserID(emailText);    
@@ -112,7 +132,8 @@ public class LogIn {
 		} else {
 			AlertMessageBox alert = new AlertMessageBox("Login failed",
 					"Please check your credentials and try again.");
-							alert.show();
+			alert.show();
+			return;
 		}
 	}
 

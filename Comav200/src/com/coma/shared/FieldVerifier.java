@@ -1,5 +1,7 @@
 package com.coma.shared;
 
+import com.google.gwt.core.client.GWT;
+
 /**
  * <p>
  * FieldVerifier validates that the name the user enters is valid.
@@ -39,4 +41,25 @@ public class FieldVerifier {
 		}
 		return name.length() > 3;
 	}
+	
+	public static boolean isValidEmail(String email) {
+//		if(email.matches("^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")){
+//			GWT.log("Email Address valid");
+//		    return true;
+//		}else{
+//		 GWT.log("Email Address Invalid");
+//		 return false;
+//		}
+		return true;
+	}
+	
+	public static boolean isValidPassword(String password) {
+		if (password == null) {
+			return false;
+		}
+
+		return password.length() > 3;
+	}
+	
+	
 }

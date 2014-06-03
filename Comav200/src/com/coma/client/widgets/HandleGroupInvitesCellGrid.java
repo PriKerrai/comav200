@@ -4,6 +4,7 @@ package com.coma.client.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.coma.client.Comav200;
 import com.coma.client.HandleGroups;
 import com.coma.client.User;
 import com.coma.client.WorkGroupInfo;
@@ -91,6 +92,8 @@ public class HandleGroupInvitesCellGrid {
 			@Override
 			public void onSelect(SelectEvent event) {		
 				new HandleGroups().acceptGroupInvite(groupID, inviteID);
+				new HandleGroups().getUsersGroups();
+				new HandleGroups().getGroupInvites();
 			}
 		});
 		
@@ -98,6 +101,8 @@ public class HandleGroupInvitesCellGrid {
 			@Override
 			public void onSelect(SelectEvent event) {
 				new HandleGroups().declineGroupInvite(inviteID);
+				new HandleGroups().getUsersGroups();
+				new HandleGroups().getGroupInvites();
 			}
 		});
 

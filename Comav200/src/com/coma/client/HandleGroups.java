@@ -2,6 +2,7 @@ package com.coma.client;
 
 import java.util.List;
 
+
 import com.coma.client.widgets.SwitchGroupCellGrid;
 import com.coma.client.widgets.SwitchGroupCellGridForDialog;
 import com.coma.client.widgets.SwitchGroupDialog;

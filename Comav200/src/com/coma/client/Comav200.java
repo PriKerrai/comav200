@@ -76,6 +76,10 @@ public class Comav200 {
 
 	public TabPanel tabPanel;
 
+	public TabPanel getTabPanel() {
+		return tabPanel;
+	}
+
 	public static Comav200 GetInstance(){
 		if(instance == null){
 			instance = new Comav200();

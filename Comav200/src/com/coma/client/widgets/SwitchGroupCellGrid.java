@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.coma.client.Comav200;
+import com.coma.client.HandleGroups;
 import com.coma.client.LoadModel;
 import com.coma.client.User;
 import com.coma.client.WorkGroupInfo;
@@ -88,6 +89,7 @@ public class SwitchGroupCellGrid {
 				Info.display("Group changed", "Active group: " + workGroupName);
 				newWorkGroupID = 0;
 				workGroupName = "";
+				
 			}
 
 		});

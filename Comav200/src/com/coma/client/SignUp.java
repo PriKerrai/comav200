@@ -21,6 +21,7 @@ import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.PasswordField;
 import com.sencha.gxt.widget.core.client.form.TextField;
 import com.coma.client.Comav200;
+import com.coma.shared.FieldVerifier;
 
 public class SignUp {
 
@@ -33,7 +34,7 @@ public class SignUp {
 
 	private final DatabaseConnectionAsync databaseConnection = GWT
 			.create(DatabaseConnection.class);
-	
+
 	private int PANEL_WIDTH = 270;
 	private int PANEL_HEIGHT = 300;
 
@@ -48,14 +49,14 @@ public class SignUp {
 
 		VerticalPanel holder = new VerticalPanel();
 		HorizontalPanel hPanel = new HorizontalPanel();
-		
+
 		nameTextField.setAllowBlank(false);
 		holder.add(new FieldLabel(nameTextField, "First name"));
-		 
+
 		emailTextField.setAllowBlank(false);
-        holder.add(new FieldLabel(emailTextField, "Email"));
-        holder.add(new FieldLabel(passwordField, "Password"));
-        holder.add(new FieldLabel(passwordFieldRepeated, "Repeat password"));
+		holder.add(new FieldLabel(emailTextField, "Email"));
+		holder.add(new FieldLabel(passwordField, "Password"));
+		holder.add(new FieldLabel(passwordFieldRepeated, "Repeat password"));
 		signUpButton.addSelectHandler(new SelectHandler(){
 
 			@Override
@@ -63,8 +64,12 @@ public class SignUp {
 
 				String name = nameTextField.getText();
 				String email = emailTextField.getText();
+				
 				String password = passwordField.getValue();
 				String passwordRepeated = passwordFieldRepeated.getValue();
+				
+				boolean isValidEmail = FieldVerifier.isValidEmail(email);
+				boolean isValidPassword = FieldVerifier.isValidEmail(password);
 
 				if (event.getSource().equals(signUpButton)) {
 
@@ -73,8 +78,19 @@ public class SignUp {
 						alert.show();
 						return;
 					}
-					if (password.length() < 1) {
-						AlertMessageBox alert = new AlertMessageBox("Too short!", "Password need to be between X and X");
+
+					if(!isValidEmail) {
+						AlertMessageBox alert = new AlertMessageBox("Too short!", "Please enter a valid email adress");
+						alert.show();
+						return;
+					}
+					if(passwordField.getValue() == null) {
+						AlertMessageBox alert = new AlertMessageBox("Too short!", "Password need to be between atleast 5 characters long");
+						alert.show();
+						return;
+					}
+					if (!isValidPassword) {
+						AlertMessageBox alert = new AlertMessageBox("Too short!", "Password need to be between atleast 5 characters long");
 						alert.show();
 						return;
 					}
@@ -90,7 +106,7 @@ public class SignUp {
 			}
 
 		});
-		
+
 		backToLoginButton.addSelectHandler(new SelectHandler(){
 
 			@Override
@@ -103,11 +119,11 @@ public class SignUp {
 		hPanel.add(backToLoginButton);
 		holder.add(hPanel);
 		form.add(holder);
-		
+
 		int windowHeight = Window.getClientHeight();
-        int windowWidth = Window.getClientWidth();
-        vlc.add(form);
-        vlc.setPosition((windowWidth-PANEL_WIDTH )/2, (windowHeight-PANEL_HEIGHT)/2);
+		int windowWidth = Window.getClientWidth();
+		vlc.add(form);
+		vlc.setPosition((windowWidth-PANEL_WIDTH )/2, (windowHeight-PANEL_HEIGHT)/2);
 		return vlc;
 	}
 
@@ -177,7 +193,7 @@ public class SignUp {
 		databaseConnection.getUserID(email, new AsyncCallback<Integer>() {
 			public void onFailure(Throwable caught) {
 			}
-			
+
 			@Override
 			public void onSuccess(Integer result) {
 				// TODO Auto-generated method stub
@@ -189,4 +205,6 @@ public class SignUp {
 
 		});
 	}
+	
+	
 }
