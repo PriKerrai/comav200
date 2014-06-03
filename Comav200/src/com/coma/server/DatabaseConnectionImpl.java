@@ -240,7 +240,7 @@ DatabaseConnection {
 
 	public ModelInfo loadModel(String modelCreatorName, String modelName,
 			String modelCreationDate) {
-		
+
 		Connection dbCon = null;
 		ModelInfo modelInfo = new ModelInfo();
 
@@ -269,7 +269,7 @@ DatabaseConnection {
 		}      
 		return null;
 	}
-	
+
 	@Override
 	public void addCommentToModel(int userID, int modelID, String comment) {
 
@@ -515,7 +515,7 @@ DatabaseConnection {
 	}
 
 	@Override
-	public void updateActiveGroupModel(int activeGroupID, int modelID, String version) {
+	public void updateActiveGroupModel(int activeGroupID, int modelID, int version) {
 		Connection dbCon = null;
 
 		String modelString = "";
@@ -536,7 +536,7 @@ DatabaseConnection {
 			preparedStatementTwo.setInt(1, activeGroupID);
 			preparedStatementTwo.setInt(2, modelID);
 			preparedStatementTwo.setString(3, modelString);
-			preparedStatementTwo.setString(4, version);
+			preparedStatementTwo.setInt(4, version);
 
 			preparedStatementTwo.executeUpdate();
 		} catch (SQLException ex) {
@@ -766,27 +766,49 @@ DatabaseConnection {
 	}
 
 	@Override
-	 public String getUserName(String email) {
-	  Connection dbCon = null;
-	  String name = "";
-	  String query = "SELECT * FROM user as u LEFT JOIN userprofile as p ON u.userID = p.userID WHERE userEmail = ?";
-	  try{
-	   dbCon = initializeDBConnection(); 
-	   PreparedStatement preparedStatement = dbCon.prepareStatement(query);
-	   preparedStatement.setString(1, email);
-	   ResultSet rs = preparedStatement.executeQuery();
-	   while (rs.next()) {
-	    name = rs.getString("firstName");
-	   }
-	   return name;
+	public String getUserName(String email) {
+		Connection dbCon = null;
+		String name = "";
+		String query = "SELECT * FROM user as u LEFT JOIN userprofile as p ON u.userID = p.userID WHERE userEmail = ?";
+		try{
+			dbCon = initializeDBConnection(); 
+			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+			preparedStatement.setString(1, email);
+			ResultSet rs = preparedStatement.executeQuery();
+			while (rs.next()) {
+				name = rs.getString("firstName");
+			}
+			return name;
 
-	  } catch (SQLException ex) {
-	   Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
-	  }      
-	  return null;
-	 }
+		} catch (SQLException ex) {
+			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+		}      
+		return null;
+	}
 
-	
+	@Override
+	public int getLatestGroupModelVersion(int groupID) {
+		Connection dbCon = null;
+		int version = 0;
+		String query = "SELECT * FROM activegroupmodel WHERE groupID = ? ORDER BY version DESC LIMIT 1";
+		try{
+			dbCon = initializeDBConnection(); 
+			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+			preparedStatement.setInt(1, groupID);
+			ResultSet rs = preparedStatement.executeQuery();
+			while (rs.next()) {
+				version = rs.getInt("version");
+				System.out.println(version + "version");
+			}
+			return version;
+
+		} catch (SQLException ex) {
+			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+		}      
+		return -1;
+	}
+
+
 
 }
 

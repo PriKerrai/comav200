@@ -25,7 +25,7 @@ import com.sencha.gxt.widget.core.client.info.Info;
 public class AcceptProposalDialog {
 
 	Dialog dialog = new Dialog();
-	
+
 
 	private int activeModelID;
 
@@ -61,13 +61,13 @@ public class AcceptProposalDialog {
 		dialog.getButton(PredefinedButton.YES).addSelectHandler(new SelectHandler() {
 			@Override
 			public void onSelect(SelectEvent event) {
-				 int activeGroupID = User.getInstance().getActiveGroupID();
-                 int modelID = getModelID();
-                 String version = "420";
-                 
-                 checkGroupFacilitator(activeGroupID, modelID, version);
-                 
-                 dialog.hide();
+				int activeGroupID = User.getInstance().getActiveGroupID();
+				int modelID = getModelID();
+				String version = "420";
+
+				checkGroupFacilitator(activeGroupID, modelID, version);
+
+				dialog.hide();
 
 			}
 		});
@@ -89,15 +89,14 @@ public class AcceptProposalDialog {
 			@Override
 			public void onFailure(Throwable caught) {
 				// TODO Auto-generated method stub
-				
+
 			}
 			@Override
 			public void onSuccess(WorkGroupInfo result) {
 				System.out.println(result.getWorkGroupFacilitator()+ ": DB");
 				System.out.println(User.getInstance().getUserId()+ ": user");
 				if(result.getWorkGroupFacilitator() == User.getInstance().getUserId()){
-					updateActiveGroupModel(activeGroupID, modelID, version);
-					Info.display("New group model", "Model set as group model");
+					updateActiveGroupModel(activeGroupID, modelID);
 				}else{
 					AlertMessageBox alert = new AlertMessageBox("Forbidden", "Only the group facilitator can accept proposals");
 					alert.show();
@@ -105,24 +104,37 @@ public class AcceptProposalDialog {
 			}
 		});
 	}
-	
+
 	/**
 	 * 
 	 * @param activeGroupID The activeGroupID that the current user has selected
 	 * @param modelID	The modelID of the proposed model
 	 * @param version	AutoIncremented versionID
 	 */
-	public void updateActiveGroupModel(int activeGroupID, int modelID, String version) {
-		databaseConnection.updateActiveGroupModel(activeGroupID, modelID, version, new AsyncCallback<Void>() {
+	public void updateActiveGroupModel(final int activeGroupID, final int modelID) {
+
+		databaseConnection.getLatestGroupModelVersion(User.getInstance().getActiveGroupID(), new AsyncCallback<Integer>() {
 			public void onFailure(Throwable caught) {
 			}
 
 			@Override
-			public void onSuccess(Void result) {
-				// TODO Auto-generated method stub
+			public void onSuccess(Integer result) {
+				if(result == -1){
+					AlertMessageBox alert = new AlertMessageBox("No connection", "No connection to database");
+					alert.show();
+				}else{
+					int version = result+1;
+					databaseConnection.updateActiveGroupModel(activeGroupID, modelID, version, new AsyncCallback<Void>() {
+						public void onFailure(Throwable caught) {
+						}
 
+						@Override
+						public void onSuccess(Void result) {
+							Info.display("New group model", "Model set as group model");
+						}
+					});
+				}
 			}
 		});
 	}
-
 }

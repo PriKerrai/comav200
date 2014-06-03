@@ -37,7 +37,7 @@ public interface DatabaseConnectionAsync {
 	void getUserProfile(int userID, AsyncCallback<List<String>> callback);
 	void getUsersGroups(int userID, AsyncCallback<List<WorkGroupInfo>> callback);
 	void getAllUserModels(int userID, AsyncCallback<List<ModelInfo>> callback);
-	void updateActiveGroupModel(int activeGroupID, int modelID, String version,
+	void updateActiveGroupModel(int activeGroupID, int modelID, int version,
 			AsyncCallback<Void> callback);
 	void getAllGroupMembers(int activeGroupID,
 			AsyncCallback<List<String>> asyncCallback);
@@ -48,5 +48,6 @@ public interface DatabaseConnectionAsync {
 	void getUserName(String email, AsyncCallback<String> asyncCallback);
 	void loadModel(String modelCreatorName, String modelName,
 			String modelCreationDate, AsyncCallback<ModelInfo> asyncCallback);
+	void getLatestGroupModelVersion(int groupID, AsyncCallback<Integer> callback);
 	
 }

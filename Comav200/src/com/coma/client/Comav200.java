@@ -309,7 +309,6 @@ public class Comav200 {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				// TODO Auto-generated method stub
 
 			}
 

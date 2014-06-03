@@ -48,7 +48,6 @@ public class SwitchGroupCellGridForDialog {
 
 		gridContentPanel = new ContentPanel();
 		gridContentPanel.setHeight(600);
-		gridContentPanel.setHeadingHtml("Switch group");
 
 		final Grid<WorkGroupInfo> grid = new Grid<WorkGroupInfo>(store, cm);
 		grid.getView().setAutoExpandColumn(groupNameColumn);
