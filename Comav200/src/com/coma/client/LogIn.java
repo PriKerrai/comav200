@@ -51,6 +51,7 @@ public class LogIn {
 		HorizontalPanel hPanel = new HorizontalPanel();
 
 		emailTextField.setAllowBlank(false);
+		holder.add(new Image("http://i.imgur.com/DVvpqtk.png"));
 		holder.add(new FieldLabel(emailTextField, "Email"));
 
 		holder.add(new FieldLabel(passwordField, "Password"));
