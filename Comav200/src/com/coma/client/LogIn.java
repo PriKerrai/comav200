@@ -127,7 +127,6 @@ public class LogIn {
 			return;
 		}
 		if (encryptedPassword.equals(password)) {
-			getAndSetUserName(emailText);
 			initUserInfo(emailText);    
 			User.getInstance().setUserEmail(emailTextField.getText());
 		} else {
@@ -148,22 +147,13 @@ public class LogIn {
 			public void onSuccess(Integer result) {
 				// TODO Auto-generated method stub
 				User.getInstance().setUserId(result);
-				databaseConnection.getUserName(email, new AsyncCallback<String>() {
-					public void onFailure(Throwable caught) {
-					}
-
-					@Override
-					public void onSuccess(String result) {
-						User.getInstance().setUserName(result);
-						Comav200.GetInstance().initMainProgram(); 
-					}
-				});
-				             
+				getAndSetUserName(email);			             
 			}
 		});
 	}
 
-	public void getAndSetUserName(String email) {
+	
+	private void getAndSetUserName(String email) {
 		databaseConnection.getUserName(email, new AsyncCallback<String>() {
 			public void onFailure(Throwable caught) {
 			}
@@ -173,6 +163,7 @@ public class LogIn {
 				// TODO Auto-generated method stub
 				System.out.println(result);
 				User.getInstance().setUserName(result);
+				Comav200.GetInstance().initMainProgram(); 
 			}
 		});
 	}
