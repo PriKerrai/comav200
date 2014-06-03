@@ -289,8 +289,10 @@ public class Comav200 {
 		panel.add(saveModelButton);
 		panel.add(loadModelButton);
 		panel.add(proposeButton);
-		panel.add(new Label("Logged in as: " + User.getInstance().getUserEmail()+ " id: " + User.getInstance().getUserId() + "Group: " +User.getInstance().getActiveGroupID()));
-
+		Label name = new Label("Logged in as: " + User.getInstance().getUserName());
+		name.getElement().setClassName("nameStyle");
+		//panel.add(new Label("Logged in as: " + User.getInstance().getUserEmail()+ " id: " + User.getInstance().getUserId() + "Group: " +User.getInstance().getActiveGroupID()));
+		panel.add(name);
 		return panel;  
 	}
 

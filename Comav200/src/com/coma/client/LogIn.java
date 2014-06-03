@@ -25,6 +25,9 @@ import com.sencha.gxt.widget.core.client.form.TextField;
 
 public class LogIn {
 
+	private final String LOGIN_FAILED = "Login Failed";
+	private final String CHECK_CREDENTIALS = "Please check your credentials and try again.";
+	
 	private TextButton logInButton = new TextButton("Log In");
 	private TextButton signUpButton = new TextButton("Sign Up");
 	private TextField emailTextField = new TextField();
@@ -108,6 +111,7 @@ public class LogIn {
 
 	private void checkAuthantication(String email, String password) {
 		
+		AlertMessageBox alert = new AlertMessageBox(LOGIN_FAILED, CHECK_CREDENTIALS);
 		String encryptedPassword = encryptPassword(passwordField.getValue());
 		String emailText = emailTextField.getText();
 
@@ -115,24 +119,18 @@ public class LogIn {
 		boolean isValidPassword = FieldVerifier.isValidPassword(password);
 
 		if(!isValidEmail) {
-			AlertMessageBox alert = new AlertMessageBox("Login failed",
-					"Please check your credentials and try again.");
 			alert.show();
 			return;
 		}
 		if(!isValidPassword) {
-			AlertMessageBox alert = new AlertMessageBox("Login failed",
-					"Please check your credentials and try again.");
 			alert.show();
 			return;
 		}
 		if (encryptedPassword.equals(password)) {
 			getAndSetUserName(emailText);
-			getAndSetUserID(emailText);    
+			initUserInfo(emailText);    
 			User.getInstance().setUserEmail(emailTextField.getText());
 		} else {
-			AlertMessageBox alert = new AlertMessageBox("Login failed",
-					"Please check your credentials and try again.");
 			alert.show();
 			return;
 		}
@@ -141,7 +139,7 @@ public class LogIn {
 	/**
 	 *Gets active users ID from database and sets the ID in the User class
 	 */
-	public void getAndSetUserID(String email) {
+	public void initUserInfo(final String email) {
 		databaseConnection.getUserID(email, new AsyncCallback<Integer>() {
 			public void onFailure(Throwable caught) {
 			}
@@ -150,7 +148,17 @@ public class LogIn {
 			public void onSuccess(Integer result) {
 				// TODO Auto-generated method stub
 				User.getInstance().setUserId(result);
-				Comav200.GetInstance().initMainProgram();              
+				databaseConnection.getUserName(email, new AsyncCallback<String>() {
+					public void onFailure(Throwable caught) {
+					}
+
+					@Override
+					public void onSuccess(String result) {
+						User.getInstance().setUserName(result);
+						Comav200.GetInstance().initMainProgram(); 
+					}
+				});
+				             
 			}
 		});
 	}
