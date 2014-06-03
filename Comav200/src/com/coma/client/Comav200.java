@@ -17,6 +17,7 @@ import com.coma.client.widgets.MessageFrame;
 import com.coma.client.widgets.ModelCellGrid;
 import com.coma.client.widgets.NameModelDialog;
 import com.coma.client.widgets.NewModelDialog;
+import com.coma.client.widgets.SaveModelDialog;
 import com.coma.client.widgets.SendProposalDialog;
 import com.coma.client.widgets.SwitchGroupCellGrid;
 import com.coma.client.widgets.UserProfileFormPanel;
@@ -95,6 +96,7 @@ public class Comav200 {
 	public TextButton loadModelButton = new TextButton("Load Model");
 	public TextButton importModelButton = new TextButton("Import");
 	public TextButton exportModelButton = new TextButton("Export");
+	public TextButton modifyGroupModelButton = new TextButton("Modify group model");
 
 	public TextButton editProfileButton = new TextButton("Edit profile");
 	public TextButton invitesButton = new TextButton("My group invites");
@@ -241,8 +243,10 @@ public class Comav200 {
 			@Override
 			public void onSelect(SelectEvent event) {
 				if(model.getModelName() != null){
-					model.setIsProposal(0);
-					new SaveModel().saveModel(oryxFrame);
+					SaveModelDialog smd = new SaveModelDialog(oryxFrame);
+					Dialog dialog = smd.createSaveModelDialog(model.getModelName());
+					dialog.center();
+					dialog.show();
 				} else{
 					NameModelDialog nmd = new NameModelDialog(oryxFrame);
 					Dialog dialog = nmd.createNameModelDialog();
@@ -293,19 +297,18 @@ public class Comav200 {
 	private Panel topMenuButtonsGroupModelView()
 	{ 	
 		HorizontalPanel panel = new HorizontalPanel();
-
+/*
 		importModelButton.setStyleName("testStyle");
 		//importModelButton.getElement().setClassName("utilityButton");
 		exportModelButton.getElement().setClassName("utilityButton");
 		switchGroupGroupTabButton.getElement().setClassName("utilityButton");
-
+*/
 
 		importModelButton.addSelectHandler(new SelectHandler(){
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				tabPanel.setActiveWidget(tabPanel.getWidget(0));
-				new LoadModel().getActiveGroupModelFromDatabase(getOryxFrame());
+
 			}
 
 		});
@@ -318,6 +321,17 @@ public class Comav200 {
 
 		});
 
+		modifyGroupModelButton.addSelectHandler(new SelectHandler(){
+
+			@Override
+			public void onSelect(SelectEvent event) {
+				tabPanel.setActiveWidget(tabPanel.getWidget(0));
+				new LoadModel().getActiveGroupModelFromDatabase(getOryxFrame());
+				
+			}
+			
+		});
+		
 		switchGroupGroupTabButton.addSelectHandler(new SelectHandler(){
 
 			@Override
@@ -330,6 +344,7 @@ public class Comav200 {
 
 		panel.add(importModelButton);
 		panel.add(exportModelButton);
+		panel.add(modifyGroupModelButton);
 		panel.add(switchGroupGroupTabButton);
 
 		return panel;  

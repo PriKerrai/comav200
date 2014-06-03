@@ -6,6 +6,7 @@ import com.coma.client.SaveModel;
 import com.coma.client.User;
 import com.google.gwt.user.client.ui.Label;
 import com.sencha.gxt.widget.core.client.Dialog;
+import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
@@ -15,17 +16,18 @@ import com.sencha.gxt.widget.core.client.form.CheckBox;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.TextField;
 
-public class NameModelDialog {
+public class SaveModelDialog {
+
 
 	private TextField modelNameBox;
 	private MessageFrame oryxFrame;
 	private Dialog dialog;
 
-	public NameModelDialog(MessageFrame oryxFrame){
+	public SaveModelDialog(MessageFrame oryxFrame){
 		this.oryxFrame = oryxFrame;
 	}
 
-	public Dialog createNameModelDialog(){
+	public Dialog createSaveModelDialog(String modelName){
 		// Create the popup dialog box
 		final CheckBox proposalCheckBox = new CheckBox();
 		proposalCheckBox.setBoxLabel(" - Send as proposal for " + User.getInstance().getActiveGroupName());
@@ -38,9 +40,8 @@ public class NameModelDialog {
 
 		modelNameBox = new TextField();
 		modelNameBox.setAllowBlank(false);
-		modelNameBox.setEmptyText("Enter model name");
+		modelNameBox.setValue(modelName);
 
-		verticalLayoutContainer.add(new Label("Please name your model before saving"));
 		verticalLayoutContainer.add(new FieldLabel(modelNameBox, "Model name"), new VerticalLayoutData(1, -1));
 		if(User.getInstance().getActiveGroupName() != null){
 			dialog.setPixelSize(400, 140);
@@ -80,5 +81,3 @@ public class NameModelDialog {
 
 	}
 }
-
-
