@@ -41,4 +41,5 @@ public interface DatabaseConnection extends RemoteService {
 	ModelInfo loadModel(String modelCreatorName, String modelName,
 			String modelCreationDate);
 	int getLatestGroupModelVersion(int groupID);
+	int getLatestJoinedGroup(int userId);
 }

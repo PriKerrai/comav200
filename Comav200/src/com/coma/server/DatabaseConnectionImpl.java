@@ -808,6 +808,27 @@ DatabaseConnection {
 		return -1;
 	}
 
+	@Override
+	public int getLatestJoinedGroup(int userID) {
+		Connection dbCon = null;
+		int groupID = -1;
+		String query = "SELECT * FROM workgroupmember WHERE userID = ? ORDER BY joinedDate DESC LIMIT 1";
+		try{
+			dbCon = initializeDBConnection(); 
+			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+			preparedStatement.setInt(1, userID);
+			ResultSet rs = preparedStatement.executeQuery();
+			while (rs.next()) {
+				groupID = rs.getInt("groupID");
+			}
+			return groupID;
+
+		} catch (SQLException ex) {
+			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+		}      
+		return -1;
+	}
+
 
 
 }

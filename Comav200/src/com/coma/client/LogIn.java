@@ -11,7 +11,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
@@ -27,7 +26,7 @@ public class LogIn {
 
 	private final String LOGIN_FAILED = "Login Failed";
 	private final String CHECK_CREDENTIALS = "Please check your credentials and try again.";
-	
+
 	private TextButton logInButton = new TextButton("Log In");
 	private TextButton signUpButton = new TextButton("Sign Up");
 	private TextField emailTextField = new TextField();
@@ -110,7 +109,7 @@ public class LogIn {
 	}
 
 	private void checkAuthantication(String email, String password) {
-		
+
 		AlertMessageBox alert = new AlertMessageBox(LOGIN_FAILED, CHECK_CREDENTIALS);
 		String encryptedPassword = encryptPassword(passwordField.getValue());
 		String emailText = emailTextField.getText();
@@ -152,7 +151,6 @@ public class LogIn {
 		});
 	}
 
-	
 	private void getAndSetUserName(String email) {
 		databaseConnection.getUserName(email, new AsyncCallback<String>() {
 			public void onFailure(Throwable caught) {
@@ -160,14 +158,41 @@ public class LogIn {
 
 			@Override
 			public void onSuccess(String result) {
-				// TODO Auto-generated method stub
-				System.out.println(result);
 				User.getInstance().setUserName(result);
-				Comav200.GetInstance().initMainProgram(); 
+				setActiveGroup();
 			}
 		});
 	}
 
+	private void setActiveGroup(){
+		databaseConnection.getLatestJoinedGroup(User.getInstance().getUserId(), new AsyncCallback<Integer>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onSuccess(Integer result) {
+				databaseConnection.getGroupInfo(result, new AsyncCallback<WorkGroupInfo>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void onSuccess(WorkGroupInfo result) {
+						User.getInstance().setActiveGroupID(result.getWorkGroupID());
+						User.getInstance().setActiveGroupName(result.getWorkGroupName());
+						Comav200.GetInstance().initMainProgram(); 
+					}
+				});
+			}
+		});
+	}
 
 	public void getPasswordFromDatabase(String emailString) {
 

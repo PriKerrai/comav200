@@ -49,5 +49,6 @@ public interface DatabaseConnectionAsync {
 	void loadModel(String modelCreatorName, String modelName,
 			String modelCreationDate, AsyncCallback<ModelInfo> asyncCallback);
 	void getLatestGroupModelVersion(int groupID, AsyncCallback<Integer> callback);
+	void getLatestJoinedGroup(int userId, AsyncCallback<Integer> asyncCallback);
 	
 }
