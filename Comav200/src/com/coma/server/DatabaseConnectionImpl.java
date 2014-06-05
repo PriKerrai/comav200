@@ -649,13 +649,14 @@ DatabaseConnection {
 	public void addUserToGroup(int groupID, int userID) {
 		Connection dbCon = null;
 
-		System.out.println("GROUP : " + groupID + "USERID : " + userID);
-		String query = "INSERT INTO workgroupmember (groupID, userID) VALUES (?,?)";
+		String joinedDate = getDate();
+		String query = "INSERT INTO workgroupmember (groupID, userID, joinedDate) VALUES (?,?,?)";
 		try{
 			dbCon = initializeDBConnection(); 
 			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
 			preparedStatement.setInt(1, groupID);
 			preparedStatement.setInt(2, userID);
+			preparedStatement.setString(3, joinedDate);
 			preparedStatement.executeUpdate();
 		} catch (SQLException ex) {
 			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);

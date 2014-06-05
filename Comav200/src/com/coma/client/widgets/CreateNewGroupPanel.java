@@ -97,7 +97,6 @@ public class CreateNewGroupPanel{
 			@Override
 			public void onSuccess(Integer result) {
 				new HandleGroups().addUserToGroup(result);
-				System.out.println("Inne i create new grup??");
 			}
 		});
 	}
