@@ -42,4 +42,5 @@ public interface DatabaseConnection extends RemoteService {
 			String modelCreationDate);
 	int getLatestGroupModelVersion(int groupID);
 	int getLatestJoinedGroup(int userId);
+	void setAllProposalsToInactive(int groupID);
 }

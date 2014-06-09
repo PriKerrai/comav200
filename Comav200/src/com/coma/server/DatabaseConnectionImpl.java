@@ -431,7 +431,6 @@ DatabaseConnection {
 		return null;
 	}
 
-
 	private List<WorkGroupInfo> getGroupInvitesInfo(List<WorkGroupInfo> invitesList) {
 		Connection dbCon = null;
 
@@ -453,7 +452,6 @@ DatabaseConnection {
 		}
 		return invitesList;
 	}
-
 
 	@Override
 	public void addUserProfileToUser(int userID, String firstName,
@@ -629,8 +627,6 @@ DatabaseConnection {
 	public void setInviteToInactive(int inviteID) {
 		Connection dbCon = null;
 
-
-
 		String query = "UPDATE workgroupinvites SET isActive = ? WHERE inviteID = ?";
 		try{
 			dbCon = initializeDBConnection(); 
@@ -641,7 +637,6 @@ DatabaseConnection {
 		} catch (SQLException ex) {
 			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
 		}  
-
 	}
 
 	@Override
@@ -827,8 +822,45 @@ DatabaseConnection {
 		return -1;
 	}
 
+	private void setProposalToInactive(int modelID) {
 
+		Connection dbCon = null;
 
+		String query = "UPDATE model SET isProposal = ? WHERE modelID = ?";
+		try{
+			dbCon = initializeDBConnection(); 
+			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+			preparedStatement.setInt(1, 0);
+			preparedStatement.setInt(2, modelID);
+			preparedStatement.executeUpdate();
+		} catch (SQLException ex) {
+			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+		}  
+	}
+	
+
+	@Override
+	
+	public void setAllProposalsToInactive(int groupID) {
+		Connection dbCon = null;
+		int modelID = 0;
+		String query = "SELECT * FROM model WHERE groupID = ? AND isProposal = ?";
+		try{
+			dbCon = initializeDBConnection(); 
+			PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+			preparedStatement.setInt(1, groupID);
+			preparedStatement.setInt(2, 1);
+			ResultSet rs = preparedStatement.executeQuery();
+			while (rs.next()) {
+				modelID = rs.getInt("modelID");
+				setProposalToInactive(modelID);
+			}
+
+		} catch (SQLException ex) {
+			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
+		} 
+		
+	}
 }
 
 

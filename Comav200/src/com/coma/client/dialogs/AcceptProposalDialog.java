@@ -63,10 +63,7 @@ public class AcceptProposalDialog {
 			public void onSelect(SelectEvent event) {
 				int activeGroupID = User.getInstance().getActiveGroupID();
 				int modelID = getModelID();
-				String version = "420";
-
-				checkGroupFacilitator(activeGroupID, modelID, version);
-
+				checkGroupFacilitator(activeGroupID, modelID);
 				dialog.hide();
 
 			}
@@ -83,7 +80,7 @@ public class AcceptProposalDialog {
 
 	}
 
-	private void checkGroupFacilitator(final int activeGroupID, final int modelID, final String version){
+	private void checkGroupFacilitator(final int activeGroupID, final int modelID){
 		databaseConnection.getGroupInfo(activeGroupID, new AsyncCallback<WorkGroupInfo>() {
 
 			@Override
@@ -129,6 +126,20 @@ public class AcceptProposalDialog {
 						@Override
 						public void onSuccess(Void result) {
 							Info.display("New group model", "Model set as group model");
+							databaseConnection.setAllProposalsToInactive(User.getInstance().getActiveGroupID(), new AsyncCallback<Void>() {
+
+								@Override
+								public void onFailure(Throwable caught) {
+									// TODO Auto-generated method stub
+									
+								}
+
+								@Override
+								public void onSuccess(Void result) {
+									// TODO Auto-generated method stub
+									
+								}
+							});
 						}
 					});
 				}

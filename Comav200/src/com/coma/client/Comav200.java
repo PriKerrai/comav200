@@ -121,6 +121,7 @@ public class Comav200 {
 	HandleGroupInvitesCellGrid handleGroupInvitesPanel = new HandleGroupInvitesCellGrid();
 	SwitchGroupCellGrid switchGroupCellPanel = new SwitchGroupCellGrid();
 	HandleGroups handleGroups = new HandleGroups();
+	
 
 	public UserProfileFormPanel getUserProfilePanel() {
 		return userProfilePanel;

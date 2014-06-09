@@ -50,5 +50,6 @@ public interface DatabaseConnectionAsync {
 			String modelCreationDate, AsyncCallback<ModelInfo> asyncCallback);
 	void getLatestGroupModelVersion(int groupID, AsyncCallback<Integer> callback);
 	void getLatestJoinedGroup(int userId, AsyncCallback<Integer> asyncCallback);
+	void setAllProposalsToInactive(int groupID, AsyncCallback<Void> callback);
 	
 }
