@@ -222,12 +222,12 @@ public class Comav200 {
 
 	private Panel topMenuButtonsMyModelView() {
 		HorizontalPanel panel = new HorizontalPanel();
-
+/*
 		newModelButton.getElement().setClassName("utilityButton");
 		saveModelButton.getElement().setClassName("utilityButton");
 		loadModelButton.getElement().setClassName("utilityButton");
 		proposeButton.getElement().setClassName("utilityButton");
-
+*/
 		newModelButton.addSelectHandler(new SelectHandler() {
 
 			@Override
@@ -272,10 +272,16 @@ public class Comav200 {
 			@Override
 			public void onSelect(SelectEvent event) {
 				if (model.getModelName() != null) {
+					if(User.getInstance().getActiveGroupName() != null){
 					Dialog dialog = new SendProposalDialog(oryxFrame)
 					.createSendProposalDialog();
 					dialog.center();
 					dialog.show();
+					}else{
+						AlertMessageBox alert = new AlertMessageBox("No group",
+								"No group choosen");
+						alert.show();
+					}
 				} else {
 					AlertMessageBox alert = new AlertMessageBox("Not saved",
 							"Model needs to be saved before you can send it as a proposal");

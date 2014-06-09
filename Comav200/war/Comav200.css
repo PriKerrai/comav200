@@ -22,68 +22,6 @@ body{
 	padding-left: 80%;
 }
 
-<<<<<<< .mine
-#topDiv
-{
-   border-top: 1px solid black;
-   border-bottom: 1px solid black;
-    min-width:1300px;
-    width: 100%;
-    height:9%;
-    background-color: #666666;
-       
-   
-}
-#wrapper{
-
-
-width: 100%;
-overflow: hidden;
-height: 100%;
-
-}
-#rightDiv
-{
-    min-width:3000;
-    width: 20%;
-    height:50px;
-        background-color: #999999;
-        overflow: hidden;
-        height: 100%;
-}
-
-#oryxDiv
-{
-        float: left;
-    min-width:1000px;
-    width: 80%;
-    height:100%;
-        background-color: #FF4500;
-   
-}
-
-#rightDivTop
-{
-    min-width:3000;
-    width: 100%;
-    height:50px;
-        background-color: #378945;
-        overflow: hidden;
-        height: 35%;
-}
-#rightDivBot
-{
-    min-width:3000;
-    width: 100%;
-    height:50px;
-        background-color: #354365;
-        overflow: hidden;
-        height: 65%;
-}
-
-=======
->>>>>>> .r13
-
 .sendButton {
   display: block;
   font-size: 16pt;

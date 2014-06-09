@@ -1,0 +1,2 @@
+serviceClass: com.coma.client.DatabaseConnection
+path: 0104E1132095F882D2C1591C681E2535.gwt.rpc

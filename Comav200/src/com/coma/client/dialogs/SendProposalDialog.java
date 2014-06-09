@@ -26,7 +26,7 @@ public class SendProposalDialog {
 		// Create the popup dialog box
 		dialog = new Dialog();
 		dialog.setHeadingText("Send proposal?");
-		dialog.add(new Label("Do you wish to send proposal for group: " + "GRUPPNAMN"));
+		dialog.add(new Label("Do you wish to send proposal for group: " + User.getInstance().getActiveGroupName()));
 		dialog.setPixelSize(300, 100);
 		dialog.setHideOnButtonClick(true);
 		dialog.setPredefinedButtons();
