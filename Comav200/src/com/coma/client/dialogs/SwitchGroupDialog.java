@@ -1,8 +1,9 @@
-package com.coma.client.widgets;
+package com.coma.client.dialogs;
 
 import com.coma.client.Comav200;
 import com.coma.client.LoadModel;
 import com.coma.client.User;
+import com.coma.client.cellgrids.SwitchGroupCellGridForDialog;
 import com.google.gwt.user.client.ui.ListBox;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Dialog;

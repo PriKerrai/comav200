@@ -1,4 +1,4 @@
-package com.coma.client.widgets;
+package com.coma.client.panels;
 
 import com.coma.client.HandleGroups;
 import com.coma.client.User;

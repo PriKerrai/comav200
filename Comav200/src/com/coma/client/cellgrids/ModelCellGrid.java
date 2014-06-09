@@ -1,4 +1,12 @@
-package com.coma.client.widgets;
+
+/**
+ * Sencha GXT 3.1.0 - Sencha for GWT
+ * Copyright(c) 2007-2014, Sencha, Inc.
+ * licensing@sencha.com
+ *
+ * http://www.sencha.com/products/gxt/license/
+ */
+package com.coma.client.cellgrids;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +25,8 @@ import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
 
-public class LoadModelCellGrid {
+public class ModelCellGrid {
+
 	private static final ModelInfoProperties props = GWT.create(ModelInfoProperties.class);
 
 	private static ContentPanel gridContentPanel;
@@ -25,16 +34,15 @@ public class LoadModelCellGrid {
 	private static List<ModelInfo> modelInfoList;
 	static ListStore<ModelInfo> store;
 
-	public static ContentPanel createLoadModelCellGrid() {
+	public static ContentPanel createModelCellGrid() {
 
-		ColumnConfig<ModelInfo, String> groupNameColumn = new ColumnConfig<ModelInfo, String>(props.modelGroupName(), 75, ("Group"));
+		ColumnConfig<ModelInfo, String> creatorColumn = new ColumnConfig<ModelInfo, String>(props.modelCreatorName(), 75, ("Creator"));
 		ColumnConfig<ModelInfo, String> modelNameColumn = new ColumnConfig<ModelInfo, String>(props.modelName(), 100, "Model name");
 		ColumnConfig<ModelInfo, String> creationDateColumn = new ColumnConfig<ModelInfo, String>(props.modelCreationDate(), 150, "Creation date");
 
 		List<ColumnConfig<ModelInfo, ?>> l = new ArrayList<ColumnConfig<ModelInfo, ?>>();
-		
+		l.add(creatorColumn);
 		l.add(modelNameColumn);
-		l.add(groupNameColumn);
 		l.add(creationDateColumn);
 		ColumnModel<ModelInfo> cm = new ColumnModel<ModelInfo>(l);
 
@@ -48,7 +56,7 @@ public class LoadModelCellGrid {
 		gridContentPanel.setHeaderVisible(false);
 
 		final Grid<ModelInfo> grid = new Grid<ModelInfo>(store, cm);
-		grid.getView().setAutoExpandColumn(modelNameColumn);
+		grid.getView().setAutoExpandColumn(creatorColumn);
 		grid.getView().setStripeRows(true);
 		grid.getView().setColumnLines(true);
 		grid.setBorders(false);
@@ -81,8 +89,6 @@ public class LoadModelCellGrid {
 	}
 
 	public static void setModelInfoList(List<ModelInfo> modelInfoList) {
-		LoadModelCellGrid.modelInfoList = modelInfoList;
+		ModelCellGrid.modelInfoList = modelInfoList;
 	}
 }
-
-

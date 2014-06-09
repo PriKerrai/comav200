@@ -6,7 +6,7 @@
  *
  * http://www.sencha.com/products/gxt/license/
  */
-package com.coma.client.widgets;
+package com.coma.client.cellgrids;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
 
-public class ModelCellGrid {
+public class ProposalViewVoteCellGrid {
 
 	private static final ModelInfoProperties props = GWT.create(ModelInfoProperties.class);
 
@@ -34,7 +34,7 @@ public class ModelCellGrid {
 	private static List<ModelInfo> modelInfoList;
 	static ListStore<ModelInfo> store;
 
-	public static ContentPanel createModelCellGrid() {
+	public static ContentPanel createVoteCellGrid() {
 
 		ColumnConfig<ModelInfo, String> creatorColumn = new ColumnConfig<ModelInfo, String>(props.modelCreatorName(), 75, ("Creator"));
 		ColumnConfig<ModelInfo, String> modelNameColumn = new ColumnConfig<ModelInfo, String>(props.modelName(), 100, "Model name");
@@ -89,6 +89,6 @@ public class ModelCellGrid {
 	}
 
 	public static void setModelInfoList(List<ModelInfo> modelInfoList) {
-		ModelCellGrid.modelInfoList = modelInfoList;
+		ProposalViewVoteCellGrid.modelInfoList = modelInfoList;
 	}
 }

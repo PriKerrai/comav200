@@ -1,5 +1,5 @@
 
-package com.coma.client.widgets;
+package com.coma.client.cellgrids;
 
 import java.util.ArrayList;
 import java.util.List;

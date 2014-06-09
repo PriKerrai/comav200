@@ -3,9 +3,12 @@ package com.coma.client;
 import java.util.List;
 
 
-import com.coma.client.widgets.SwitchGroupCellGrid;
-import com.coma.client.widgets.SwitchGroupCellGridForDialog;
-import com.coma.client.widgets.SwitchGroupDialog;
+
+
+
+import com.coma.client.cellgrids.SwitchGroupCellGrid;
+import com.coma.client.cellgrids.SwitchGroupCellGridForDialog;
+import com.coma.client.dialogs.SwitchGroupDialog;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.sencha.gxt.widget.core.client.Dialog;

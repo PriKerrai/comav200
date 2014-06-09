@@ -661,7 +661,6 @@ DatabaseConnection {
 		} catch (SQLException ex) {
 			Logger.getLogger(Collection.class.getName()).log(Level.SEVERE, null, ex);
 		}  
-
 	}
 
 	@Override

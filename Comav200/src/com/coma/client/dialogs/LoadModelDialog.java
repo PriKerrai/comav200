@@ -1,4 +1,4 @@
-package com.coma.client.widgets;
+package com.coma.client.dialogs;
 
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;

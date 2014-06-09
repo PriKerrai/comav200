@@ -1,4 +1,4 @@
-package com.coma.client.widgets;
+package com.coma.client.dialogs;
 
 import com.coma.client.DatabaseConnection;
 import com.coma.client.DatabaseConnectionAsync;

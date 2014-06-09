@@ -1,4 +1,4 @@
-package com.coma.client.widgets;
+package com.coma.client.dialogs;
 
 import java.util.List;
 
