@@ -164,7 +164,6 @@ public class SignUp {
 			}
 
 			public void onSuccess(Integer result) {
-				System.out.println("REsult: " + result);
 				if(result == 0){
 					databaseConnection.createNewUser(email, password,
 							new AsyncCallback<Void>() {
@@ -196,7 +195,6 @@ public class SignUp {
 
 			@Override
 			public void onSuccess(Integer result) {
-				// TODO Auto-generated method stub
 				User.getInstance().setUserId(result);
 				User.getInstance().setUserName(fName);
 				Comav200.GetInstance().addUserProfileToUser(fName, "", "", "");

@@ -93,8 +93,6 @@ public class AcceptProposalDialog {
 			}
 			@Override
 			public void onSuccess(WorkGroupInfo result) {
-				System.out.println(result.getWorkGroupFacilitator()+ ": DB");
-				System.out.println(User.getInstance().getUserId()+ ": user");
 				if(result.getWorkGroupFacilitator() == User.getInstance().getUserId()){
 					updateActiveGroupModel(activeGroupID, modelID);
 				}else{

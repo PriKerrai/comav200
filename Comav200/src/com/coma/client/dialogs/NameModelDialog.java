@@ -54,7 +54,6 @@ public class NameModelDialog {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				// TODO Auto-generated method stub
 				ModelInfo model = Comav200.GetInstance().getModel();
 				model.setModelName(modelNameBox.getValue());
 				if(proposalCheckBox.getValue()){

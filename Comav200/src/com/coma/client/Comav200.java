@@ -44,7 +44,6 @@ import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
 
-
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
@@ -55,7 +54,7 @@ public class Comav200 {
 	public static String problemLocation;
 	private ModelInfo model;
 	private List<String> userProfile;
-	private boolean isFirstTime = true;	
+	private boolean isFirstTime = true;
 	private Panel proposalButtonsPanel;
 
 	public ModelInfo getModel() {
@@ -67,6 +66,7 @@ public class Comav200 {
 	}
 
 	private MessageFrame oryxFrame = null;
+
 	public MessageFrame getOryxFrame() {
 		return oryxFrame;
 	}
@@ -81,12 +81,11 @@ public class Comav200 {
 		return tabPanel;
 	}
 
-	public static Comav200 GetInstance(){
-		if(instance == null){
+	public static Comav200 GetInstance() {
+		if (instance == null) {
 			instance = new Comav200();
 			return instance;
-		}
-		else{
+		} else {
 			return instance;
 		}
 	}
@@ -94,22 +93,21 @@ public class Comav200 {
 	public TextButton newModelButton = new TextButton("New Model");
 	public TextButton saveModelButton = new TextButton("Save Model");
 	public TextButton loadModelButton = new TextButton("Load Model");
-	public TextButton importModelButton = new TextButton("Import");
-	public TextButton exportModelButton = new TextButton("Export");
-	public TextButton modifyGroupModelButton = new TextButton("Modify group model");
+	public TextButton modifyGroupModelButton = new TextButton(
+			"Modify group model");
 
 	public TextButton editProfileButton = new TextButton("Edit profile");
 	public TextButton invitesButton = new TextButton("My group invites");
 	public TextButton proposeButton = new TextButton("Propose as group model");
 	public TextButton createGroupButton = new TextButton("Create group");
 	public TextButton inviteGroupButton = new TextButton("Invite to group");
-	public TextButton switchGroupPreferencesTabButton = new TextButton("Switch group");
+	public TextButton switchGroupPreferencesTabButton = new TextButton(
+			"Switch group");
 	public TextButton switchGroupGroupTabButton = new TextButton("Switch group");
 	public TextButton leaveVoteButton = new TextButton("Leave vote");
 	public TextButton modelCommentsButton = new TextButton("Model comments");
 	public TextButton acceptProposalButton = new TextButton("Accept proposal");
 	public TextButton showVotesOnAllProposals = new TextButton("Vote summary");
-
 
 	LogIn logIn = new LogIn();
 	SignUp signUp = new SignUp();
@@ -139,34 +137,35 @@ public class Comav200 {
 	public HandleGroupInvitesCellGrid getHandleGroupInvitesPanel() {
 		return handleGroupInvitesPanel;
 	}
-	
+
 	public SwitchGroupCellGrid getSwitchGroupCellPanel() {
 		return switchGroupCellPanel;
 	}
 
 	/**
-	 * Create a remote service proxy to talk to the server-side Greeting service.
+	 * Create a remote service proxy to talk to the server-side Greeting
+	 * service.
 	 */
 	private final DatabaseConnectionAsync databaseConnection = GWT
 			.create(DatabaseConnection.class);
 	private int activeModelID;
 
-	public void initialize(){
+	public void initialize() {
 		RootPanel.get("mainDiv").add(logIn.screen());
 	}
 
-	public TabPanel initTabPanel(){
+	public TabPanel initTabPanel() {
 		getUserProfile(User.getInstance().getUserId());
 		handleGroups.getGroupInvites();
 		handleGroups.getUsersGroups();
-		
+
 		tabPanel = new TabPanel();
 
 		tabPanel.add(initMyModelView(), "My Model");
 		tabPanel.add(initGroupModelView(), "Group Model");
-		tabPanel.add(initProposalView(), "Proposals");	
-		tabPanel.add(initPreferencesView(), "Preferences");	
-		tabPanel.setSize("100%", "100%");	
+		tabPanel.add(initProposalView(), "Proposals");
+		tabPanel.add(initPreferencesView(), "Preferences");
+		tabPanel.setSize("100%", "100%");
 
 		SelectionHandler<Widget> handler = new SelectionHandler<Widget>() {
 
@@ -175,14 +174,15 @@ public class Comav200 {
 				TabPanel panel = (TabPanel) event.getSource();
 				Widget w = event.getSelectedItem();
 				int tabID = panel.getWidgetIndex(w);
-				Panel p = (Panel)panel.getWidget(tabID);
+				Panel p = (Panel) panel.getWidget(tabID);
 
 				if (tabID == 0 || tabID == 1) {
 					p.add(oryxFrame);
 					oryxFrame.setWidth("100%");
-					if(tabID == 1){
+					if (tabID == 1) {
 						oryxFrame.setVisible(true);
-						new LoadModel().getActiveGroupModelFromDatabase(oryxFrame);
+						new LoadModel()
+						.getActiveGroupModelFromDatabase(oryxFrame);
 					}
 				}
 
@@ -197,30 +197,30 @@ public class Comav200 {
 
 					ContentPanel cp = new ContentPanel();
 					cp.add(oryxFrame);
-					cp.setWidth((int) (width*0.75));
+					cp.setWidth((int) (width * 0.75));
 					cp.setHeaderVisible(false);
 
 					dockPanel.add(cp);
 
 					getVoteMapData(dockPanel);
 
-					p.add(dockPanel);	
+					p.add(dockPanel);
 				}
 				if (tabID == 3) {
-					if(isFirstTime){
+					if (isFirstTime) {
 						p.setWidth("100%");
 						p.add(profileView.profileViewContainer());
 						isFirstTime = false;
 					}
 				}
-			}};
-			tabPanel.addSelectionHandler(handler);
+			}
+		};
+		tabPanel.addSelectionHandler(handler);
 
-			return tabPanel;
+		return tabPanel;
 	}
 
-	private Panel topMenuButtonsMyModelView()
-	{ 	
+	private Panel topMenuButtonsMyModelView() {
 		HorizontalPanel panel = new HorizontalPanel();
 
 		newModelButton.getElement().setClassName("utilityButton");
@@ -228,7 +228,7 @@ public class Comav200 {
 		loadModelButton.getElement().setClassName("utilityButton");
 		proposeButton.getElement().setClassName("utilityButton");
 
-		newModelButton.addSelectHandler(new SelectHandler(){
+		newModelButton.addSelectHandler(new SelectHandler() {
 
 			@Override
 			public void onSelect(SelectEvent event) {
@@ -238,103 +238,82 @@ public class Comav200 {
 				dialog.show();
 			}
 		});
-		saveModelButton.addSelectHandler(new SelectHandler(){
+		saveModelButton.addSelectHandler(new SelectHandler() {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				if(model.getModelName() != null){
+				if (model.getModelName() != null) {
 					SaveModelDialog smd = new SaveModelDialog(oryxFrame);
-					Dialog dialog = smd.createSaveModelDialog(model.getModelName());
+					Dialog dialog = smd.createSaveModelDialog(model
+							.getModelName());
 					dialog.center();
 					dialog.show();
-				} else{
+				} else {
 					NameModelDialog nmd = new NameModelDialog(oryxFrame);
 					Dialog dialog = nmd.createNameModelDialog();
 					dialog.center();
 					dialog.show();
-				}	
+				}
 			}
 
 		});
-		loadModelButton.addSelectHandler(new SelectHandler(){
+		loadModelButton.addSelectHandler(new SelectHandler() {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				//new LoadModel().getModelsFromDatabase(2,oryxFrame);
+				// new LoadModel().getModelsFromDatabase(2,oryxFrame);
 				getLoadModelCellListData();
 
 			}
 
 		});
-		proposeButton.addSelectHandler(new SelectHandler(){
+		proposeButton.addSelectHandler(new SelectHandler() {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				if(model.getModelName() != null){
-					Dialog dialog = new SendProposalDialog(oryxFrame).createSendProposalDialog();
+				if (model.getModelName() != null) {
+					Dialog dialog = new SendProposalDialog(oryxFrame)
+					.createSendProposalDialog();
 					dialog.center();
 					dialog.show();
-				} else{
-					AlertMessageBox alert = new AlertMessageBox("Not saved", "Model needs to be saved before you can send it as a proposal");
+				} else {
+					AlertMessageBox alert = new AlertMessageBox("Not saved",
+							"Model needs to be saved before you can send it as a proposal");
 					alert.show();
-				}	
-
-
-
+				}
 			}
-
 		});
 
 		panel.add(newModelButton);
 		panel.add(saveModelButton);
 		panel.add(loadModelButton);
 		panel.add(proposeButton);
-		Label name = new Label("Logged in as: " + User.getInstance().getUserName());
+		Label name = new Label("Logged in as: "
+				+ User.getInstance().getUserName());
 		name.getElement().setClassName("nameStyle");
-		//panel.add(new Label("Logged in as: " + User.getInstance().getUserEmail()+ " id: " + User.getInstance().getUserId() + "Group: " +User.getInstance().getActiveGroupID()));
+		// panel.add(new Label("Logged in as: " +
+		// User.getInstance().getUserEmail()+ " id: " +
+		// User.getInstance().getUserId() + "Group: "
+		// +User.getInstance().getActiveGroupID()));
 		panel.add(name);
-		return panel;  
+		return panel;
 	}
 
-	private Panel topMenuButtonsGroupModelView()
-	{ 	
+	private Panel topMenuButtonsGroupModelView() {
 		HorizontalPanel panel = new HorizontalPanel();
-/*
-		importModelButton.setStyleName("testStyle");
-		//importModelButton.getElement().setClassName("utilityButton");
-		exportModelButton.getElement().setClassName("utilityButton");
-		switchGroupGroupTabButton.getElement().setClassName("utilityButton");
-*/
 
-		importModelButton.addSelectHandler(new SelectHandler(){
-
-			@Override
-			public void onSelect(SelectEvent event) {
-
-			}
-
-		});
-		exportModelButton.addSelectHandler(new SelectHandler(){
-
-			@Override
-			public void onSelect(SelectEvent event) {
-
-			}
-
-		});
-
-		modifyGroupModelButton.addSelectHandler(new SelectHandler(){
+		modifyGroupModelButton.addSelectHandler(new SelectHandler() {
 
 			@Override
 			public void onSelect(SelectEvent event) {
 				tabPanel.setActiveWidget(tabPanel.getWidget(0));
 				new LoadModel().getActiveGroupModelFromDatabase(getOryxFrame());
-				
+
 			}
-			
+
 		});
-		
-		switchGroupGroupTabButton.addSelectHandler(new SelectHandler(){
+
+		switchGroupGroupTabButton.addSelectHandler(new SelectHandler() {
 
 			@Override
 			public void onSelect(SelectEvent event) {
@@ -343,17 +322,13 @@ public class Comav200 {
 			}
 
 		});
-
-		panel.add(importModelButton);
-		panel.add(exportModelButton);
 		panel.add(modifyGroupModelButton);
 		panel.add(switchGroupGroupTabButton);
 
-		return panel;  
+		return panel;
 	}
 
-	private Panel topMenuButtonsProposalView()
-	{ 	
+	private Panel topMenuButtonsProposalView() {
 		HorizontalPanel panel = new HorizontalPanel();
 
 		modelCommentsButton.getElement().setClassName("utilityButton");
@@ -361,38 +336,42 @@ public class Comav200 {
 		acceptProposalButton.getElement().setClassName("utilityButton");
 		showVotesOnAllProposals.getElement().setClassName("utilityButton");
 
-		modelCommentsButton.addSelectHandler(new SelectHandler(){
+		modelCommentsButton.addSelectHandler(new SelectHandler() {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				if(activeModelID != -1){
+				if (activeModelID != -1) {
 					new CommentsDialog(activeModelID);
-				}else{
-					AlertMessageBox alert = new AlertMessageBox("No model choosen", "Please choose a model to read or leave a comment");
+				} else {
+					AlertMessageBox alert = new AlertMessageBox(
+							"No model choosen",
+							"Please choose a model to read or leave a comment");
 					alert.show();
 				}
 			}
 
 		});
-		leaveVoteButton.addSelectHandler(new SelectHandler(){
+		leaveVoteButton.addSelectHandler(new SelectHandler() {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				if(activeModelID != -1){
-					LeaveVoteDialogBox vdb = new LeaveVoteDialogBox(activeModelID);
+				if (activeModelID != -1) {
+					LeaveVoteDialogBox vdb = new LeaveVoteDialogBox(
+							activeModelID);
 					Dialog dialogBox = vdb.leaveVoteDialog();
 					dialogBox.center();
 					dialogBox.show();
-				}else{
-					AlertMessageBox alert = new AlertMessageBox("No model choosen", "Please choose a model to leave a vote");
+				} else {
+					AlertMessageBox alert = new AlertMessageBox(
+							"No model choosen",
+							"Please choose a model to leave a vote");
 					alert.show();
 				}
-
 
 			}
 
 		});
-		acceptProposalButton.addSelectHandler(new SelectHandler(){
+		acceptProposalButton.addSelectHandler(new SelectHandler() {
 
 			@Override
 			public void onSelect(SelectEvent event) {
@@ -405,7 +384,7 @@ public class Comav200 {
 			}
 
 		});
-		showVotesOnAllProposals.addSelectHandler(new SelectHandler(){
+		showVotesOnAllProposals.addSelectHandler(new SelectHandler() {
 
 			@Override
 			public void onSelect(SelectEvent event) {
@@ -419,20 +398,24 @@ public class Comav200 {
 		panel.add(showVotesOnAllProposals);
 		panel.add(acceptProposalButton);
 
-		return panel;  
+		return panel;
 	}
 
-	public void getVoteMapData (final Panel p) {
-		databaseConnection.getAllModelsFromSpecificGroupThatIsProposed(User.getInstance().getActiveGroupID(), new AsyncCallback<List<ModelInfo>>() {
+	public void getVoteMapData(final Panel p) {
+		databaseConnection.getAllModelsFromSpecificGroupThatIsProposed(User
+				.getInstance().getActiveGroupID(),
+				new AsyncCallback<List<ModelInfo>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				// TODO Auto-generated method stub
 				try {
 					throw caught;
 				} catch (IncompatibleRemoteServiceException e) {
-					// this client is not compatible with the server; cleanup and refresh the 
+					// this client is not compatible with the server;
+					// cleanup and refresh the
 					// browser
-					System.out.println("IncompatibleRemoteServiceException");
+					System.out
+					.println("IncompatibleRemoteServiceException");
 				} catch (InvocationException e) {
 					// the call didn't complete cleanly
 					System.out.println("InvocationException");
@@ -443,13 +426,12 @@ public class Comav200 {
 
 			@Override
 			public void onSuccess(List<ModelInfo> result) {
-				// TODO Auto-generated method stub
 				double width = Window.getClientWidth();
 				ModelCellGrid.setModelInfoList(result);
 
 				ContentPanel cp = new ContentPanel();
 				cp.add(ModelCellGrid.createModelCellGrid());
-				cp.setWidth((int) (width*0.25));
+				cp.setWidth((int) (width * 0.25));
 				cp.setHeaderVisible(false);
 				dockPanel.add(cp);
 
@@ -457,8 +439,9 @@ public class Comav200 {
 		});
 	}
 
-	public void getLoadModelCellListData () {
-		databaseConnection.getAllUserModels(User.getInstance().getUserId(), new AsyncCallback<List<ModelInfo>>() {
+	public void getLoadModelCellListData() {
+		databaseConnection.getAllUserModels(User.getInstance().getUserId(),
+				new AsyncCallback<List<ModelInfo>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -466,9 +449,11 @@ public class Comav200 {
 				try {
 					throw caught;
 				} catch (IncompatibleRemoteServiceException e) {
-					// this client is not compatible with the server; cleanup and refresh the 
+					// this client is not compatible with the server;
+					// cleanup and refresh the
 					// browser
-					System.out.println("IncompatibleRemoteServiceException");
+					System.out
+					.println("IncompatibleRemoteServiceException");
 				} catch (InvocationException e) {
 					// the call didn't complete cleanly
 					System.out.println("InvocationException");
@@ -479,12 +464,13 @@ public class Comav200 {
 
 			@Override
 			public void onSuccess(List<ModelInfo> result) {
-				// TODO Auto-generated method stub
-				//LoadModelCellList.setModelInfoList(result);
+				// LoadModelCellList.setModelInfoList(result);
 				LoadModelDialog lmdb = new LoadModelDialog();
 				LoadModelCellGrid.setModelInfoList(result);
 
-				Dialog dialog = lmdb.createLoadModelDialog(LoadModelCellGrid.createLoadModelCellGrid());
+				Dialog dialog = lmdb
+						.createLoadModelDialog(LoadModelCellGrid
+								.createLoadModelCellGrid());
 				dialog.center();
 				dialog.show();
 			}
@@ -493,9 +479,9 @@ public class Comav200 {
 	}
 
 	/**
-	 *Initialize My Model view
+	 * Initialize My Model view
 	 */
-	private Panel initMyModelView(){
+	private Panel initMyModelView() {
 		model = new ModelInfo();
 		VerticalPanel panel = new VerticalPanel();
 		initializeOryxFrame();
@@ -506,34 +492,34 @@ public class Comav200 {
 	}
 
 	/**
-	 *Initialize Group Model view
+	 * Initialize Group Model view
 	 */
-	private Panel initGroupModelView(){
+	private Panel initGroupModelView() {
 		VerticalPanel panel = new VerticalPanel();
 		panel.add(topMenuButtonsGroupModelView());
 		return panel;
 	}
 
 	/**
-	 *Initialize Proposal view
+	 * Initialize Proposal view
 	 */
-	private Panel initProposalView(){
+	private Panel initProposalView() {
 		VerticalPanel panel = new VerticalPanel();
 		proposalButtonsPanel = topMenuButtonsProposalView();
-		panel.add(proposalButtonsPanel);	
+		panel.add(proposalButtonsPanel);
 		return panel;
 	}
 
 	/**
 	 * Initialize preferences view
 	 */
-	private Panel initPreferencesView(){
+	private Panel initPreferencesView() {
 		VerticalPanel panel = new VerticalPanel();
 		return panel;
 	}
 
 	/**
-	 *Creates the frame which Oryx is loaded into
+	 * Creates the frame which Oryx is loaded into
 	 */
 	public void initializeOryxFrame() {
 		setOryxFrame(new MessageFrame("oryxFrame"));
@@ -549,9 +535,9 @@ public class Comav200 {
 		RootPanel.get("mainDiv").add(signUp.screen());
 	}
 
-
-	public void getProposalAvgVotes(int groupID){
-		databaseConnection.getModelIDs(groupID, new AsyncCallback<List<Integer>>(){
+	public void getProposalAvgVotes(int groupID) {
+		databaseConnection.getModelIDs(groupID,
+				new AsyncCallback<List<Integer>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -570,15 +556,18 @@ public class Comav200 {
 
 	public void getVotesOnModel(List<Integer> modelIDs) {
 
-		databaseConnection.getVotes(modelIDs, new AsyncCallback<List<ProposalAvgVote>>() {
+		databaseConnection.getVotes(modelIDs,
+				new AsyncCallback<List<ProposalAvgVote>>() {
 
 			@Override
 			public void onSuccess(List<ProposalAvgVote> result) {
 				new ProposalAvgVotesData(result);
-				//propAvgVote.setUpBarChart(result);
-				VoteSummaryOnGroupProposalsDialog.setProposalAvgVotesList(result);
+				// propAvgVote.setUpBarChart(result);
+				VoteSummaryOnGroupProposalsDialog
+				.setProposalAvgVotesList(result);
 
-				Dialog dialogBox = showVotesOnProposalDialog.createVoteSummaryOnGoupProposalsDialog();
+				Dialog dialogBox = showVotesOnProposalDialog
+						.createVoteSummaryOnGoupProposalsDialog();
 				dialogBox.center();
 				dialogBox.show();
 
@@ -593,7 +582,6 @@ public class Comav200 {
 		});
 	}
 
-
 	public void loadModelFromCellList(int modelID) {
 		new LoadModel().getModelFromDatabase(modelID, oryxFrame);
 	}
@@ -606,49 +594,55 @@ public class Comav200 {
 	public void setActiveModelID(int modelID) {
 		this.activeModelID = modelID;
 	}
+
 	/**
 	 * Clear oryx workspace
 	 */
-	public void clearOryx(){
+	public void clearOryx() {
 		final MessageFrame oryxFrame = this.oryxFrame;
 		final String model = "Empty model";
 		oryxFrame.setVisible(false);
 		oryxFrame.removeAllCallbackHandlers();
-		oryxFrame.addCallbackHandler(new LoadingCompletehandler(new LoadingCompleteEventListener() {
+		oryxFrame.addCallbackHandler(new LoadingCompletehandler(
+				new LoadingCompleteEventListener() {
 
-			@Override
-			public void loadingComplete() {
-				oryxFrame.removeAllCallbackHandlers();
-				oryxFrame.setVisible(true);
-				oryxFrame.addCallbackHandler(new CallbackHandler() {
 					@Override
-					public void callBack(final HashMap<String, String> data) {
+					public void loadingComplete() {
 						oryxFrame.removeAllCallbackHandlers();
-						if (!data.get("action").equals("shapesloaded")) {
-							// Display error message that model cannot be loaded
-							return;
-						}
+						oryxFrame.setVisible(true);
+						oryxFrame.addCallbackHandler(new CallbackHandler() {
+							@Override
+							public void callBack(
+									final HashMap<String, String> data) {
+								oryxFrame.removeAllCallbackHandlers();
+								if (!data.get("action").equals("shapesloaded")) {
+									// Display error message that model cannot
+									// be loaded
+									return;
+								}
+							}
+						});
+						HashMap<String, String> oryxCmd = new HashMap<String, String>();
+						oryxCmd.put("target", "oryx");
+						oryxCmd.put("action", "loadshapes");
+						oryxCmd.put("message", model);
+						oryxFrame.sendJSON(oryxCmd);
 					}
-				});
-				HashMap<String, String> oryxCmd = new HashMap<String, String>();
-				oryxCmd.put("target", "oryx");
-				oryxCmd.put("action", "loadshapes");
-				oryxCmd.put("message", model);
-				oryxFrame.sendJSON(oryxCmd);
-			}
 
-		}));
+				}));
 		oryxFrame.setUrl("http://localhost/oryx/oryx.xhtml");
 	}
 
 	/**
-	 * @param phoneNr 
-	 * @param bDay 
-	 * @param sName 
-	 *
+	 * @param phoneNr
+	 * @param bDay
+	 * @param sName
+	 * 
 	 */
-	public void addUserProfileToUser(String fName, String sName, String bDay, String phoneNr) {
-		databaseConnection.addUserProfileToUser(User.getInstance().getUserId(), fName, sName, bDay, phoneNr, new AsyncCallback<Void>() {
+	public void addUserProfileToUser(String fName, String sName, String bDay,
+			String phoneNr) {
+		databaseConnection.addUserProfileToUser(User.getInstance().getUserId(),
+				fName, sName, bDay, phoneNr, new AsyncCallback<Void>() {
 			public void onFailure(Throwable caught) {
 			}
 
@@ -660,14 +654,15 @@ public class Comav200 {
 	}
 
 	/**
-	 * @param phoneNr 
-	 * @param bDay 
-	 * @param sName 
-	 * @return 
-	 *
+	 * @param phoneNr
+	 * @param bDay
+	 * @param sName
+	 * @return
+	 * 
 	 */
 	public void getUserProfile(int userID) {
-		databaseConnection.getUserProfile(userID, new AsyncCallback<List<String>>() {
+		databaseConnection.getUserProfile(userID,
+				new AsyncCallback<List<String>>() {
 
 			public void onFailure(Throwable caught) {
 			}

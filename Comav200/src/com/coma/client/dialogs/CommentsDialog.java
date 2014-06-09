@@ -4,12 +4,10 @@ import java.util.List;
 
 import com.coma.client.DatabaseConnection;
 import com.coma.client.DatabaseConnectionAsync;
-import com.coma.client.HandleGroups;
 import com.coma.client.User;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.sencha.gxt.widget.core.client.Dialog;
-import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
 import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.MarginData;
@@ -78,7 +76,6 @@ public class CommentsDialog{
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				// TODO Auto-generated method stub
 				String comment = writeCommentTextArea.getText();
 				if(comment.equals("")) {
 					dialog.hide();
@@ -160,7 +157,7 @@ public class CommentsDialog{
 
 			@Override
 			public void onSuccess(Void result) {
-				System.out.println("Success from addComment");
+				//TODO alert
 
 			}
 		});

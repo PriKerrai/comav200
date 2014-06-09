@@ -144,7 +144,6 @@ public class LogIn {
 
 			@Override
 			public void onSuccess(Integer result) {
-				// TODO Auto-generated method stub
 				User.getInstance().setUserId(result);
 				getAndSetUserName(email);			             
 			}

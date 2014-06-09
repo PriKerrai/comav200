@@ -74,7 +74,6 @@ public class LeaveVoteDialogBox{
 		dialog.getButton(PredefinedButton.YES).addSelectHandler(new SelectHandler() {
 			@Override
 			public void onSelect(SelectEvent event) {
-				// TODO Auto-generated method stub
 				int index = slider.getValue();
 				int userID = User.getInstance().getUserId();
 				addVoteToModel(userID, getModelID(), index);
@@ -85,7 +84,6 @@ public class LeaveVoteDialogBox{
 		dialog.getButton(PredefinedButton.CANCEL).addSelectHandler(new SelectHandler() {
 			@Override
 			public void onSelect(SelectEvent event) {
-				System.out.println("Hejsan, CANCEL");
 				dialog.hide();
 			}
 		});
@@ -99,7 +97,7 @@ public class LeaveVoteDialogBox{
 			}
 			@Override
 			public void onSuccess(Void result) {
-				System.out.println("Success from addVoteToModel");
+				//TODO alert
 			}
 		});
 	}}

@@ -76,10 +76,7 @@ public class HandleGroups {
 
 			@Override
 			public void onSuccess(List<WorkGroupInfo> result) {
-
-				System.out.println(result.size());
 				Comav200.GetInstance().getHandleGroupInvitesPanel().setInviteList(result);
-				System.out.println("efter set list");
 				//						HandleGroupInvitesDialogBox hgidb = new HandleGroupInvitesDialogBox();
 				//						Dialog dialog = hgidb.createDialogBox(invitesList.loadModelPanel());
 				//						dialog.center();

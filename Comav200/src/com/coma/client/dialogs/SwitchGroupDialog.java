@@ -45,7 +45,6 @@ public class SwitchGroupDialog {
 		dialog.getButton(PredefinedButton.CANCEL).addSelectHandler(new SelectHandler() {
 			@Override
 			public void onSelect(SelectEvent event) {
-				System.out.println("Hejsan, CANCEL");
 				dialog.hide();
 			}
 		});
